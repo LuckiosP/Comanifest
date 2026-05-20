@@ -129,7 +129,7 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 - `lib/supabase/config.ts` — **`isSupabaseConfigured()`**  
 - `lib/supabase/client.ts` — browser Supabase client (returns `null` if not configured)  
 - `lib/supabase/server.ts` — server Supabase client (cookies)  
-- `middleware.ts` (repo root) — Supabase session refresh on Edge; **skips** `/auth/callback` so PKCE cookie state is not touched before the client exchanges `?code=` (logic lives here, not under `lib/`, for Vercel Edge deploy)  
+- `middleware.ts` (repo root) — Supabase session refresh on Edge; **skips** `/auth/callback`. Must **not** import from `@/lib/*` (Vercel Edge deploy rejects it); reads `NEXT_PUBLIC_*` env vars inline.  
 
 ### Docs & env
 

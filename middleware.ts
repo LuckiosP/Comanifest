@@ -1,17 +1,18 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
-import {
-  getSupabaseAnonKey,
-  getSupabaseUrl,
-  isSupabaseConfigured,
-} from "@/lib/supabase/config";
-
 type CookieToSet = {
   name: string;
   value: string;
   options: CookieOptions;
 };
+
+function env(name: string): string | undefined {
+  const raw = process.env[name];
+  if (raw == null) return undefined;
+  const trimmed = raw.replace(/^\uFEFF/, "").trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+}
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -23,12 +24,8 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
-  if (!isSupabaseConfigured()) {
-    return response;
-  }
-
-  const url = getSupabaseUrl();
-  const anonKey = getSupabaseAnonKey();
+  const url = env("NEXT_PUBLIC_SUPABASE_URL");
+  const anonKey = env("NEXT_PUBLIC_SUPABASE_ANON_KEY");
   if (!url || !anonKey) {
     return response;
   }
