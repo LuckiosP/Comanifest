@@ -129,8 +129,7 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 - `lib/supabase/config.ts` — **`isSupabaseConfigured()`**  
 - `lib/supabase/client.ts` — browser Supabase client (returns `null` if not configured)  
 - `lib/supabase/server.ts` — server Supabase client (cookies)  
-- `lib/supabase/middleware.ts` — session refresh helper; **skips** `/auth/callback` so PKCE cookie state is not touched before the client exchanges `?code=`  
-- `middleware.ts` (repo root) — calls `updateSession` for matched routes
+- `middleware.ts` (repo root) — Supabase session refresh on Edge; **skips** `/auth/callback` so PKCE cookie state is not touched before the client exchanges `?code=` (logic lives here, not under `lib/`, for Vercel Edge deploy)  
 
 ### Docs & env
 
