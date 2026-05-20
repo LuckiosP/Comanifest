@@ -183,7 +183,7 @@ The UI should feel:
 
 **Ongoing:** edit locally → `git push` → Vercel redeploys — see **`docs/deploying.md`**.
 
-**Not done yet:** custom domain, “my holds” / profile, anonymous→email linking UX, polish.
+**Not done yet:** custom domain, “my holds” / profile, anonymous→email linking UX, polish, **security pentest** (`docs/security-pentest.md`).
 
 ---
 

@@ -11,6 +11,7 @@ Collective intention, together — manifest hopeful outcomes and hold them with 
 | [`docs/comanifest-brief.md`](docs/comanifest-brief.md) | Product vision, tone, **manifest / hold** vocabulary |
 | [`docs/project-handoff.md`](docs/project-handoff.md) | What's built, file map, Supabase setup, troubleshooting |
 | [`docs/deploying.md`](docs/deploying.md) | GitHub → Vercel → Supabase URLs; **keeping local & live in sync** |
+| [`docs/security-pentest.md`](docs/security-pentest.md) | **Future security review / pentest** checklist and briefing |
 
 ## Local development
 

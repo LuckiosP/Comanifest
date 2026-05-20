@@ -155,6 +155,7 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 
 - `docs/comanifest-brief.md` — product brief (pinned reference)  
 - `docs/deploying.md` — **GitHub → Vercel → Supabase URLs**; **sync workflow**  
+- `docs/security-pentest.md` — **future security review / pentest** protocol (before wider launch)  
 - `docs/supabase-schema.sql` — DB + RLS + joins (full fresh install)  
 - `docs/supabase-join-migration.sql` — **additive** joins table + trigger + policies (existing projects)  
 - `.env.example` — template for public Supabase vars (safe to commit)
@@ -189,6 +190,7 @@ The dev scripts set **`NODE_OPTIONS=--dns-result-order=ipv4first`** and **`NODE_
 
 ## Known follow-ups (not done yet)
 
+- **Security review / pentest** — before wider public launch; use **`docs/security-pentest.md`** (checklist + prompt for tester or AI audit)  
 - **Custom domain** on Vercel + update Supabase redirect URLs — see **`docs/deploying.md` Step 3**  
 - **Anonymous → email linking** — dedicated UX when a guest upgrades (Supabase supports linking; magic link from an existing anon session should be tested per project settings)  
 - **“My holds” / profile** — list manifestations the signed-in user holds or has manifested  
@@ -215,4 +217,4 @@ That gives the assistant the same structural context chat history used to hold.
 
 ---
 
-*Last updated: 2026-05-19 — production on Vercel; sync workflow; middleware Edge deploy; manifest/hold voice.*
+*Last updated: 2026-05-19 — production on Vercel; sync workflow; security-pentest protocol doc.*
