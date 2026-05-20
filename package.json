@@ -1,0 +1,30 @@
+{
+  "name": "comanifest-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "set NODE_OPTIONS=--dns-result-order=ipv4first&& set NODE_USE_SYSTEM_CA=1&& next dev",
+    "dev:posix": "NODE_OPTIONS=--dns-result-order=ipv4first NODE_USE_SYSTEM_CA=1 next dev",
+    "build": "set NODE_OPTIONS=--dns-result-order=ipv4first&& set NODE_USE_SYSTEM_CA=1&& next build",
+    "start": "set NODE_OPTIONS=--dns-result-order=ipv4first&& set NODE_USE_SYSTEM_CA=1&& next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@marsidev/react-turnstile": "^1.5.2",
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.49.4",
+    "next": "16.2.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.6",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
