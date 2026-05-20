@@ -177,15 +177,13 @@ The UI should feel:
 
 ---
 
-## 7. Immediate next steps
+## 7. Status & next steps
 
-Be prepared to help with:
+**Shipped (2026-05):** local dev, GitHub (`LuckiosP/Comanifest`), Vercel production, Supabase auth (magic link on live), manifest + hold flows, UI voice (manifest / hold).
 
-- creating a clean layout  
-- building a simple homepage  
-- building a list of manifestations  
-- setting up Supabase auth (when requested)  
-- designing the first version of the “manifestation card” component  
+**Ongoing:** edit locally → `git push` → Vercel redeploys — see **`docs/deploying.md`**.
+
+**Not done yet:** custom domain, “my holds” / profile, anonymous→email linking UX, polish.
 
 ---
 

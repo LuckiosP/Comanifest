@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Comanifest
 
-## Getting Started
+Collective intention, together — manifest hopeful outcomes and hold them with a community.
 
-First, run the development server:
+**Live:** deployed on **Vercel** (auto-builds from GitHub). **Local:** `npm run dev` → [http://localhost:3000](http://localhost:3000).
+
+## Docs (read these first)
+
+| Doc | What it's for |
+|-----|----------------|
+| [`docs/comanifest-brief.md`](docs/comanifest-brief.md) | Product vision, tone, **manifest / hold** vocabulary |
+| [`docs/project-handoff.md`](docs/project-handoff.md) | What's built, file map, Supabase setup, troubleshooting |
+| [`docs/deploying.md`](docs/deploying.md) | GitHub → Vercel → Supabase URLs; **keeping local & live in sync** |
+
+## Local development
 
 ```bash
+npm install
+cp .env.example .env.local   # then fill in Supabase URL + anon key
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+On macOS/Linux use `npm run dev:posix` if Supabase `fetch` fails (see handoff).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Keep localhost and production in sync
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+Edit on laptop  →  git push  →  GitHub  →  Vercel redeploys
+```
 
-## Learn More
+```bash
+cd /c/Projects/comanifest-app   # or C:\Projects\comanifest-app
+git pull                        # before starting work (optional but good habit)
+# … edit, test with npm run dev …
+git add -A
+git commit -m "Describe what you changed"
+git push
+```
 
-To learn more about Next.js, take a look at the following resources:
+- **Code** syncs via **git push** (GitHub remote: **`LuckiosP/Comanifest`**).
+- **Secrets:** `.env.local` stays on your machine; copy the same variable **names** into **Vercel → Settings → Environment Variables**.
+- **Database:** local and live share the **same Supabase project** unless you create a separate dev project later.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Full checklist: **`docs/deploying.md`**.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Stack
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Next.js 16 (App Router), React, TypeScript, Tailwind, Supabase.

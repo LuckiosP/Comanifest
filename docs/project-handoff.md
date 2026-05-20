@@ -11,8 +11,28 @@ For product vision, tone, and roadmap, use **`docs/comanifest-brief.md`** — th
 ## Project location
 
 - **Primary checkout (Windows):** `C:\Projects\comanifest-app` — local **`C:\Projects`** tree, **not** Dropbox.
-- **Production URL + custom domain:** see **`docs/deploying.md`** (GitHub → Vercel → DNS → Supabase Auth URLs).
-- **Why it matters:** Moving off Dropbox avoids selective-sync duplicate folders (e.g. `.next (Selective Sync Conflict…)`) and flaky lint/build paths. ESLint / `.gitignore` rules for those patterns stay in the repo in case an old clone or secondary copy ever lives under sync again.
+- **GitHub:** [`LuckiosP/Comanifest`](https://github.com/LuckiosP/Comanifest) — push here to update production.
+- **Production:** **Vercel** (`https://….vercel.app`) — auto-deploys from GitHub `main`. Sign-in, manifest, and hold verified on live (2026-05).
+- **Custom domain:** see **`docs/deploying.md`** when ready.
+- **Why local path matters:** Moving off Dropbox avoids selective-sync duplicate folders (e.g. `.next (Selective Sync Conflict…)`) and flaky lint/build paths.
+
+---
+
+## Keeping localhost, GitHub, and Vercel in sync
+
+**Mental model:** laptop (edit) → **`git push`** → GitHub → Vercel rebuilds the live site.
+
+| Syncs how | What |
+|-----------|------|
+| **`git push`** | App code → live site (1–2 min after push) |
+| **Same Supabase project** | Manifestations / holds in DB appear on localhost and live |
+| **Manual** | Env vars: `.env.local` ↔ Vercel settings; auth URLs in Supabase dashboard |
+
+**Typical session:** `git pull` → `npm run dev` → edit → `git add -A` → `git commit -m "…"` → `git push` → check Vercel **Deployments** → **Ready**.
+
+**Do not commit:** `.env.local` (secrets). **Do edit code in:** local files only, not the Vercel UI.
+
+Full checklist and Supabase redirect examples: **`docs/deploying.md`**.
 
 ---
 
@@ -77,7 +97,7 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 3. Set **`NEXT_PUBLIC_SUPABASE_ANON_KEY`** to the **anon** (JWT, `eyJ…`) or **publishable** (`sb_publishable_…`) key from **Project Settings → API** — **not** `sb_secret_…` or **service_role**.  
 4. Run **`docs/supabase-schema.sql`** in the Supabase SQL Editor (**`manifestations`** + **`manifestation_joins`**, RLS, join-count trigger). If you **already** ran an older schema that only created **`manifestations`**, run **`docs/supabase-join-migration.sql`** once instead of re-running the full file.  
 5. Enable **Anonymous** provider in Supabase Auth.  
-6. Enable **Email** provider (Authentication → Providers → **Email**) so magic links work. Under **Authentication → URL Configuration**, set **Site URL** to your app (e.g. `http://localhost:3000` in dev) and add **`http://localhost:3000/auth/callback`** (and your production origin + `/auth/callback`) to **Redirect URLs**.
+6. Enable **Email** provider (Authentication → Providers → **Email**) so magic links work. Under **Authentication → URL configuration**, set **Site URL** and **Redirect URLs** for **both** dev and production — see **`docs/deploying.md` → Step 2** for exact lines (`https://YOUR-VERCEL-HOST/**`, `…/auth/callback`, and localhost equivalents).
 
 **Auth flow (manifest + hold + sign-in):** Anonymous session for guests; **`signInWithOtp`** sends a link to **`/auth/callback?next=…`**; the **callback page** awaits **`auth.initialize()`** in the browser (PKCE exchange happens there, once — do not also call **`exchangeCodeForSession`** or the verifier is already gone), then **`router.replace(next)`**. Server actions use **`getServerAuthUser`**.
 
@@ -134,6 +154,7 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 ### Docs & env
 
 - `docs/comanifest-brief.md` — product brief (pinned reference)  
+- `docs/deploying.md` — **GitHub → Vercel → Supabase URLs**; **sync workflow**  
 - `docs/supabase-schema.sql` — DB + RLS + joins (full fresh install)  
 - `docs/supabase-join-migration.sql` — **additive** joins table + trigger + policies (existing projects)  
 - `.env.example` — template for public Supabase vars (safe to commit)
@@ -160,14 +181,18 @@ The dev scripts set **`NODE_OPTIONS=--dns-result-order=ipv4first`** and **`NODE_
 ## Bugs fixed along the way
 
 1. **Homepage looked blank** — `globals.css` had a plain `body { background; color }` rule that could override Tailwind on `<body>`. Removed those from `body` so **`app/layout.tsx`** controls surface colours; homepage wrapper uses **`min-h-screen`**.  
-2. **ESLint explosion** — caused by linting sync-tool conflict copies of `.next`; fixed via `globalIgnores` + removed real lint issues (`about` unused import, **`react-hooks/set-state-in-effect`** in create form by moving sync `setState` into the async path).
+2. **ESLint explosion** — caused by linting sync-tool conflict copies of `.next`; fixed via `globalIgnores` + removed real lint issues (`about` unused import, **`react-hooks/set-state-in-effect`** in create form by moving sync `setState` into the async path).  
+3. **Magic link PKCE errors** — callback page must not call **`exchangeCodeForSession`** after **`auth.initialize()`**; middleware must **skip** `/auth/callback`.  
+4. **Vercel deploy failed (Edge middleware)** — `middleware.ts` must not import `@/lib/*`; read `NEXT_PUBLIC_*` env inline. Vercel **Framework Preset** must be **Next.js** (not **Other**).
 
 ---
 
 ## Known follow-ups (not done yet)
 
+- **Custom domain** on Vercel + update Supabase redirect URLs — see **`docs/deploying.md` Step 3**  
 - **Anonymous → email linking** — dedicated UX when a guest upgrades (Supabase supports linking; magic link from an existing anon session should be tested per project settings)  
 - **“My holds” / profile** — list manifestations the signed-in user holds or has manifested  
+- **Separate Supabase dev project** — optional later so local experiments do not touch production data  
 - **Next.js 16** warns that **`middleware`** convention may move to **`proxy`** — migrate when you adopt the new API  
 - **Polish** (motion, typography, empty states): explicitly deferred by author  
 - **If any clone still lives under Dropbox (or similar sync):** exclude **`.next`** (and ideally the whole repo) from sync to reduce conflict folders
@@ -190,4 +215,4 @@ That gives the assistant the same structural context chat history used to hold.
 
 ---
 
-*Last updated: 2026-05-19 — UI voice: manifest/hold vocabulary documented; strings in `intention-copy.ts`.*
+*Last updated: 2026-05-19 — production on Vercel; sync workflow; middleware Edge deploy; manifest/hold voice.*
