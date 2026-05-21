@@ -1,5 +1,5 @@
 import { SAMPLE_MANIFESTATIONS } from "@/lib/manifestations/sample-data";
-import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { createServerSupabaseClient, getServerAuthUser } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import type {
   Manifestation,
@@ -110,9 +110,7 @@ export async function listManifestations(sort: ManifestationSort): Promise<{
     return { source: "live", rows: [] };
   }
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getServerAuthUser(supabase);
 
   let joinedIds = new Set<string>();
   if (user) {
@@ -221,9 +219,7 @@ export async function getManifestationById(id: string): Promise<{
   }
   const { user_id: creatorId, ...row } = db;
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getServerAuthUser(supabase);
 
   let viewer_has_joined = false;
   if (user) {
