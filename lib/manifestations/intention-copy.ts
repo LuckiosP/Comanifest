@@ -70,3 +70,37 @@ export const MANIFEST_DELETE_SUCCESS =
   "This manifestation has been deleted.";
 export const MANIFEST_DELETE_BLOCKED =
   "Others are still holding this manifestation. Archive it first, or wait until they withdraw, before deleting.";
+
+/** Similar manifestations on create (phase 5). */
+export const SIMILAR_MANIFESTATIONS_HEADING =
+  "Something similar may already be live";
+export const SIMILAR_MANIFESTATIONS_HINT =
+  "Consider holding an existing manifestation instead of starting a duplicate — you can still manifest your own if none of these fit.";
+export const SIMILAR_MANIFESTATIONS_LOADING = "Looking for similar manifestations…";
+export const SIMILAR_MANIFESTATIONS_HOLD_LINK = "Hold this one instead →";
+
+/** Share (phase 8). */
+export const SHARE_LABEL = "Share";
+export const SHARE_FACEBOOK = "Facebook";
+export const SHARE_BLUESKY = "Bluesky";
+export const SHARE_INSTAGRAM = "Instagram";
+export const SHARE_COPY_LINK = "Copy link";
+export const SHARE_COPY_SUCCESS = "Link copied — paste it wherever you like.";
+export const SHARE_NATIVE = "Share…";
+
+/** Creator hold email updates (phase 9). */
+export const NOTIFICATIONS_HEADING = "Hold updates by email";
+export const NOTIFICATIONS_HINT =
+  "When someone holds a manifestation you started, we can email you — never their private commitment notes.";
+export const NOTIFICATIONS_ANONYMOUS_HINT =
+  "Sign in with email on the account page to choose instant, daily, or weekly hold updates.";
+export const NOTIFICATIONS_SAVE = "Save email preferences";
+export const NOTIFICATIONS_SAVE_PENDING = "Saving…";
+export const NOTIFICATIONS_SAVE_SUCCESS = "Email preferences saved.";
+export const NOTIFICATIONS_FREQUENCY_LABEL = "When someone holds my manifestation";
+export const NOTIFICATIONS_FREQUENCY_OFF = "Off";
+export const NOTIFICATIONS_FREQUENCY_INSTANT = "Instant";
+export const NOTIFICATIONS_FREQUENCY_DAILY = "Daily digest";
+export const NOTIFICATIONS_FREQUENCY_WEEKLY = "Weekly digest";
+export const NOTIFICATIONS_NOT_CONFIGURED =
+  "Email updates are not configured on this deployment yet.";

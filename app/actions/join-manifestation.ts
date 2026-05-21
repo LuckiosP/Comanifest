@@ -9,6 +9,7 @@ import {
 import {
   HOLD_WITHDRAW_SUCCESS,
 } from "@/lib/manifestations/intention-copy";
+import { notifyCreatorOnNewHold } from "@/lib/notifications/notify-creator";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import {
   createServerSupabaseClient,
@@ -107,6 +108,8 @@ export async function joinManifestation(
   revalidatePath("/manifestations");
   revalidatePath("/account");
   revalidatePath(`/manifestations/${manifestationId}`);
+
+  void notifyCreatorOnNewHold(manifestationId);
 
   return {
     success:

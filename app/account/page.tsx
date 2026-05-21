@@ -3,8 +3,17 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { ManifestationCard } from "@/app/components/ManifestationCard";
+import { NotificationPreferencesForm } from "@/app/components/NotificationPreferencesForm";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import { listAccountManifestations } from "@/lib/manifestations/account-queries";
+import {
+  NOTIFICATIONS_ANONYMOUS_HINT,
+  NOTIFICATIONS_HEADING,
+  NOTIFICATIONS_HINT,
+  NOTIFICATIONS_NOT_CONFIGURED,
+} from "@/lib/manifestations/intention-copy";
+import { isEmailNotificationsConfigured } from "@/lib/notifications/config";
+import { getHoldUpdatesFrequency } from "@/lib/notifications/preferences";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import {
   createServerSupabaseClient,
@@ -45,6 +54,11 @@ export default async function AccountPage() {
   }
 
   const { created, holding, hint } = await listAccountManifestations(user.id);
+  const emailUser = Boolean(user.email && !user.is_anonymous);
+  const holdUpdatesFrequency = emailUser
+    ? await getHoldUpdatesFrequency(supabase, user.id)
+    : "off";
+  const notificationsConfigured = isEmailNotificationsConfigured();
 
   return (
     <div className="flex min-h-full flex-col bg-gradient-to-b from-violet-50/80 via-white to-amber-50/40 dark:from-stone-950 dark:via-stone-900 dark:to-stone-950">
@@ -64,6 +78,35 @@ export default async function AccountPage() {
             {hint}
           </p>
         ) : null}
+
+        <section className="flex flex-col gap-3 rounded-2xl border border-stone-200/90 bg-white/80 p-5 shadow-sm dark:border-stone-700/90 dark:bg-stone-800/50">
+          <div className="flex flex-col gap-1">
+            <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-50">
+              {NOTIFICATIONS_HEADING}
+            </h2>
+            <p className="text-sm text-stone-600 dark:text-stone-300">
+              {NOTIFICATIONS_HINT}
+            </p>
+          </div>
+          {!emailUser ? (
+            <p className="text-sm text-stone-600 dark:text-stone-300">
+              {NOTIFICATIONS_ANONYMOUS_HINT}{" "}
+              <Link
+                href="/sign-in?next=/account"
+                className="font-medium text-violet-700 underline-offset-2 hover:underline dark:text-violet-300"
+              >
+                Sign in with email
+              </Link>
+              .
+            </p>
+          ) : !notificationsConfigured ? (
+            <p className="text-sm text-amber-900 dark:text-amber-200">
+              {NOTIFICATIONS_NOT_CONFIGURED}
+            </p>
+          ) : (
+            <NotificationPreferencesForm initialFrequency={holdUpdatesFrequency} />
+          )}
+        </section>
 
         <section className="flex flex-col gap-4">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -98,6 +141,7 @@ export default async function AccountPage() {
                     showStatus
                     showEditLink
                     showCreatorActions
+                    showShare
                   />
                 </li>
               ))}
@@ -131,6 +175,7 @@ export default async function AccountPage() {
                       !manifestation.id.startsWith("sample-")
                     }
                     showStatus
+                    showShare
                   />
                 </li>
               ))}

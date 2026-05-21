@@ -4,18 +4,21 @@ import { notFound } from "next/navigation";
 
 import { JoinManifestationControl } from "../../components/JoinManifestationControl";
 import { CreatorManifestationActions } from "../../components/CreatorManifestationActions";
+import { ShareManifestationControl } from "../../components/ShareManifestationControl";
 import { SiteHeader } from "../../components/SiteHeader";
 import {
   holdingCountLabel,
   MANIFEST_ARCHIVED_BANNER,
   MANIFEST_EDIT_LINK,
   MANIFEST_ENDS_LABEL,
-} from "@/lib/manifestations/intention-copy";import { formatManifestationDate } from "@/lib/manifestations/dates";
+} from "@/lib/manifestations/intention-copy";
+import { formatManifestationDate } from "@/lib/manifestations/dates";
 import { getManifestationById } from "@/lib/manifestations/queries";
 import {
   isManifestationEditable,
   isManifestationOpenForHolds,
 } from "@/lib/manifestations/lifecycle";
+import { getPublicSiteUrl, manifestationPublicUrl } from "@/lib/site-url";
 import { MANIFESTATION_CATEGORY_LABELS } from "@/lib/types/manifestation";
 
 type Props = {
@@ -32,9 +35,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     result.row.intention.length > 160
       ? `${result.row.intention.slice(0, 157)}…`
       : result.row.intention;
+  const url = manifestationPublicUrl(id);
   return {
     title: `${result.row.title} — Comanifest`,
     description,
+    openGraph: {
+      title: result.row.title,
+      description,
+      url,
+      siteName: "Comanifest",
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title: result.row.title,
+      description,
+    },
+    metadataBase: new URL(getPublicSiteUrl()),
   };
 }
 
@@ -48,6 +65,8 @@ export default async function ManifestationDetailPage({ params }: Props) {
   const { row, hint, viewer_has_joined, viewer_is_creator, source } = result;
   const label =
     MANIFESTATION_CATEGORY_LABELS[row.category] ?? row.category;
+  const canShare =
+    source === "live" && (viewer_is_creator || viewer_has_joined);
 
   return (
     <div className="flex min-h-full flex-col bg-gradient-to-b from-violet-50/80 via-white to-amber-50/40 dark:from-stone-950 dark:via-stone-900 dark:to-stone-950">
@@ -124,7 +143,14 @@ export default async function ManifestationDetailPage({ params }: Props) {
                 joinCount={row.join_count}
               />
             ) : null}
-          </div>        </article>
+            {canShare ? (
+              <ShareManifestationControl
+                manifestationId={row.id}
+                title={row.title}
+              />
+            ) : null}
+          </div>
+        </article>
 
         <Link
           href="/"

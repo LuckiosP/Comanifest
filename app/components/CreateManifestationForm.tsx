@@ -6,6 +6,7 @@ import {
   createManifestation,
   type CreateManifestationState,
 } from "@/app/actions/manifestations";
+import { SimilarManifestationsPanel } from "@/app/components/SimilarManifestationsPanel";
 import { TurnstileCaptchaRow } from "@/app/components/TurnstileCaptchaRow";
 import { ensureAnonymousBrowserSession } from "@/lib/auth/ensure-anonymous-browser-session";
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
@@ -35,6 +36,8 @@ export function CreateManifestationForm() {
   const [authError, setAuthError] = useState<string | null>(null);
   const [retryTick, setRetryTick] = useState(0);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [title, setTitle] = useState("");
+  const [intention, setIntention] = useState("");
   const turnstileSiteKey = getTurnstileSiteKey();
 
   const onCaptchaExpire = useCallback(() => {
@@ -166,6 +169,8 @@ export function CreateManifestationForm() {
           minLength={3}
           maxLength={200}
           disabled={!configured || disabled}
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
           placeholder="e.g. Sunshine and ease for the park gathering"
           className={inputClass}
         />
@@ -180,10 +185,16 @@ export function CreateManifestationForm() {
           maxLength={2000}
           rows={5}
           disabled={!configured || disabled}
+          value={intention}
+          onChange={(event) => setIntention(event.target.value)}
           placeholder="What are we holding together, in a spirit of kindness and possibility?"
           className={`${inputClass} resize-y min-h-[120px]`}
         />
       </label>
+
+      {configured ? (
+        <SimilarManifestationsPanel title={title} intention={intention} />
+      ) : null}
 
       <label className="flex flex-col text-sm font-medium text-stone-700 dark:text-stone-200">
         Category

@@ -99,7 +99,7 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 1. Copy **`.env.example`** → **`.env.local`** in the repo root.  
 2. Set **`NEXT_PUBLIC_SUPABASE_URL`** to the **Project URL** only (`https://….supabase.co`) — **do not** append `/rest/v1/`.  
 3. Set **`NEXT_PUBLIC_SUPABASE_ANON_KEY`** to the **anon** (JWT, `eyJ…`) or **publishable** (`sb_publishable_…`) key from **Project Settings → API** — **not** `sb_secret_…` or **service_role**.  
-4. Run **`docs/supabase-schema.sql`** in the Supabase SQL Editor (**`manifestations`** + **`manifestation_joins`**, RLS, join-count trigger). If you **already** ran an older schema, run incremental migrations instead of re-running the full file: **`docs/supabase-join-migration.sql`** (holds), then **`docs/supabase-phase1-lifecycle-migration.sql`** (**`ends_at`**, **`status`**, creator reflection), then **`docs/supabase-withdraw-hold-migration.sql`** (withdraw hold).  
+4. Run **`docs/supabase-schema.sql`** in the Supabase SQL Editor (**`manifestations`** + **`manifestation_joins`**, RLS, join-count trigger). If you **already** ran an older schema, run incremental migrations instead of re-running the full file: **`docs/supabase-join-migration.sql`** (holds), then **`docs/supabase-phase1-lifecycle-migration.sql`** (**`ends_at`**, **`status`**, creator reflection), then **`docs/supabase-withdraw-hold-migration.sql`** (withdraw hold), then **`docs/supabase-notifications-migration.sql`** (hold email preferences + digest queue).  
 5. Enable **Anonymous** provider in Supabase Auth.  
 6. Enable **Email** provider (Authentication → Providers → **Email**) so magic links work. Under **Authentication → URL configuration**, set **Site URL** and **Redirect URLs** for **both** dev and production — see **`docs/deploying.md` → Step 2** for exact lines (`https://YOUR-VERCEL-HOST/**`, `…/auth/callback`, and localhost equivalents).
 
@@ -108,6 +108,8 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 **If holds fail with “relation `manifestation_joins` does not exist” (or similar):** run **`docs/supabase-join-migration.sql`** in the same project as your `.env.local` URL.
 
 **If withdraw hold fails (permission denied, count unchanged, or withdraw button stays):** run **`docs/supabase-withdraw-hold-migration.sql`** once in the SQL Editor. Re-run the full file if you already ran an older copy — it is safe to run again and adds the **`withdraw_manifestation_hold`** RPC.
+
+**If hold email preferences fail to save:** run **`docs/supabase-notifications-migration.sql`** once. For instant/digest emails on production, set **`SUPABASE_SERVICE_ROLE_KEY`**, **`RESEND_API_KEY`**, **`NOTIFICATION_FROM_EMAIL`**, and **`CRON_SECRET`** in Vercel (see **`.env.example`**). Daily/weekly digests use **`vercel.json`** cron → **`/api/cron/hold-digest?frequency=daily|weekly`**.
 
 **If you see “Could not find the table `public.manifestations` in the schema cache”:** the app is talking to Supabase, but that project **does not have the `manifestations` table yet** (or you are on the wrong Supabase project). Open **SQL** → **New query** in the **same** project as your `.env.local` URL, paste and run **`docs/supabase-schema.sql`**, then check **Table Editor** for **`manifestations`**. If the script errors with “already exists”, the table is there — refresh the app; if policies failed halfway, say what error you got.
 
@@ -131,7 +133,10 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 - `app/components/SignInForm.tsx` — magic link email form  
 - `app/components/ManifestationCard.tsx` — card (title links to detail) + **`FeedSortLinks`** (**Widest circle**) + hold UI via **`JoinManifestationControl`** when feed is live  
 - `app/components/JoinManifestationControl.tsx` — client hold form (anonymous session, note + checkbox); UI copy from **`intention-copy.ts`**  
-- `app/components/CreateManifestationForm.tsx` — client manifest form + anonymous session prep; UI copy from **`intention-copy.ts`**  
+- `app/components/CreateManifestationForm.tsx` — client manifest form + anonymous session prep + **similar manifestations panel**  
+- `app/components/SimilarManifestationsPanel.tsx` — debounced vibe match on create  
+- `app/components/ShareManifestationControl.tsx` — Facebook / Bluesky / native share / copy link  
+- `app/components/NotificationPreferencesForm.tsx` — hold email frequency on **`/account`**  
 - `app/sign-in/page.tsx` — sign-in shell + query errors from callback  
 - `app/auth/callback/page.tsx` — magic-link landing shell  
 - `app/auth/callback/CallbackClient.tsx` — client PKCE via **`auth.initialize()`** + **`getSession()`** + redirect  
@@ -140,7 +145,10 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 - `app/manifestations/new/page.tsx` — wraps create form  
 - `app/guidelines/page.tsx` — guidelines content  
 - `app/actions/manifestations.ts` — **`createManifestation`** server action  
-- `app/actions/join-manifestation.ts` — **`joinManifestation`** server action  
+- `app/actions/join-manifestation.ts` — **`joinManifestation`** server action (+ creator hold notifications)  
+- `app/actions/similar-manifestations.ts` — **`fetchSimilarManifestations`** for create form  
+- `app/actions/notification-preferences.ts` — **`saveNotificationPreferences`**  
+- `app/api/cron/hold-digest/route.ts` — daily/weekly digest cron ( **`CRON_SECRET`** )  
 - `app/about/page.tsx` — simple about page (no unused imports)
 
 ### Data & Supabase helpers
@@ -150,7 +158,13 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 - `lib/auth/format-auth-error.ts` — normalise Supabase Auth errors for UI (avoids empty/`{}` messages)  
 - `lib/manifestations/sample-data.ts` — example rows for offline / error fallback  
 - `lib/manifestations/join-bounds.ts` — shared min/max length for commitment note  
-- `lib/manifestations/intention-copy.ts` — **single source** for manifest/hold user-facing strings (see brief → Voice & vocabulary)  
+- `lib/manifestations/intention-copy.ts` — **single source** for manifest/hold user-facing strings  
+- `lib/manifestations/similar.ts` — **`findSimilarManifestations`** (reuses search ranking)  
+- `lib/manifestations/share-client.ts` — share URL helpers (client)  
+- `lib/site-url.ts` — **`getPublicSiteUrl`**, **`manifestationPublicUrl`**  
+- `lib/notifications/` — Resend email, prefs, instant notify, digest sender  
+- `docs/supabase-notifications-migration.sql` — notification prefs + digest queue  
+- `vercel.json` — cron schedules for hold digests  
 - `lib/manifestations/queries.ts` — **`listManifestations`**, **`getManifestationById`**, **`probeManifestationsTable`** (live vs sample; hold flags for live)  
 - `lib/supabase/config.ts` — **`isSupabaseConfigured()`**  
 - `lib/supabase/client.ts` — browser Supabase client (returns `null` if not configured)  
@@ -204,11 +218,11 @@ Roadmap detail and priority: **`docs/comanifest-brief.md` → §7 Status & roadm
 - **Phase 2 — My account** ✅ `/account` — manifestations I started + I’m holding  
 - **Phase 3 — Own your manifestations** ✅ **edit**; **withdraw hold**; **archive** / **delete** (delete when `join_count ≤ 1` only)  
 - **Phase 4 — Search** ✅ feed + header **`?q=`** search (title, intention, category)  
-- **Phase 5 — Similar manifestations** suggested on create  
+- **Phase 5 — Similar manifestations** ✅ debounced suggestions on **`/manifestations/new`** before submit  
 - **Phase 6 — Closure:** creator-only success reflection after end date  
 - **Phase 7 — Feature suggestion box**  
-- **Phase 8 — Share:** Facebook, Instagram, Bluesky + link previews (detail + account; creator or holder)  
-- **Phase 9 — Creator email updates:** when your manifestation is held — instant / daily / weekly / off (email sign-in required)  
+- **Phase 8 — Share:** ✅ Facebook, Bluesky, native share / copy link on detail + account (creator or holder); Open Graph on detail  
+- **Phase 9 — Creator email updates:** ✅ instant / daily / weekly / off on **`/account`** (email sign-in); Resend + Vercel cron for digests  
 - **Phase 10 — Operator dashboard:** private admin analytics (users, manifests, holds, category, geography) — operator auth + privacy review  
 - **Security review / pentest** — before wider launch; **`docs/security-pentest.md`**  
 - **Custom domain** — **`docs/deploying.md` Step 3**  
@@ -233,4 +247,4 @@ That gives the assistant the same structural context chat history used to hold.
 
 ---
 
-*Last updated: 2026-05-19 — phase 3a edit shipped; roadmap: share (8), email updates (9), operator dashboard (10).*
+*Last updated: 2026-05-19 — phases 5, 8, 9 shipped (similar on create, share, hold email updates).*

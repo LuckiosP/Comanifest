@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { CreatorManifestationActions } from "@/app/components/CreatorManifestationActions";
 import { JoinManifestationControl } from "@/app/components/JoinManifestationControl";
+import { ShareManifestationControl } from "@/app/components/ShareManifestationControl";
 import {
   holdingCountLabel,
   MANIFEST_EDIT_LINK,
@@ -22,6 +23,7 @@ type ManifestationCardProps = {
   showStatus?: boolean;
   showEditLink?: boolean;
   showCreatorActions?: boolean;
+  showShare?: boolean;
 };
 
 export function ManifestationCard({
@@ -31,6 +33,7 @@ export function ManifestationCard({
   showStatus = false,
   showEditLink = false,
   showCreatorActions = false,
+  showShare = false,
 }: ManifestationCardProps) {
   const label =
     MANIFESTATION_CATEGORY_LABELS[manifestation.category] ??
@@ -97,6 +100,13 @@ export function ManifestationCard({
             manifestationId={manifestation.id}
             status={manifestation.status}
             joinCount={manifestation.join_count}
+          />
+        ) : null}
+        {showShare && !manifestation.id.startsWith("sample-") ? (
+          <ShareManifestationControl
+            manifestationId={manifestation.id}
+            title={manifestation.title}
+            compact
           />
         ) : null}
       </div>
