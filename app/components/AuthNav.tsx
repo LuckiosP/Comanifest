@@ -8,6 +8,9 @@ import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { ACCOUNT_NAV } from "@/lib/manifestations/intention-copy";
 
+const SIGN_IN_LABEL = "Sign in with email";
+const SIGN_OUT_LABEL = "Sign out";
+
 function truncateEmail(email: string, max = 22) {
   if (email.length <= max) return email;
   const [local, domain] = email.split("@");
@@ -22,7 +25,6 @@ export function AuthNav() {
   const signInHref = `/sign-in?next=${encodeURIComponent(pathname || "/")}`;
   const [email, setEmail] = useState<string | null>(null);
   const [isAnonymous, setIsAnonymous] = useState(false);
-  const [hasSession, setHasSession] = useState(false);
   const [ready, setReady] = useState(() => !isSupabaseConfigured());
 
   useEffect(() => {
@@ -48,7 +50,6 @@ export function AuthNav() {
         const u = session?.user;
         setEmail(u?.email ?? null);
         setIsAnonymous(Boolean(u?.is_anonymous));
-        setHasSession(Boolean(u));
         setReady(true);
       };
 
@@ -90,14 +91,15 @@ export function AuthNav() {
 
   const base =
     "rounded-full px-3 py-2 text-sm font-medium transition-colors sm:text-sm";
+  const linkIdle =
+    "text-stone-600 hover:bg-violet-100 hover:text-violet-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-stone-50";
+  const signInAccent =
+    "border border-violet-200 bg-violet-50 text-violet-800 hover:bg-violet-100 dark:border-violet-800 dark:bg-violet-950/40 dark:text-violet-200 dark:hover:bg-violet-900/50";
 
-  if (email) {
+  if (email && !isAnonymous) {
     return (
       <div className="flex flex-wrap items-center justify-end gap-1 sm:gap-2">
-        <Link
-          href="/account"
-          className={`${base} text-stone-600 hover:bg-violet-100 hover:text-violet-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-stone-50`}
-        >
+        <Link href="/account" className={`${base} ${linkIdle}`}>
           {ACCOUNT_NAV}
         </Link>
         <span
@@ -111,42 +113,30 @@ export function AuthNav() {
           onClick={() => void signOut()}
           className={`${base} text-stone-600 hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-stone-50`}
         >
-          Sign out
+          {SIGN_OUT_LABEL}
         </button>
+      </div>
+    );
+  }
+
+  if (isAnonymous) {
+    return (
+      <div className="flex flex-wrap items-center justify-end gap-1 sm:gap-2">
+        <Link href="/account" className={`${base} ${linkIdle}`}>
+          {ACCOUNT_NAV}
+        </Link>
+        <Link href={signInHref} className={`${base} ${signInAccent}`}>
+          {SIGN_IN_LABEL}
+        </Link>
       </div>
     );
   }
 
   return (
     <div className="flex flex-wrap items-center justify-end gap-1 sm:gap-2">
-      {hasSession ? (
-        <Link
-          href="/account"
-          className={`${base} text-stone-600 hover:bg-violet-100 hover:text-violet-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-stone-50`}
-        >
-          {ACCOUNT_NAV}
-        </Link>
-      ) : null}
-      {isAnonymous ? (
-        <span className="hidden text-xs text-stone-500 sm:inline dark:text-stone-400">
-          Guest
-        </span>
-      ) : null}
-      <Link
-        href={signInHref}
-        className={`${base} text-stone-600 hover:bg-violet-100 hover:text-violet-900 dark:hover:bg-stone-800 dark:hover:text-stone-50`}
-      >
-        Sign in
+      <Link href={signInHref} className={`${base} ${signInAccent}`}>
+        {SIGN_IN_LABEL}
       </Link>
-      {isAnonymous ? (
-        <button
-          type="button"
-          onClick={() => void signOut()}
-          className={`${base} text-stone-600 hover:bg-stone-100 dark:text-stone-300 dark:hover:bg-stone-800`}
-        >
-          Sign out
-        </button>
-      ) : null}
     </div>
   );
 }

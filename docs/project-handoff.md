@@ -105,6 +105,8 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 
 **Auth flow (manifest + hold + sign-in):** Anonymous session for guests; **`signInWithOtp`** sends a link to **`/auth/callback?next=…`**; the **callback page** awaits **`auth.initialize()`** in the browser (PKCE exchange happens there, once — do not also call **`exchangeCodeForSession`** or the verifier is already gone), then **`router.replace(next)`**. Server actions use **`getServerAuthUser`**.
 
+**Guest → email linking:** If you manifested or held as a **guest**, sign in from the **same browser** without signing out first. **`SignInForm`** uses **`updateUser({ email })`** on anonymous sessions (keeps the same **`user_id`**) — **not** **`signInWithOtp`**, which creates a separate account and orphans guest data. If accounts already split, see **`docs/recover-guest-manifestations.sql`**.
+
 **If holds fail with “relation `manifestation_joins` does not exist” (or similar):** run **`docs/supabase-join-migration.sql`** in the same project as your `.env.local` URL.
 
 **If withdraw hold fails (permission denied, count unchanged, or withdraw button stays):** run **`docs/supabase-withdraw-hold-migration.sql`** once in the SQL Editor. Re-run the full file if you already ran an older copy — it is safe to run again and adds the **`withdraw_manifestation_hold`** RPC.
@@ -226,7 +228,7 @@ Roadmap detail and priority: **`docs/comanifest-brief.md` → §7 Status & roadm
 - **Phase 10 — Operator dashboard:** private admin analytics (users, manifests, holds, category, geography) — operator auth + privacy review  
 - **Security review / pentest** — before wider launch; **`docs/security-pentest.md`**  
 - **Custom domain** — **`docs/deploying.md` Step 3**  
-- **Anonymous → email linking** — dedicated UX when a guest upgrades  
+- **Anonymous → email linking** — ✅ **`SignInForm`** uses **`updateUser`** for guest sessions; recovery SQL in **`docs/recover-guest-manifestations.sql`** if accounts already split  
 - **Polish** (motion, typography, empty states): deferred  
 
 ---

@@ -50,13 +50,31 @@ export function SignInForm({ nextPath }: SignInFormProps) {
     const origin = window.location.origin;
     const redirectTo = `${origin}/auth/callback?next=${encodeURIComponent(next)}`;
 
-    const { error } = await supabase.auth.signInWithOtp({
-      email: trimmed,
-      options: {
-        emailRedirectTo: redirectTo,
-        shouldCreateUser: true,
-      },
-    });
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    const isAnonymousGuest = Boolean(session?.user?.is_anonymous);
+
+    if (session?.user && !session.user.is_anonymous) {
+      setPending(false);
+      setFormError(
+        "You are already signed in with email. Sign out first if you need a different account.",
+      );
+      return;
+    }
+
+    const { error } = isAnonymousGuest
+      ? await supabase.auth.updateUser(
+          { email: trimmed },
+          { emailRedirectTo: redirectTo },
+        )
+      : await supabase.auth.signInWithOtp({
+          email: trimmed,
+          options: {
+            emailRedirectTo: redirectTo,
+            shouldCreateUser: true,
+          },
+        });
     setPending(false);
 
     if (error) {
@@ -68,12 +86,25 @@ export function SignInForm({ nextPath }: SignInFormProps) {
         );
         return;
       }
+      if (
+        isAnonymousGuest &&
+        (lower.includes("already") ||
+          lower.includes("registered") ||
+          lower.includes("exists"))
+      ) {
+        setFormError(
+          "That email already has an account. Sign out, open Sign in again without browsing as a guest first, and request a magic link — or contact support to merge guest manifestations.",
+        );
+        return;
+      }
       setFormError(raw);
       return;
     }
 
     setInfo(
-      "Check your inbox for a sign-in link. If nothing arrives in a minute, look in spam, or confirm Email auth is enabled in your Supabase project.",
+      isAnonymousGuest
+        ? "Check your inbox for a confirmation link. Open it in this same browser so your guest manifestations stay on this account."
+        : "Check your inbox for a sign-in link. If nothing arrives in a minute, look in spam, or confirm Email auth is enabled in your Supabase project.",
     );
   }
 
@@ -126,9 +157,10 @@ export function SignInForm({ nextPath }: SignInFormProps) {
       </button>
 
       <p className="text-xs leading-relaxed text-stone-500 dark:text-stone-400">
-        If you were browsing as a guest before, signing in with email can link
-        to your existing activity depending on your Supabase settings — when in
-        doubt, use the same browser until we add a dedicated “link guest” flow.
+        If you manifested or held something as a guest, stay in this browser,
+        then sign in here — we attach your email to the same guest account so
+        your manifestations stay yours. Opening the link in a different browser
+        can split accounts.
       </p>
     </form>
   );
