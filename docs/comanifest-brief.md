@@ -143,6 +143,36 @@ Anonymous users may still browse; **“my stuff”** requires a stable identity 
 
 A simple **suggestion box** in the product for ideas about Comanifest itself (not manifestations). Low friction: short text + optional contact, stored safely (Supabase table or link to GitHub Issues — implementation TBD). Tone: “Help us grow Comanifest.”
 
+### H. Share a manifestation
+
+Users who **created** or **hold** a manifestation should be able to **share** it to social platforms — initially **Facebook**, **Instagram**, and **Bluesky**.
+
+- Share from **detail page** and **`/account`** (started + holding lists).  
+- Shared link opens the public **manifestation detail URL** with a good **link preview** (title, short description, Comanifest branding — Open Graph / Twitter / Bluesky meta).  
+- Copy tuned for the product voice: inviting others to **hold** with intention, not “sign this petition”.  
+- **Instagram** has no simple web “post to feed” URL — mobile **Web Share API** where available; otherwise **copy link** + optional pre-written caption. **Facebook** and **Bluesky** can use standard share-intent URLs.  
+- Only **active**, non-deleted manifestations are shareable.
+
+### I. Creator email updates (when someone holds)
+
+Creators with an **email on their account** (magic-link sign-in) can opt in to updates when **someone new holds** a manifestation they started.
+
+- **Frequency (user choice):** e.g. **each new hold**, **daily digest**, **weekly digest**, or **off**.  
+- Email content stays **gentle** — e.g. “Your manifestation *[title]* was held — *N* people are holding it now.” **Do not** expose holders’ private commitment notes or emails.  
+- Requires **notification preferences** stored per user; a **delivery pipeline** (Supabase Edge Function + transactional email provider, or similar) and a **scheduled job** for digests.  
+- Tied to **stable identity** — guests without email cannot receive these until they sign in with email (see anonymous→email linking).
+
+### J. Operator dashboard (“behind the scenes”)
+
+A **private admin area** (not linked from the public site) for platform analysis:
+
+- **Manifestations** — counts, by **category**, status, over time.  
+- **Holds** — join activity, holds per manifestation, trends.  
+- **Users** — sign-ups, anonymous vs email, active creators/holders (aggregated — no browsing private commitment notes from the dashboard unless explicitly required and audited).  
+- **Geography** — country/region breakdown (TBD how collected: e.g. coarse IP at hold/create, optional profile country later — must respect privacy and disclose in guidelines).  
+
+Access **restricted** to operators only (e.g. allowlisted admin emails, Supabase custom claim, or separate auth). Uses **service-role** or admin RLS policies — never expose service keys to the browser. Run **security review** before exposing real user data at scale.
+
 ---
 
 ## 4. Technical direction
@@ -206,7 +236,7 @@ The UI should feel:
 
 ## 7. Status & roadmap
 
-**Shipped (2026-05):** local dev, GitHub (`LuckiosP/Comanifest`), Vercel production, Supabase auth (magic link on live), manifest + hold flows, UI voice (manifest / hold), compulsory **end date** on create, **`/account`** (started + holding). **Timeframe** free-text removed from create — **Holds until** is the single date field.
+**Shipped (2026-05):** local dev, GitHub (`LuckiosP/Comanifest`), Vercel production, Supabase auth (magic link on live), manifest + hold flows, UI voice (manifest / hold), compulsory **end date** on create, **`/account`** (started + holding), **edit** active manifestations you created (phase 3a).
 
 **Ongoing:** edit locally → `git push` → Vercel redeploys — see **`docs/deploying.md`**.
 
@@ -218,20 +248,29 @@ Work in **thin slices** — each step should ship something usable on live.
 |-------|------|-----------|
 | **1 — Data model** ✅ | Compulsory **`ends_at`** on manifestations; **`status`** (e.g. active / archived / deleted); optional creator **reflection** fields for post-end evaluation | Everything else (closure, feed filters, account lists) depends on dates and lifecycle |
 | **2 — My account** ✅ | **`/account`**: manifestations I **started** + I’m **holding** | Core user need; uses existing `user_id` + joins |
-| **3 — Own your manifestations** | **Edit** own active manifestation (title, intention, category, **Holds until**); **withdraw hold**; **archive** / **delete** own manifestation (rules TBD) | Account page needs actions, not just lists; edit fixes mistakes before closure |
+| **3 — Own your manifestations** | **Edit** ✅; **withdraw hold** ✅; **archive** / **delete** ✅ | Account page needs actions, not just lists |
 | **4 — Search** | Feed + header **search** (title / intention / category) | Needed before duplicate-nudge is credible |
 | **5 — Similar on create** | On **Start a manifestation**, query similar rows and **suggest** before submit | Reuses search; reduces duplicate manifestations |
-| **6 — Closure & evaluation** | After **`ends_at`**, prompt **creator only** to reflect on success (gentle copy) | Requires phase 1 dates + notifications or “ready to close” UI |
+| **6 — Closure & evaluation** | After **`ends_at`**, prompt **creator only** to reflect on success (gentle copy) | Requires phase 1 dates + “ready to close” UI |
 | **7 — Feature suggestions** | Simple **suggestion box** (Supabase table + form, or link to GitHub Issues) | Independent; can ship anytime after phase 2 |
-| **Later** | Custom domain, anonymous→email linking, **security pentest** (`docs/security-pentest.md`), polish | After core product loop is trustworthy |
+| **8 — Share** | **Share** manifestations you **created** or **hold** — Facebook, Instagram, Bluesky + link preview (OG meta) | Growth; best after public detail URLs are stable |
+| **9 — Creator email updates** | Notify creators when their manifestation is **held** — frequency: each hold / daily / weekly / off | Needs email identity + notification prefs + email provider |
+| **10 — Operator dashboard** | Private **`/admin`** analytics: users, manifests, holds, category, geography (aggregated) | Needs admin auth, service role, privacy review — after core loop + pentest prep |
+| **Later** | Custom domain, anonymous→email linking, **security pentest** (`docs/security-pentest.md`), polish | Before wide launch |
 
-**Phase 3 build order (recommended slices):** (a) **Edit** → (b) **Withdraw hold** → (c) **Archive / delete**.
+**Phase 3 build order (recommended slices):** (a) **Edit** ✅ → (b) **Withdraw hold** ✅ → (c) **Archive / delete** ✅.
 
-**Edit (phase 3a) — scope:** creator-only; **`active`** manifestations only; same validation as create (title, intention, category, end date ≥ today); route e.g. **`/manifestations/[id]/edit`** or edit from **`/account`**; reuse create-form patterns and **`intention-copy.ts`** voice.
+**Archive / delete (phase 3c) — rules:** creator-only; **archive** active posts (hidden from feed; creator + existing holders can still open); **delete** only when **`join_count ≤ 1`** (no other holders); delete requires confirmation checkbox.
 
-**Not done yet:** custom domain, phases 3–7 above, anonymous→email linking UX, **security pentest**.
+**Phase 8 (share) — scope:** share button on detail + account; canonical URL; OG tags on detail page; platform intents (Facebook, Bluesky); Instagram via Web Share API + copy link; strings in **`intention-copy.ts`**.
 
-**Open product decisions (TBD when building):** Can creators close before `ends_at`? Delete vs archive when others still hold? Show archived manifestations in search? Can **`ends_at`** be moved earlier if others already hold?
+**Phase 9 (email) — scope:** `notification_preferences` (or profile fields); trigger on new join for “instant”; cron/queue for digests; requires **custom SMTP** or provider (Supabase auth email alone is not enough for product notifications).
+
+**Phase 10 (dashboard) — scope:** operator-only route; charts/tables from Supabase (aggregates); geography TBD; no public nav link.
+
+**Not done yet:** custom domain, phases 3b–10 above, anonymous→email linking UX, **security pentest**.
+
+**Open product decisions (TBD when building):** Can creators close before `ends_at`? Delete vs archive when others still hold? Show archived manifestations in search? Can **`ends_at`** be moved earlier if others already hold? Share text/caption wording per platform? Include holder count only vs “someone new held” in emails? Which admin emails get dashboard access? How is geography collected and disclosed?
 
 ---
 

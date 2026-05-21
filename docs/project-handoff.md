@@ -84,13 +84,13 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 
 **Manifest (live Supabase only):** **`/manifestations/new`** uses **`CreateManifestationForm`** — anonymous session prep, **`createManifestation`** server action. Copy from **`intention-copy.ts`**: nav **Manifest**, CTA **Start a manifestation**, submit **Manifest this**.
 
-**Hold (live Supabase only):** Feed and detail use **`JoinManifestationControl`** — anonymous session, **Hold with intention** expand on cards, **commitment note** (20–500 chars) + **required checkbox**, server action **`joinManifestation`**. Copy: **Hold this manifestation**, badge **You're holding this manifestation**. **`manifestation_joins`** + RLS + trigger (see SQL docs). Sample/example cards do not enable hold.
+**Hold (live Supabase only):** Feed and detail use **`JoinManifestationControl`** — anonymous session, **Hold with intention** expand on cards, **commitment note** (20–500 chars) + **required checkbox**, server action **`joinManifestation`**. Holders can **withdraw** via **`WithdrawHoldControl`** + **`withdrawHold`** (checkbox confirmation; decrements **`join_count`** via DB trigger). Copy: **Hold this manifestation**, badge **You're holding this manifestation**, **Withdraw hold**. **`manifestation_joins`** + RLS + triggers (see SQL docs). Sample/example cards do not enable hold.
 
 **Detail navigation:** Feed card **titles** link to **`/manifestations/[id]`**.
 
 **Auth:** **`AuthNav`** in the header shows **My account** when you have a session (anonymous or email), **Guest** + **Sign in** + **Sign out** for anonymous-only guests, or truncated **email** + **Sign out** after magic link. **Sign in** preserves the current path via **`?next=`** (validated).
 
-**Lifecycle (Phase 1):** Every manifestation has a required **`ends_at`** and **`status`** (`active` / `archived` / `deleted`). The public feed lists **`active`** only; holds are blocked after **`ends_at`** or when not active. Creator **reflection** columns exist for a later closure UI. If your DB predates this, run **`docs/supabase-phase1-lifecycle-migration.sql`** once.
+**Lifecycle (Phase 1):** Every manifestation has a required **`ends_at`** and **`status`** (`active` / `archived` / `deleted`). The public feed lists **`active`** only; holds are blocked after **`ends_at`** or when not active. Creators can **archive** (feed-hidden) or **delete** (when no other holders). Creator **reflection** columns exist for a later closure UI. If your DB predates this, run **`docs/supabase-phase1-lifecycle-migration.sql`** once.
 
 ---
 
@@ -99,13 +99,15 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 1. Copy **`.env.example`** → **`.env.local`** in the repo root.  
 2. Set **`NEXT_PUBLIC_SUPABASE_URL`** to the **Project URL** only (`https://….supabase.co`) — **do not** append `/rest/v1/`.  
 3. Set **`NEXT_PUBLIC_SUPABASE_ANON_KEY`** to the **anon** (JWT, `eyJ…`) or **publishable** (`sb_publishable_…`) key from **Project Settings → API** — **not** `sb_secret_…` or **service_role**.  
-4. Run **`docs/supabase-schema.sql`** in the Supabase SQL Editor (**`manifestations`** + **`manifestation_joins`**, RLS, join-count trigger). If you **already** ran an older schema, run incremental migrations instead of re-running the full file: **`docs/supabase-join-migration.sql`** (holds), then **`docs/supabase-phase1-lifecycle-migration.sql`** (**`ends_at`**, **`status`**, creator reflection).  
+4. Run **`docs/supabase-schema.sql`** in the Supabase SQL Editor (**`manifestations`** + **`manifestation_joins`**, RLS, join-count trigger). If you **already** ran an older schema, run incremental migrations instead of re-running the full file: **`docs/supabase-join-migration.sql`** (holds), then **`docs/supabase-phase1-lifecycle-migration.sql`** (**`ends_at`**, **`status`**, creator reflection), then **`docs/supabase-withdraw-hold-migration.sql`** (withdraw hold).  
 5. Enable **Anonymous** provider in Supabase Auth.  
 6. Enable **Email** provider (Authentication → Providers → **Email**) so magic links work. Under **Authentication → URL configuration**, set **Site URL** and **Redirect URLs** for **both** dev and production — see **`docs/deploying.md` → Step 2** for exact lines (`https://YOUR-VERCEL-HOST/**`, `…/auth/callback`, and localhost equivalents).
 
 **Auth flow (manifest + hold + sign-in):** Anonymous session for guests; **`signInWithOtp`** sends a link to **`/auth/callback?next=…`**; the **callback page** awaits **`auth.initialize()`** in the browser (PKCE exchange happens there, once — do not also call **`exchangeCodeForSession`** or the verifier is already gone), then **`router.replace(next)`**. Server actions use **`getServerAuthUser`**.
 
 **If holds fail with “relation `manifestation_joins` does not exist” (or similar):** run **`docs/supabase-join-migration.sql`** in the same project as your `.env.local` URL.
+
+**If withdraw hold fails (permission denied or count does not drop):** run **`docs/supabase-withdraw-hold-migration.sql`** once in the SQL Editor.
 
 **If you see “Could not find the table `public.manifestations` in the schema cache”:** the app is talking to Supabase, but that project **does not have the `manifestations` table yet** (or you are on the wrong Supabase project). Open **SQL** → **New query** in the **same** project as your `.env.local` URL, paste and run **`docs/supabase-schema.sql`**, then check **Table Editor** for **`manifestations`**. If the script errors with “already exists”, the table is there — refresh the app; if policies failed halfway, say what error you got.
 
@@ -200,11 +202,14 @@ Roadmap detail and priority: **`docs/comanifest-brief.md` → §7 Status & roadm
 
 - **Phase 1 — Schema** ✅ compulsory **`ends_at`**, **`status`**, creator reflection fields  
 - **Phase 2 — My account** ✅ `/account` — manifestations I started + I’m holding  
-- **Phase 3 — Own your manifestations:** **edit** own active post ✅ (title, intention, category, end date); **withdraw hold**; **archive** / **delete** (rules TBD). Recommended slice order: edit → withdraw → archive/delete  
+- **Phase 3 — Own your manifestations** ✅ **edit**; **withdraw hold**; **archive** / **delete** (delete when `join_count ≤ 1` only)  
 - **Phase 4 — Search** on feed  
 - **Phase 5 — Similar manifestations** suggested on create  
 - **Phase 6 — Closure:** creator-only success reflection after end date  
 - **Phase 7 — Feature suggestion box**  
+- **Phase 8 — Share:** Facebook, Instagram, Bluesky + link previews (detail + account; creator or holder)  
+- **Phase 9 — Creator email updates:** when your manifestation is held — instant / daily / weekly / off (email sign-in required)  
+- **Phase 10 — Operator dashboard:** private admin analytics (users, manifests, holds, category, geography) — operator auth + privacy review  
 - **Security review / pentest** — before wider launch; **`docs/security-pentest.md`**  
 - **Custom domain** — **`docs/deploying.md` Step 3**  
 - **Anonymous → email linking** — dedicated UX when a guest upgrades  
@@ -228,4 +233,4 @@ That gives the assistant the same structural context chat history used to hold.
 
 ---
 
-*Last updated: 2026-05-19 — phases 1–2 shipped; phase 3 expanded (edit + lifecycle); timeframe removed from create.*
+*Last updated: 2026-05-19 — phase 3a edit shipped; roadmap: share (8), email updates (9), operator dashboard (10).*

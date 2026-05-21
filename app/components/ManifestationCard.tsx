@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { CreatorManifestationActions } from "@/app/components/CreatorManifestationActions";
 import { JoinManifestationControl } from "@/app/components/JoinManifestationControl";
 import {
   holdingCountLabel,
@@ -17,15 +18,19 @@ import {
 type ManifestationCardProps = {
   manifestation: ManifestationListRow;
   joinsEnabled: boolean;
+  withdrawEnabled?: boolean;
   showStatus?: boolean;
   showEditLink?: boolean;
+  showCreatorActions?: boolean;
 };
 
 export function ManifestationCard({
   manifestation,
   joinsEnabled,
+  withdrawEnabled = joinsEnabled,
   showStatus = false,
   showEditLink = false,
+  showCreatorActions = false,
 }: ManifestationCardProps) {
   const label =
     MANIFESTATION_CATEGORY_LABELS[manifestation.category] ??
@@ -68,6 +73,7 @@ export function ManifestationCard({
             <JoinManifestationControl
               manifestationId={manifestation.id}
               joinsEnabled={joinsEnabled}
+              withdrawEnabled={withdrawEnabled}
               viewerHasJoined={manifestation.viewer_has_joined}
               viewerIsCreator={manifestation.viewer_is_creator}
               variant="card"
@@ -83,6 +89,15 @@ export function ManifestationCard({
           >
             {MANIFEST_EDIT_LINK}
           </Link>
+        ) : null}
+        {showCreatorActions &&
+        manifestation.viewer_is_creator &&
+        !manifestation.id.startsWith("sample-") ? (
+          <CreatorManifestationActions
+            manifestationId={manifestation.id}
+            status={manifestation.status}
+            joinCount={manifestation.join_count}
+          />
         ) : null}
       </div>
       {manifestation.id.startsWith("sample-") ? (

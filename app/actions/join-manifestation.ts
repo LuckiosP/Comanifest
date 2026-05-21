@@ -6,6 +6,9 @@ import {
   JOIN_COMMITMENT_MAX_LEN,
   JOIN_COMMITMENT_MIN_LEN,
 } from "@/lib/manifestations/join-bounds";
+import {
+  HOLD_WITHDRAW_SUCCESS,
+} from "@/lib/manifestations/intention-copy";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import {
   createServerSupabaseClient,
@@ -109,4 +112,71 @@ export async function joinManifestation(
     success:
       "You are now holding this manifestation with the group. Thank you for taking it seriously.",
   };
+}
+
+export type WithdrawHoldState = { error?: string; success?: string };
+
+export async function withdrawHold(
+  _prev: WithdrawHoldState | undefined,
+  formData: FormData,
+): Promise<WithdrawHoldState> {
+  if (!isSupabaseConfigured()) {
+    return { error: "Supabase is not configured." };
+  }
+
+  const manifestationId = String(formData.get("manifestation_id") ?? "").trim();
+  const affirm = String(formData.get("affirm_withdraw") ?? "");
+
+  if (!manifestationId) {
+    return { error: "Missing manifestation." };
+  }
+
+  if (affirm !== "on") {
+    return {
+      error: "Please confirm you are stepping back from holding this manifestation.",
+    };
+  }
+
+  const supabase = await createServerSupabaseClient();
+  if (!supabase) {
+    return { error: "Could not connect to Supabase." };
+  }
+
+  const user = await getServerAuthUser(supabase);
+  if (!user) {
+    return {
+      error:
+        "No signed-in user reached the server. Reload the page and try again.",
+    };
+  }
+
+  const { data: joinRow, error: joinErr } = await supabase
+    .from("manifestation_joins")
+    .select("id")
+    .eq("manifestation_id", manifestationId)
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (joinErr) {
+    return { error: joinErr.message };
+  }
+  if (!joinRow) {
+    return { error: "You are not holding this manifestation." };
+  }
+
+  const { error } = await supabase
+    .from("manifestation_joins")
+    .delete()
+    .eq("id", joinRow.id)
+    .eq("user_id", user.id);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath("/manifestations");
+  revalidatePath("/account");
+  revalidatePath(`/manifestations/${manifestationId}`);
+
+  return { success: HOLD_WITHDRAW_SUCCESS };
 }

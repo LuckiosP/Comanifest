@@ -5,6 +5,7 @@
 -- of re-running the full script:
 --   - **`docs/supabase-join-migration.sql`** — hold rows + join_count trigger
 --   - **`docs/supabase-phase1-lifecycle-migration.sql`** — ends_at, status, creator reflection
+--   - **`docs/supabase-withdraw-hold-migration.sql`** — withdraw hold (delete join + decrement count)
 --
 -- Before testing the app:
 -- 1. Create a project at https://supabase.com
@@ -100,6 +101,11 @@ create policy "Users can insert join rows when not the creator"
     )
   );
 
+create policy "Users can delete their own joins"
+  on public.manifestation_joins
+  for delete
+  using (auth.uid() = user_id);
+
 create or replace function public.manifestation_joins_after_insert()
 returns trigger
 language plpgsql
@@ -118,3 +124,22 @@ create trigger manifestation_joins_increment_count
   after insert on public.manifestation_joins
   for each row
   execute function public.manifestation_joins_after_insert();
+
+create or replace function public.manifestation_joins_after_delete()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  update public.manifestations
+  set join_count = greatest(1, join_count - 1)
+  where id = old.manifestation_id;
+  return old;
+end;
+$$;
+
+create trigger manifestation_joins_decrement_count
+  after delete on public.manifestation_joins
+  for each row
+  execute function public.manifestation_joins_after_delete();

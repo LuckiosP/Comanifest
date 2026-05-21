@@ -97,6 +97,7 @@ export default async function AccountPage() {
                     joinsEnabled={false}
                     showStatus
                     showEditLink
+                    showCreatorActions
                   />
                 </li>
               ))}
@@ -126,6 +127,9 @@ export default async function AccountPage() {
                   <ManifestationCard
                     manifestation={manifestation}
                     joinsEnabled={false}
+                    withdrawEnabled={
+                      !manifestation.id.startsWith("sample-")
+                    }
                     showStatus
                   />
                 </li>

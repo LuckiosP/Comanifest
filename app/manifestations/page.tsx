@@ -62,6 +62,7 @@ export default async function ManifestationsPage({
                   joinsEnabled={
                     source === "live" && isManifestationOpenForHolds(m)
                   }
+                  withdrawEnabled={source === "live"}
                 />
               </li>
             ))}

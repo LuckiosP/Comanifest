@@ -1,4 +1,5 @@
 import { SAMPLE_MANIFESTATIONS } from "@/lib/manifestations/sample-data";
+import { canViewArchivedManifestation } from "@/lib/manifestations/lifecycle";
 import { createServerSupabaseClient, getServerAuthUser } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import type {
@@ -232,11 +233,23 @@ export async function getManifestationById(id: string): Promise<{
     viewer_has_joined = Boolean(joinRow);
   }
 
+  const viewer_is_creator = Boolean(user && user.id === creatorId);
+
+  if (
+    !canViewArchivedManifestation({
+      status: row.status,
+      viewerIsCreator: viewer_is_creator,
+      viewerHasJoined: viewer_has_joined,
+    })
+  ) {
+    return null;
+  }
+
   return {
     row,
     source: "live",
     viewer_has_joined,
-    viewer_is_creator: Boolean(user && user.id === creatorId),
+    viewer_is_creator,
   };
 }
 

@@ -3,13 +3,14 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { JoinManifestationControl } from "../../components/JoinManifestationControl";
+import { CreatorManifestationActions } from "../../components/CreatorManifestationActions";
 import { SiteHeader } from "../../components/SiteHeader";
 import {
   holdingCountLabel,
+  MANIFEST_ARCHIVED_BANNER,
   MANIFEST_EDIT_LINK,
   MANIFEST_ENDS_LABEL,
-} from "@/lib/manifestations/intention-copy";
-import { formatManifestationDate } from "@/lib/manifestations/dates";
+} from "@/lib/manifestations/intention-copy";import { formatManifestationDate } from "@/lib/manifestations/dates";
 import { getManifestationById } from "@/lib/manifestations/queries";
 import {
   isManifestationEditable,
@@ -65,6 +66,12 @@ export default async function ManifestationDetailPage({ params }: Props) {
           </p>
         ) : null}
 
+        {row.status === "archived" ? (
+          <p className="rounded-xl border border-stone-200 bg-stone-50/90 px-3 py-2 text-sm text-stone-700 dark:border-stone-700 dark:bg-stone-800/50 dark:text-stone-200">
+            {MANIFEST_ARCHIVED_BANNER}
+          </p>
+        ) : null}
+
         <article className="flex flex-col gap-4 rounded-2xl border border-stone-200/90 bg-white/80 p-6 shadow-sm backdrop-blur-sm dark:border-stone-700/90 dark:bg-stone-800/50 sm:p-8">
           <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-stone-500 dark:text-stone-400">
             <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-violet-800 dark:bg-violet-900/50 dark:text-violet-200">
@@ -105,10 +112,18 @@ export default async function ManifestationDetailPage({ params }: Props) {
               joinsEnabled={
                 source === "live" && isManifestationOpenForHolds(row)
               }
+              withdrawEnabled={source === "live"}
               viewerHasJoined={viewer_has_joined}
               viewerIsCreator={viewer_is_creator}
               variant="detail"
             />
+            {viewer_is_creator && source === "live" ? (
+              <CreatorManifestationActions
+                manifestationId={row.id}
+                status={row.status}
+                joinCount={row.join_count}
+              />
+            ) : null}
           </div>        </article>
 
         <Link
