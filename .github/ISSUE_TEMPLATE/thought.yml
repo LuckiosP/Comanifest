@@ -1,0 +1,27 @@
+name: Thought or idea
+description: Capture a product idea, bug, or note while away from Cursor
+title: "[Thought] "
+labels: ["thought"]
+body:
+  - type: markdown
+    value: |
+      Quick capture from phone or browser. When you're at your laptop, open Cursor and say:
+      **"Review open GitHub issues labeled thought"** or paste the issue link in chat.
+  - type: textarea
+    id: body
+    attributes:
+      label: What's on your mind?
+      description: Product ideas, copy tweaks, worries, dreams for Comanifest — anything.
+      placeholder: e.g. "The hold button should feel even calmer on mobile…"
+    validations:
+      required: true
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: When should we look at this?
+      options:
+        - Whenever
+        - Next session
+        - Before wider launch
+    validations:
+      required: false

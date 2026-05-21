@@ -156,6 +156,8 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 - `docs/comanifest-brief.md` — product brief (pinned reference)  
 - `docs/deploying.md` — **GitHub → Vercel → Supabase URLs**; **sync workflow**  
 - `docs/security-pentest.md` — **future security review / pentest** protocol (before wider launch)  
+- `docs/capturing-thoughts-while-away.md` — capture ideas **offline** (GitHub Issues, `docs/thoughts-inbox.md`; AI has no email/WhatsApp inbox)  
+- `docs/thoughts-inbox.md` — quick bullet inbox (editable from phone via GitHub)  
 - `docs/supabase-schema.sql` — DB + RLS + joins (full fresh install)  
 - `docs/supabase-join-migration.sql` — **additive** joins table + trigger + policies (existing projects)  
 - `.env.example` — template for public Supabase vars (safe to commit)

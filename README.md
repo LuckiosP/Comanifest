@@ -12,6 +12,7 @@ Collective intention, together — manifest hopeful outcomes and hold them with 
 | [`docs/project-handoff.md`](docs/project-handoff.md) | What's built, file map, Supabase setup, troubleshooting |
 | [`docs/deploying.md`](docs/deploying.md) | GitHub → Vercel → Supabase URLs; **keeping local & live in sync** |
 | [`docs/security-pentest.md`](docs/security-pentest.md) | **Future security review / pentest** checklist and briefing |
+| [`docs/capturing-thoughts-while-away.md`](docs/capturing-thoughts-while-away.md) | **Ideas while offline** — GitHub Issues / inbox (not email/WhatsApp to AI) |
 
 ## Local development
 
