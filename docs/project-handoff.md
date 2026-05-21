@@ -107,7 +107,7 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 
 **If holds fail with “relation `manifestation_joins` does not exist” (or similar):** run **`docs/supabase-join-migration.sql`** in the same project as your `.env.local` URL.
 
-**If withdraw hold fails (permission denied or count does not drop):** run **`docs/supabase-withdraw-hold-migration.sql`** once in the SQL Editor.
+**If withdraw hold fails (permission denied, count unchanged, or withdraw button stays):** run **`docs/supabase-withdraw-hold-migration.sql`** once in the SQL Editor. Re-run the full file if you already ran an older copy — it is safe to run again and adds the **`withdraw_manifestation_hold`** RPC.
 
 **If you see “Could not find the table `public.manifestations` in the schema cache”:** the app is talking to Supabase, but that project **does not have the `manifestations` table yet** (or you are on the wrong Supabase project). Open **SQL** → **New query** in the **same** project as your `.env.local` URL, paste and run **`docs/supabase-schema.sql`**, then check **Table Editor** for **`manifestations`**. If the script errors with “already exists”, the table is there — refresh the app; if policies failed halfway, say what error you got.
 

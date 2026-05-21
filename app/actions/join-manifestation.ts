@@ -164,14 +164,42 @@ export async function withdrawHold(
     return { error: "You are not holding this manifestation." };
   }
 
-  const { error } = await supabase
+  const { error: rpcError } = await supabase.rpc("withdraw_manifestation_hold", {
+    p_manifestation_id: manifestationId,
+  });
+
+  if (!rpcError) {
+    revalidatePath("/manifestations");
+    revalidatePath("/account");
+    revalidatePath(`/manifestations/${manifestationId}`);
+    return { success: HOLD_WITHDRAW_SUCCESS };
+  }
+
+  const rpcMissing =
+    rpcError.message.includes("withdraw_manifestation_hold") ||
+    rpcError.message.includes("Could not find the function") ||
+    rpcError.code === "PGRST202";
+
+  if (!rpcMissing) {
+    return { error: rpcError.message };
+  }
+
+  const { data: deleted, error: deleteError } = await supabase
     .from("manifestation_joins")
     .delete()
     .eq("id", joinRow.id)
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .select("id");
 
-  if (error) {
-    return { error: error.message };
+  if (deleteError) {
+    return { error: deleteError.message };
+  }
+
+  if (!deleted?.length) {
+    return {
+      error:
+        "Could not withdraw your hold. Run docs/supabase-withdraw-hold-migration.sql in the Supabase SQL Editor (adds delete permission and updates the hold count).",
+    };
   }
 
   revalidatePath("/manifestations");

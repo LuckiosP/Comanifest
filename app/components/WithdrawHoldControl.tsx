@@ -18,11 +18,13 @@ const initialState: WithdrawHoldState = {};
 type WithdrawHoldControlProps = {
   manifestationId: string;
   variant?: "inline" | "compact";
+  onWithdrawn?: () => void;
 };
 
 export function WithdrawHoldControl({
   manifestationId,
   variant = "inline",
+  onWithdrawn,
 }: WithdrawHoldControlProps) {
   const router = useRouter();
   const [state, formAction, pending] = useActionState(
@@ -34,9 +36,10 @@ export function WithdrawHoldControl({
   useEffect(() => {
     if (state?.success) {
       setExpanded(false);
+      onWithdrawn?.();
       router.refresh();
     }
-  }, [state?.success, router]);
+  }, [state?.success, router, onWithdrawn]);
 
   if (variant === "compact" && !expanded) {
     return (

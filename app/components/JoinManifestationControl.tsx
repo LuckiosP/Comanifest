@@ -55,6 +55,7 @@ export function JoinManifestationControl({
   const [retryTick, setRetryTick] = useState(0);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [expanded, setExpanded] = useState(variant === "detail");
+  const [withdrew, setWithdrew] = useState(false);
   const turnstileSiteKey = getTurnstileSiteKey();
 
   const onCaptchaExpire = useCallback(() => {
@@ -164,6 +165,14 @@ export function JoinManifestationControl({
     );
   }
 
+  if (withdrew) {
+    return (
+      <p className="max-w-xs text-right text-xs text-stone-500 dark:text-stone-400">
+        You stepped back from holding this manifestation.
+      </p>
+    );
+  }
+
   if (viewerHasJoined || state?.success) {
     return (
       <div
@@ -176,6 +185,7 @@ export function JoinManifestationControl({
           <WithdrawHoldControl
             manifestationId={manifestationId}
             variant={variant === "card" ? "compact" : "inline"}
+            onWithdrawn={() => setWithdrew(true)}
           />
         ) : null}
       </div>

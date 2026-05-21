@@ -37,3 +37,31 @@ create trigger manifestation_joins_decrement_count
   after delete on public.manifestation_joins
   for each row
   execute function public.manifestation_joins_after_delete();
+
+-- Preferred app path: SECURITY DEFINER RPC (works even if DELETE policy was missed).
+create or replace function public.withdraw_manifestation_hold(p_manifestation_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_user_id uuid := auth.uid();
+  v_deleted int;
+begin
+  if v_user_id is null then
+    raise exception 'Not authenticated';
+  end if;
+
+  delete from public.manifestation_joins
+  where manifestation_id = p_manifestation_id
+    and user_id = v_user_id;
+
+  get diagnostics v_deleted = row_count;
+  if v_deleted = 0 then
+    raise exception 'You are not holding this manifestation';
+  end if;
+end;
+$$;
+
+grant execute on function public.withdraw_manifestation_hold(uuid) to anon, authenticated;
