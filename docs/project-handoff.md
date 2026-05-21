@@ -71,6 +71,7 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 | `/manifestations` | **Feed** of manifestations; **sort** via `?sort=joined` or default newest |
 | `/manifestations/new` | **Start a manifestation** form (`MANIFEST_CTA`); server action **`createManifestation`** |
 | `/manifestations/[id]` | **Detail** for one manifestation: full intention, metadata, **hold** UI (`JoinManifestationControl`); **`getManifestationById`** returns sample rows, live UUID rows, and **`viewer_has_joined` / `viewer_is_creator`** for the current session |
+| `/manifestations/[id]/edit` | **Edit** an active manifestation you created (title, intention, category, **Holds until**); **`updateManifestation`** server action; creator-only |
 | `/account` | **My account**: manifestations **you started** and **you are holding** (`listAccountManifestations`); requires a session — redirects to **`/sign-in?next=/account`** if not signed in |
 | `/sign-in` | **Magic link** email sign-in (`?next=/path` supported); **`SignInForm`** uses `signInWithOtp` with redirect to **`/auth/callback`** |
 | `/auth/callback` | **Client page** finishes PKCE in the **browser** (verifier cookie from “Send magic link” is visible): **`auth.initialize()`** (with default `detectSessionInUrl`) performs the code exchange once, then **`getSession()`** confirms and the app redirects to **`next`** |
@@ -197,9 +198,9 @@ The dev scripts set **`NODE_OPTIONS=--dns-result-order=ipv4first`** and **`NODE_
 
 Roadmap detail and priority: **`docs/comanifest-brief.md` → §7 Status & roadmap**.
 
-- **Phase 1 — Schema:** compulsory **`ends_at`**, **`status`** (active / archived / deleted), creator reflection fields  
-- **Phase 2 — My account:** `/account` — manifestations I started + I’m holding  
-- **Phase 3 — Lifecycle:** withdraw hold; archive / delete own manifestation  
+- **Phase 1 — Schema** ✅ compulsory **`ends_at`**, **`status`**, creator reflection fields  
+- **Phase 2 — My account** ✅ `/account` — manifestations I started + I’m holding  
+- **Phase 3 — Own your manifestations:** **edit** own active post ✅ (title, intention, category, end date); **withdraw hold**; **archive** / **delete** (rules TBD). Recommended slice order: edit → withdraw → archive/delete  
 - **Phase 4 — Search** on feed  
 - **Phase 5 — Similar manifestations** suggested on create  
 - **Phase 6 — Closure:** creator-only success reflection after end date  
@@ -227,4 +228,4 @@ That gives the assistant the same structural context chat history used to hold.
 
 ---
 
-*Last updated: 2026-05-19 — brief: end dates, closure, search, account, lifecycle, suggestion box; roadmap phases.*
+*Last updated: 2026-05-19 — phases 1–2 shipped; phase 3 expanded (edit + lifecycle); timeframe removed from create.*

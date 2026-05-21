@@ -29,3 +29,9 @@ export const ACCOUNT_NAV = "My account";
 
 /** Label beside the required end date on create + detail views. */
 export const MANIFEST_ENDS_LABEL = "Holds until";
+
+/** Edit flow — creator updates an active manifestation. */
+export const MANIFEST_EDIT_CTA = "Edit manifestation";
+export const MANIFEST_EDIT_SUBMIT = "Save changes";
+export const MANIFEST_EDIT_SUBMIT_PENDING = "Saving…";
+export const MANIFEST_EDIT_LINK = "Edit";

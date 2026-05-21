@@ -6,11 +6,15 @@ import { JoinManifestationControl } from "../../components/JoinManifestationCont
 import { SiteHeader } from "../../components/SiteHeader";
 import {
   holdingCountLabel,
+  MANIFEST_EDIT_LINK,
   MANIFEST_ENDS_LABEL,
 } from "@/lib/manifestations/intention-copy";
 import { formatManifestationDate } from "@/lib/manifestations/dates";
 import { getManifestationById } from "@/lib/manifestations/queries";
-import { isManifestationOpenForHolds } from "@/lib/manifestations/lifecycle";
+import {
+  isManifestationEditable,
+  isManifestationOpenForHolds,
+} from "@/lib/manifestations/lifecycle";
 import { MANIFESTATION_CATEGORY_LABELS } from "@/lib/types/manifestation";
 
 type Props = {
@@ -76,6 +80,17 @@ export default async function ManifestationDetailPage({ params }: Props) {
           <h1 className="text-2xl font-semibold leading-snug text-stone-900 dark:text-stone-50 sm:text-3xl">
             {row.title}
           </h1>
+
+          {viewer_is_creator &&
+          source === "live" &&
+          isManifestationEditable(row) ? (
+            <Link
+              href={`/manifestations/${row.id}/edit`}
+              className="w-fit text-sm font-medium text-violet-700 underline-offset-2 hover:underline dark:text-violet-300"
+            >
+              {MANIFEST_EDIT_LINK} →
+            </Link>
+          ) : null}
 
           <p className="text-base leading-relaxed text-stone-700 dark:text-stone-200">
             {row.intention}

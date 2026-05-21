@@ -96,6 +96,7 @@ export default async function AccountPage() {
                     manifestation={manifestation}
                     joinsEnabled={false}
                     showStatus
+                    showEditLink
                   />
                 </li>
               ))}

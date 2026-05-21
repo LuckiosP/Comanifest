@@ -57,3 +57,12 @@ export function localTodayDateInputValue(): string {
   const day = String(now.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
+
+/** Map a stored ISO timestamp to `YYYY-MM-DD` for `<input type="date">`. */
+export function isoToDateInputValue(iso: string): string {
+  const d = new Date(iso);
+  const year = d.getUTCFullYear();
+  const month = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(d.getUTCDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}

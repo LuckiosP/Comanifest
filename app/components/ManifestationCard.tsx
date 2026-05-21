@@ -3,9 +3,11 @@ import Link from "next/link";
 import { JoinManifestationControl } from "@/app/components/JoinManifestationControl";
 import {
   holdingCountLabel,
+  MANIFEST_EDIT_LINK,
   MANIFEST_ENDS_LABEL,
 } from "@/lib/manifestations/intention-copy";
 import { formatManifestationDate } from "@/lib/manifestations/dates";
+import { isManifestationEditable } from "@/lib/manifestations/lifecycle";
 import {
   MANIFESTATION_CATEGORY_LABELS,
   MANIFESTATION_STATUS_LABELS,
@@ -16,12 +18,14 @@ type ManifestationCardProps = {
   manifestation: ManifestationListRow;
   joinsEnabled: boolean;
   showStatus?: boolean;
+  showEditLink?: boolean;
 };
 
 export function ManifestationCard({
   manifestation,
   joinsEnabled,
   showStatus = false,
+  showEditLink = false,
 }: ManifestationCardProps) {
   const label =
     MANIFESTATION_CATEGORY_LABELS[manifestation.category] ??
@@ -70,6 +74,16 @@ export function ManifestationCard({
             />
           </div>
         </div>
+        {showEditLink &&
+        isManifestationEditable(manifestation) &&
+        !manifestation.id.startsWith("sample-") ? (
+          <Link
+            href={`/manifestations/${manifestation.id}/edit`}
+            className="w-fit text-sm font-medium text-violet-700 underline-offset-2 hover:underline dark:text-violet-300"
+          >
+            {MANIFEST_EDIT_LINK}
+          </Link>
+        ) : null}
       </div>
       {manifestation.id.startsWith("sample-") ? (
         <p className="text-xs text-amber-700/90 dark:text-amber-300/90">

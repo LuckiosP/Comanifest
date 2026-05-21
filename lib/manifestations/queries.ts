@@ -243,3 +243,32 @@ export async function getManifestationById(id: string): Promise<{
     viewer_is_creator: Boolean(user && user.id === creatorId),
   };
 }
+
+export async function getManifestationForEdit(
+  id: string,
+  userId: string,
+): Promise<Manifestation | null> {
+  if (!UUID_RE.test(id) || !isSupabaseConfigured()) {
+    return null;
+  }
+
+  const supabase = await createServerSupabaseClient();
+  if (!supabase) {
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from("manifestations")
+    .select(MANIFESTATION_SELECT)
+    .eq("id", id)
+    .eq("user_id", userId)
+    .eq("status", "active")
+    .maybeSingle();
+
+  if (error || !data) {
+    return null;
+  }
+
+  const { user_id: _creatorId, ...row } = data as DbManifestationRow;
+  return row;
+}

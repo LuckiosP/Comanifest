@@ -8,3 +8,9 @@ export function isManifestationOpenForHolds(
     new Date(manifestation.ends_at).getTime() >= Date.now()
   );
 }
+
+export function isManifestationEditable(
+  manifestation: Pick<Manifestation, "status">,
+): boolean {
+  return manifestation.status === "active";
+}

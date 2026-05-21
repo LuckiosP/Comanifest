@@ -206,7 +206,7 @@ The UI should feel:
 
 ## 7. Status & roadmap
 
-**Shipped (2026-05):** local dev, GitHub (`LuckiosP/Comanifest`), Vercel production, Supabase auth (magic link on live), manifest + hold flows, UI voice (manifest / hold). Optional `timeframe` text on create; **no end date, search, account home, or closure flow yet**.
+**Shipped (2026-05):** local dev, GitHub (`LuckiosP/Comanifest`), Vercel production, Supabase auth (magic link on live), manifest + hold flows, UI voice (manifest / hold), compulsory **end date** on create, **`/account`** (started + holding). **Timeframe** free-text removed from create — **Holds until** is the single date field.
 
 **Ongoing:** edit locally → `git push` → Vercel redeploys — see **`docs/deploying.md`**.
 
@@ -216,18 +216,22 @@ Work in **thin slices** — each step should ship something usable on live.
 
 | Phase | What | Why first |
 |-------|------|-----------|
-| **1 — Data model** | Compulsory **`ends_at`** on manifestations; **`status`** (e.g. active / archived / deleted); optional creator **reflection** fields for post-end evaluation | Everything else (closure, feed filters, account lists) depends on dates and lifecycle |
-| **2 — My account** | **`/account`** (or `/me`): manifestations I **started** + I’m **holding** | Core user need; uses existing `user_id` + joins |
-| **3 — Lifecycle actions** | **Withdraw hold**; **archive** / **delete** own manifestation (rules TBD) | Account page needs actions, not just lists |
+| **1 — Data model** ✅ | Compulsory **`ends_at`** on manifestations; **`status`** (e.g. active / archived / deleted); optional creator **reflection** fields for post-end evaluation | Everything else (closure, feed filters, account lists) depends on dates and lifecycle |
+| **2 — My account** ✅ | **`/account`**: manifestations I **started** + I’m **holding** | Core user need; uses existing `user_id` + joins |
+| **3 — Own your manifestations** | **Edit** own active manifestation (title, intention, category, **Holds until**); **withdraw hold**; **archive** / **delete** own manifestation (rules TBD) | Account page needs actions, not just lists; edit fixes mistakes before closure |
 | **4 — Search** | Feed + header **search** (title / intention / category) | Needed before duplicate-nudge is credible |
 | **5 — Similar on create** | On **Start a manifestation**, query similar rows and **suggest** before submit | Reuses search; reduces duplicate manifestations |
 | **6 — Closure & evaluation** | After **`ends_at`**, prompt **creator only** to reflect on success (gentle copy) | Requires phase 1 dates + notifications or “ready to close” UI |
 | **7 — Feature suggestions** | Simple **suggestion box** (Supabase table + form, or link to GitHub Issues) | Independent; can ship anytime after phase 2 |
 | **Later** | Custom domain, anonymous→email linking, **security pentest** (`docs/security-pentest.md`), polish | After core product loop is trustworthy |
 
-**Not done yet:** custom domain, full roadmap phases above, anonymous→email linking UX, **security pentest**.
+**Phase 3 build order (recommended slices):** (a) **Edit** → (b) **Withdraw hold** → (c) **Archive / delete**.
 
-**Open product decisions (TBD when building):** Can creators close before `ends_at`? Delete vs archive when others still hold? Show archived manifestations in search?
+**Edit (phase 3a) — scope:** creator-only; **`active`** manifestations only; same validation as create (title, intention, category, end date ≥ today); route e.g. **`/manifestations/[id]/edit`** or edit from **`/account`**; reuse create-form patterns and **`intention-copy.ts`** voice.
+
+**Not done yet:** custom domain, phases 3–7 above, anonymous→email linking UX, **security pentest**.
+
+**Open product decisions (TBD when building):** Can creators close before `ends_at`? Delete vs archive when others still hold? Show archived manifestations in search? Can **`ends_at`** be moved earlier if others already hold?
 
 ---
 
