@@ -74,8 +74,12 @@ Users **manifest** a new **manifestation** by describing:
 
 - the desired outcome  
 - the intention behind it  
-- the timeframe (optional)  
+- a **compulsory end date** — when this manifestation closes for evaluation (see **F** below)  
 - the category (weather, global, personal, sports, etc.)  
+
+**Before they submit:** the app **searches for similar manifestations** already in the feed and **suggests** them. Finding one that is basically the same is **more powerful** than duplicating — the UI should nudge people toward holding an existing manifestation rather than starting a near-copy.
+
+**Optional today, required in product:** `timeframe` as free text may remain for human-readable context, but **end date** is the authoritative close.
 
 ### B. Holding a manifestation
 
@@ -86,6 +90,8 @@ Other users **hold** a manifestation by:
 - confirming a **good-faith checkbox** — deliberate, not a throwaway click  
 - contributing to the collective count  
 
+Holders must be able to **withdraw their hold** later — remove their row and drop out of the circle without deleting the manifestation itself.
+
 ### C. Community feed
 
 A list of active manifestations, sortable by:
@@ -94,6 +100,8 @@ A list of active manifestations, sortable by:
 - widest circle (most people holding)  
 - category  
 - trending (future)  
+
+Manifestations must be **searchable** (by title, intention, category, and eventually other fields) so people can find existing work before creating duplicates.
 
 ### D. Guidelines
 
@@ -106,15 +114,34 @@ A clear, simple set of principles:
 - no political manipulation  
 - for good, for fun, for collective uplift  
 
-### E. Outcome tracking (future)
+### E. Closure & evaluation (when a manifestation ends)
 
-A gentle, non-literal way of reflecting on outcomes:
+Every manifestation has an **end date**. When that date passes (or the creator closes it early — TBD), the manifestation enters a **reflection** phase.
 
-- “Did this happen?”  
-- “How did people feel participating?”  
-- “What did the community notice?”  
+- **Only the person who created the manifestation** may evaluate whether it was a success.  
+- Evaluation is **gentle and reflective**, not a court verdict — aligned with section 2 (no guarantees, collective meaning matters).  
+- Prompts might include: did the outcome happen as hoped? how did holding it feel? what did the circle notice?  
+- Holders may see the creator’s reflection; they do not grade success themselves (unless we add optional private holder notes later).
 
-No promises, no guarantees — just reflection.
+This replaces the vague “outcome tracking (future)” idea with a **creator-led closure** tied to **compulsory end dates**.
+
+### F. My account
+
+Signed-in users need an **account home** where they can easily see:
+
+- **Manifestations I started** (created)  
+- **Manifestations I’m holding** (active holds)  
+
+From here (or from detail pages), they need lifecycle actions:
+
+- **Archive** or **delete** a manifestation they created (with clear rules: e.g. cannot delete if others hold without archiving first — TBD)  
+- **Withdraw hold** on someone else’s manifestation  
+
+Anonymous users may still browse; **“my stuff”** requires a stable identity (magic link / linked account).
+
+### G. Feature suggestion box
+
+A simple **suggestion box** in the product for ideas about Comanifest itself (not manifestations). Low friction: short text + optional contact, stored safely (Supabase table or link to GitHub Issues — implementation TBD). Tone: “Help us grow Comanifest.”
 
 ---
 
@@ -177,13 +204,30 @@ The UI should feel:
 
 ---
 
-## 7. Status & next steps
+## 7. Status & roadmap
 
-**Shipped (2026-05):** local dev, GitHub (`LuckiosP/Comanifest`), Vercel production, Supabase auth (magic link on live), manifest + hold flows, UI voice (manifest / hold).
+**Shipped (2026-05):** local dev, GitHub (`LuckiosP/Comanifest`), Vercel production, Supabase auth (magic link on live), manifest + hold flows, UI voice (manifest / hold). Optional `timeframe` text on create; **no end date, search, account home, or closure flow yet**.
 
 **Ongoing:** edit locally → `git push` → Vercel redeploys — see **`docs/deploying.md`**.
 
-**Not done yet:** custom domain, “my holds” / profile, anonymous→email linking UX, polish, **security pentest** (`docs/security-pentest.md`).
+### Recommended build order (from new requirements)
+
+Work in **thin slices** — each step should ship something usable on live.
+
+| Phase | What | Why first |
+|-------|------|-----------|
+| **1 — Data model** | Compulsory **`ends_at`** on manifestations; **`status`** (e.g. active / archived / deleted); optional creator **reflection** fields for post-end evaluation | Everything else (closure, feed filters, account lists) depends on dates and lifecycle |
+| **2 — My account** | **`/account`** (or `/me`): manifestations I **started** + I’m **holding** | Core user need; uses existing `user_id` + joins |
+| **3 — Lifecycle actions** | **Withdraw hold**; **archive** / **delete** own manifestation (rules TBD) | Account page needs actions, not just lists |
+| **4 — Search** | Feed + header **search** (title / intention / category) | Needed before duplicate-nudge is credible |
+| **5 — Similar on create** | On **Start a manifestation**, query similar rows and **suggest** before submit | Reuses search; reduces duplicate manifestations |
+| **6 — Closure & evaluation** | After **`ends_at`**, prompt **creator only** to reflect on success (gentle copy) | Requires phase 1 dates + notifications or “ready to close” UI |
+| **7 — Feature suggestions** | Simple **suggestion box** (Supabase table + form, or link to GitHub Issues) | Independent; can ship anytime after phase 2 |
+| **Later** | Custom domain, anonymous→email linking, **security pentest** (`docs/security-pentest.md`), polish | After core product loop is trustworthy |
+
+**Not done yet:** custom domain, full roadmap phases above, anonymous→email linking UX, **security pentest**.
+
+**Open product decisions (TBD when building):** Can creators close before `ends_at`? Delete vs archive when others still hold? Show archived manifestations in search?
 
 ---
 

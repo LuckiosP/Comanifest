@@ -192,14 +192,19 @@ The dev scripts set **`NODE_OPTIONS=--dns-result-order=ipv4first`** and **`NODE_
 
 ## Known follow-ups (not done yet)
 
-- **Security review / pentest** — before wider public launch; use **`docs/security-pentest.md`** (checklist + prompt for tester or AI audit)  
-- **Custom domain** on Vercel + update Supabase redirect URLs — see **`docs/deploying.md` Step 3**  
-- **Anonymous → email linking** — dedicated UX when a guest upgrades (Supabase supports linking; magic link from an existing anon session should be tested per project settings)  
-- **“My holds” / profile** — list manifestations the signed-in user holds or has manifested  
-- **Separate Supabase dev project** — optional later so local experiments do not touch production data  
-- **Next.js 16** warns that **`middleware`** convention may move to **`proxy`** — migrate when you adopt the new API  
-- **Polish** (motion, typography, empty states): explicitly deferred by author  
-- **If any clone still lives under Dropbox (or similar sync):** exclude **`.next`** (and ideally the whole repo) from sync to reduce conflict folders
+Roadmap detail and priority: **`docs/comanifest-brief.md` → §7 Status & roadmap**.
+
+- **Phase 1 — Schema:** compulsory **`ends_at`**, **`status`** (active / archived / deleted), creator reflection fields  
+- **Phase 2 — My account:** `/account` — manifestations I started + I’m holding  
+- **Phase 3 — Lifecycle:** withdraw hold; archive / delete own manifestation  
+- **Phase 4 — Search** on feed  
+- **Phase 5 — Similar manifestations** suggested on create  
+- **Phase 6 — Closure:** creator-only success reflection after end date  
+- **Phase 7 — Feature suggestion box**  
+- **Security review / pentest** — before wider launch; **`docs/security-pentest.md`**  
+- **Custom domain** — **`docs/deploying.md` Step 3**  
+- **Anonymous → email linking** — dedicated UX when a guest upgrades  
+- **Polish** (motion, typography, empty states): deferred  
 
 ---
 
@@ -219,4 +224,4 @@ That gives the assistant the same structural context chat history used to hold.
 
 ---
 
-*Last updated: 2026-05-19 — production on Vercel; sync workflow; security-pentest protocol doc.*
+*Last updated: 2026-05-19 — brief: end dates, closure, search, account, lifecycle, suggestion box; roadmap phases.*
