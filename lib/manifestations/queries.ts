@@ -6,7 +6,7 @@ import type {
   ManifestationListRow,
 } from "@/lib/types/manifestation";
 
-function formatSupabaseQueryError(error: {
+export function formatSupabaseQueryError(error: {
   message: string;
   cause?: unknown;
 }): string {
@@ -27,6 +27,12 @@ function formatSupabaseQueryError(error: {
 
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+const MANIFESTATION_SELECT =
+  "id, created_at, user_id, title, intention, category, timeframe, join_count, ends_at, status, creator_reflection, creator_reflection_success, reflected_at";
+
+const PHASE1_MIGRATION_HINT =
+  "Run docs/supabase-phase1-lifecycle-migration.sql in the Supabase SQL Editor (adds ends_at and status).";
 
 export type ManifestationSort = "newest" | "joined";
 
@@ -83,16 +89,18 @@ export async function listManifestations(sort: ManifestationSort): Promise<{
 
   const { data, error } = await supabase
     .from("manifestations")
-    .select(
-      "id, created_at, user_id, title, intention, category, timeframe, join_count",
-    )
+    .select(MANIFESTATION_SELECT)
+    .eq("status", "active")
     .order("created_at", { ascending: false });
 
   if (error) {
+    const hint = error.message.includes("ends_at")
+      ? `${PHASE1_MIGRATION_HINT} Error: ${formatSupabaseQueryError(error)}`
+      : `Showing examples while Supabase returned an error: ${formatSupabaseQueryError(error)}`;
     return {
       source: "sample",
       rows: sampleListRows(sort),
-      hint: `Showing examples while Supabase returned an error: ${formatSupabaseQueryError(error)}`,
+      hint,
     };
   }
 
@@ -195,9 +203,7 @@ export async function getManifestationById(id: string): Promise<{
 
   const { data, error } = await supabase
     .from("manifestations")
-    .select(
-      "id, created_at, user_id, title, intention, category, timeframe, join_count",
-    )
+    .select(MANIFESTATION_SELECT)
     .eq("id", id)
     .maybeSingle();
 
@@ -210,6 +216,9 @@ export async function getManifestationById(id: string): Promise<{
   }
 
   const db = data as DbManifestationRow;
+  if (db.status === "deleted") {
+    return null;
+  }
   const { user_id: creatorId, ...row } = db;
 
   const {

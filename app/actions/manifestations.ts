@@ -3,11 +3,15 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { isSupabaseConfigured } from "@/lib/supabase/config";
+import {
+  isEndDateOnOrAfterToday,
+  parseEndDateInput,
+} from "@/lib/manifestations/dates";
 import {
   createServerSupabaseClient,
   getServerAuthUser,
 } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import type { ManifestationCategory } from "@/lib/types/manifestation";
 
 const CATEGORIES: ManifestationCategory[] = [
@@ -37,6 +41,7 @@ export async function createManifestation(
   const intention = String(formData.get("intention") ?? "").trim();
   const category = String(formData.get("category") ?? "").trim();
   const timeframe = String(formData.get("timeframe") ?? "").trim();
+  const endsAtInput = String(formData.get("ends_at") ?? "").trim();
 
   if (title.length < 3 || title.length > 200) {
     return { error: "Title should be between 3 and 200 characters." };
@@ -46,6 +51,17 @@ export async function createManifestation(
   }
   if (!CATEGORIES.includes(category as ManifestationCategory)) {
     return { error: "Pick a valid category." };
+  }
+
+  if (!isEndDateOnOrAfterToday(endsAtInput)) {
+    return {
+      error: "Choose an end date from today onward — when this manifestation closes.",
+    };
+  }
+
+  const endsAt = parseEndDateInput(endsAtInput);
+  if (!endsAt) {
+    return { error: "End date is not valid." };
   }
 
   const supabase = await createServerSupabaseClient();
@@ -69,6 +85,8 @@ export async function createManifestation(
     category,
     timeframe: timeframe.length > 0 ? timeframe : null,
     join_count: 1,
+    ends_at: endsAt.toISOString(),
+    status: "active",
   });
 
   if (error) {
@@ -76,5 +94,6 @@ export async function createManifestation(
   }
 
   revalidatePath("/manifestations");
+  revalidatePath("/account");
   redirect("/manifestations");
 }

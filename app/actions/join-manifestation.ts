@@ -59,7 +59,7 @@ export async function joinManifestation(
 
   const { data: row, error: rowErr } = await supabase
     .from("manifestations")
-    .select("user_id")
+    .select("user_id, status, ends_at")
     .eq("id", manifestationId)
     .maybeSingle();
 
@@ -73,6 +73,18 @@ export async function joinManifestation(
   if (row.user_id === user.id) {
     return {
       error: "You already hold this manifestation as its creator.",
+    };
+  }
+
+  if (row.status !== "active") {
+    return {
+      error: "This manifestation is no longer open for new holds.",
+    };
+  }
+
+  if (new Date(row.ends_at).getTime() < Date.now()) {
+    return {
+      error: "This manifestation has reached its end date and is closed for new holds.",
     };
   }
 
@@ -90,6 +102,7 @@ export async function joinManifestation(
   }
 
   revalidatePath("/manifestations");
+  revalidatePath("/account");
   revalidatePath(`/manifestations/${manifestationId}`);
 
   return {

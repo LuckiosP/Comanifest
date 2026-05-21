@@ -1,8 +1,10 @@
 -- Comanifest — Supabase database setup
 -- Run this in the Supabase Dashboard: SQL Editor → New query → Run.
 --
--- If you already ran an older version of this file (before `manifestation_joins` existed),
--- run **`docs/supabase-join-migration.sql`** instead of re-running the full script.
+-- If you already ran an older version of this file, run the incremental migrations instead
+-- of re-running the full script:
+--   - **`docs/supabase-join-migration.sql`** — hold rows + join_count trigger
+--   - **`docs/supabase-phase1-lifecycle-migration.sql`** — ends_at, status, creator reflection
 --
 -- Before testing the app:
 -- 1. Create a project at https://supabase.com
@@ -21,7 +23,14 @@ create table public.manifestations (
   intention text not null check (char_length(intention) between 10 and 2000),
   category text not null,
   timeframe text,
-  join_count integer not null default 1
+  join_count integer not null default 1,
+  ends_at timestamptz not null,
+  status text not null default 'active'
+    check (status in ('active', 'archived', 'deleted')),
+  creator_reflection text
+    check (creator_reflection is null or char_length(trim(creator_reflection)) between 10 and 2000),
+  creator_reflection_success boolean,
+  reflected_at timestamptz
 );
 
 create index manifestations_created_at_idx
@@ -29,6 +38,12 @@ create index manifestations_created_at_idx
 
 create index manifestations_join_count_idx
   on public.manifestations (join_count desc);
+
+create index manifestations_status_created_at_idx
+  on public.manifestations (status, created_at desc);
+
+create index manifestations_status_ends_at_idx
+  on public.manifestations (status, ends_at);
 
 alter table public.manifestations enable row level security;
 
@@ -40,6 +55,12 @@ create policy "Manifestations are readable by everyone"
 create policy "Users can insert their own manifestations"
   on public.manifestations
   for insert
+  with check (auth.uid() = user_id);
+
+create policy "Creators can update their own manifestations"
+  on public.manifestations
+  for update
+  using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
 
 -- Join rows: one per user per manifestation; commitment text; trigger keeps join_count in sync.

@@ -4,21 +4,14 @@ import { notFound } from "next/navigation";
 
 import { JoinManifestationControl } from "../../components/JoinManifestationControl";
 import { SiteHeader } from "../../components/SiteHeader";
-import { holdingCountLabel } from "@/lib/manifestations/intention-copy";
+import {
+  holdingCountLabel,
+  MANIFEST_ENDS_LABEL,
+} from "@/lib/manifestations/intention-copy";
+import { formatManifestationDate } from "@/lib/manifestations/dates";
 import { getManifestationById } from "@/lib/manifestations/queries";
+import { isManifestationOpenForHolds } from "@/lib/manifestations/lifecycle";
 import { MANIFESTATION_CATEGORY_LABELS } from "@/lib/types/manifestation";
-
-function formatDate(iso: string) {
-  try {
-    return new Intl.DateTimeFormat("en-GB", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    }).format(new Date(iso));
-  } catch {
-    return iso;
-  }
-}
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -73,7 +66,11 @@ export default async function ManifestationDetailPage({ params }: Props) {
             <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-violet-800 dark:bg-violet-900/50 dark:text-violet-200">
               {label}
             </span>
-            <span>{formatDate(row.created_at)}</span>
+            <span>{formatManifestationDate(row.created_at)}</span>
+            <span className="text-stone-400 dark:text-stone-500">
+              · {MANIFEST_ENDS_LABEL.toLowerCase()}{" "}
+              {formatManifestationDate(row.ends_at)}
+            </span>
             {row.timeframe ? (
               <span className="text-stone-400 dark:text-stone-500">
                 · {row.timeframe}
@@ -95,7 +92,9 @@ export default async function ManifestationDetailPage({ params }: Props) {
             </p>
             <JoinManifestationControl
               manifestationId={row.id}
-              joinsEnabled={source === "live"}
+              joinsEnabled={
+                source === "live" && isManifestationOpenForHolds(row)
+              }
               viewerHasJoined={viewer_has_joined}
               viewerIsCreator={viewer_is_creator}
               variant="detail"

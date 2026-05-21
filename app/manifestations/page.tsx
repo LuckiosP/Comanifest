@@ -7,6 +7,7 @@ import {
   listManifestations,
   type ManifestationSort,
 } from "@/lib/manifestations/queries";
+import { isManifestationOpenForHolds } from "@/lib/manifestations/lifecycle";
 
 export default async function ManifestationsPage({
   searchParams,
@@ -58,7 +59,9 @@ export default async function ManifestationsPage({
               <li key={m.id}>
                 <ManifestationCard
                   manifestation={m}
-                  joinsEnabled={source === "live"}
+                  joinsEnabled={
+                    source === "live" && isManifestationOpenForHolds(m)
+                  }
                 />
               </li>
             ))}

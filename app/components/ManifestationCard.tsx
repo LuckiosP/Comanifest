@@ -1,32 +1,27 @@
 import Link from "next/link";
 
 import { JoinManifestationControl } from "@/app/components/JoinManifestationControl";
-import { holdingCountLabel } from "@/lib/manifestations/intention-copy";
+import {
+  holdingCountLabel,
+  MANIFEST_ENDS_LABEL,
+} from "@/lib/manifestations/intention-copy";
+import { formatManifestationDate } from "@/lib/manifestations/dates";
 import {
   MANIFESTATION_CATEGORY_LABELS,
+  MANIFESTATION_STATUS_LABELS,
   type ManifestationListRow,
 } from "@/lib/types/manifestation";
 
 type ManifestationCardProps = {
   manifestation: ManifestationListRow;
   joinsEnabled: boolean;
+  showStatus?: boolean;
 };
-
-function formatDate(iso: string) {
-  try {
-    return new Intl.DateTimeFormat("en-GB", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    }).format(new Date(iso));
-  } catch {
-    return iso;
-  }
-}
 
 export function ManifestationCard({
   manifestation,
   joinsEnabled,
+  showStatus = false,
 }: ManifestationCardProps) {
   const label =
     MANIFESTATION_CATEGORY_LABELS[manifestation.category] ??
@@ -38,7 +33,16 @@ export function ManifestationCard({
         <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-violet-800 dark:bg-violet-900/50 dark:text-violet-200">
           {label}
         </span>
-        <span>{formatDate(manifestation.created_at)}</span>
+        <span>{formatManifestationDate(manifestation.created_at)}</span>
+        <span className="text-stone-400 dark:text-stone-500">
+          · {MANIFEST_ENDS_LABEL.toLowerCase()}{" "}
+          {formatManifestationDate(manifestation.ends_at)}
+        </span>
+        {showStatus && manifestation.status !== "active" ? (
+          <span className="rounded-full bg-stone-100 px-2.5 py-0.5 text-stone-700 dark:bg-stone-700/60 dark:text-stone-200">
+            {MANIFESTATION_STATUS_LABELS[manifestation.status]}
+          </span>
+        ) : null}
         {manifestation.timeframe ? (
           <span className="text-stone-400 dark:text-stone-500">
             · {manifestation.timeframe}

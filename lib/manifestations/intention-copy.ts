@@ -23,3 +23,9 @@ export function holdingCountLabel(count: number): string {
   }
   return `${count} people holding this manifestation`;
 }
+
+/** Header nav link to the signed-in account page. */
+export const ACCOUNT_NAV = "My account";
+
+/** Label beside the required end date on create + detail views. */
+export const MANIFEST_ENDS_LABEL = "Holds until";

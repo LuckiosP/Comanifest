@@ -1,5 +1,14 @@
 import type { Manifestation } from "@/lib/types/manifestation";
 
+const SAMPLE_END_OFFSET_DAYS = 30;
+
+function sampleEndsAt(daysFromNow: number): string {
+  const d = new Date();
+  d.setUTCDate(d.getUTCDate() + daysFromNow);
+  d.setUTCHours(23, 59, 59, 999);
+  return d.toISOString();
+}
+
 /** Shown when Supabase is not configured or the table is unreachable. */
 export const SAMPLE_MANIFESTATIONS: Manifestation[] = [
   {
@@ -11,6 +20,11 @@ export const SAMPLE_MANIFESTATIONS: Manifestation[] = [
     category: "weather",
     timeframe: "This Saturday",
     join_count: 48,
+    ends_at: sampleEndsAt(SAMPLE_END_OFFSET_DAYS),
+    status: "active",
+    creator_reflection: null,
+    creator_reflection_success: null,
+    reflected_at: null,
   },
   {
     id: "sample-2",
@@ -21,6 +35,11 @@ export const SAMPLE_MANIFESTATIONS: Manifestation[] = [
     category: "wellbeing",
     timeframe: "Next two weeks",
     join_count: 112,
+    ends_at: sampleEndsAt(SAMPLE_END_OFFSET_DAYS + 7),
+    status: "active",
+    creator_reflection: null,
+    creator_reflection_success: null,
+    reflected_at: null,
   },
   {
     id: "sample-3",
@@ -31,5 +50,10 @@ export const SAMPLE_MANIFESTATIONS: Manifestation[] = [
     category: "sports",
     timeframe: null,
     join_count: 23,
+    ends_at: sampleEndsAt(SAMPLE_END_OFFSET_DAYS),
+    status: "active",
+    creator_reflection: null,
+    creator_reflection_success: null,
+    reflected_at: null,
   },
 ];

@@ -71,6 +71,7 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 | `/manifestations` | **Feed** of manifestations; **sort** via `?sort=joined` or default newest |
 | `/manifestations/new` | **Start a manifestation** form (`MANIFEST_CTA`); server action **`createManifestation`** |
 | `/manifestations/[id]` | **Detail** for one manifestation: full intention, metadata, **hold** UI (`JoinManifestationControl`); **`getManifestationById`** returns sample rows, live UUID rows, and **`viewer_has_joined` / `viewer_is_creator`** for the current session |
+| `/account` | **My account**: manifestations **you started** and **you are holding** (`listAccountManifestations`); requires a session — redirects to **`/sign-in?next=/account`** if not signed in |
 | `/sign-in` | **Magic link** email sign-in (`?next=/path` supported); **`SignInForm`** uses `signInWithOtp` with redirect to **`/auth/callback`** |
 | `/auth/callback` | **Client page** finishes PKCE in the **browser** (verifier cookie from “Send magic link” is visible): **`auth.initialize()`** (with default `detectSessionInUrl`) performs the code exchange once, then **`getSession()`** confirms and the app redirects to **`next`** |
 | `/guidelines` | Full **community guidelines** page |
@@ -86,7 +87,9 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 
 **Detail navigation:** Feed card **titles** link to **`/manifestations/[id]`**.
 
-**Auth:** **`AuthNav`** in the header shows **Guest** + **Sign in** + **Sign out** for anonymous sessions, or truncated **email** + **Sign out** after magic link. **Sign in** preserves the current path via **`?next=`** (validated).
+**Auth:** **`AuthNav`** in the header shows **My account** when you have a session (anonymous or email), **Guest** + **Sign in** + **Sign out** for anonymous-only guests, or truncated **email** + **Sign out** after magic link. **Sign in** preserves the current path via **`?next=`** (validated).
+
+**Lifecycle (Phase 1):** Every manifestation has a required **`ends_at`** and **`status`** (`active` / `archived` / `deleted`). The public feed lists **`active`** only; holds are blocked after **`ends_at`** or when not active. Creator **reflection** columns exist for a later closure UI. If your DB predates this, run **`docs/supabase-phase1-lifecycle-migration.sql`** once.
 
 ---
 
@@ -95,7 +98,7 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 1. Copy **`.env.example`** → **`.env.local`** in the repo root.  
 2. Set **`NEXT_PUBLIC_SUPABASE_URL`** to the **Project URL** only (`https://….supabase.co`) — **do not** append `/rest/v1/`.  
 3. Set **`NEXT_PUBLIC_SUPABASE_ANON_KEY`** to the **anon** (JWT, `eyJ…`) or **publishable** (`sb_publishable_…`) key from **Project Settings → API** — **not** `sb_secret_…` or **service_role**.  
-4. Run **`docs/supabase-schema.sql`** in the Supabase SQL Editor (**`manifestations`** + **`manifestation_joins`**, RLS, join-count trigger). If you **already** ran an older schema that only created **`manifestations`**, run **`docs/supabase-join-migration.sql`** once instead of re-running the full file.  
+4. Run **`docs/supabase-schema.sql`** in the Supabase SQL Editor (**`manifestations`** + **`manifestation_joins`**, RLS, join-count trigger). If you **already** ran an older schema, run incremental migrations instead of re-running the full file: **`docs/supabase-join-migration.sql`** (holds), then **`docs/supabase-phase1-lifecycle-migration.sql`** (**`ends_at`**, **`status`**, creator reflection).  
 5. Enable **Anonymous** provider in Supabase Auth.  
 6. Enable **Email** provider (Authentication → Providers → **Email**) so magic links work. Under **Authentication → URL configuration**, set **Site URL** and **Redirect URLs** for **both** dev and production — see **`docs/deploying.md` → Step 2** for exact lines (`https://YOUR-VERCEL-HOST/**`, `…/auth/callback`, and localhost equivalents).
 

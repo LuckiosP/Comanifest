@@ -11,9 +11,11 @@ import { ensureAnonymousBrowserSession } from "@/lib/auth/ensure-anonymous-brows
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import { getTurnstileSiteKey, isSupabaseConfigured } from "@/lib/supabase/config";
 import {
+  MANIFEST_ENDS_LABEL,
   MANIFEST_SUBMIT,
   MANIFEST_SUBMIT_PENDING,
 } from "@/lib/manifestations/intention-copy";
+import { localTodayDateInputValue } from "@/lib/manifestations/dates";
 import {
   MANIFESTATION_CATEGORY_LABELS,
   type ManifestationCategory,
@@ -107,6 +109,7 @@ export function CreateManifestationForm() {
   const disabled = pending || !authReady;
 
   const categories = Object.keys(MANIFESTATION_CATEGORY_LABELS) as ManifestationCategory[];
+  const minEndDate = localTodayDateInputValue();
 
   return (
     <form action={formAction} className="flex flex-col gap-5">
@@ -197,6 +200,21 @@ export function CreateManifestationForm() {
             </option>
           ))}
         </select>
+      </label>
+
+      <label className="flex flex-col text-sm font-medium text-stone-700 dark:text-stone-200">
+        {MANIFEST_ENDS_LABEL}
+        <input
+          type="date"
+          name="ends_at"
+          required
+          min={minEndDate}
+          disabled={!configured || disabled}
+          className={inputClass}
+        />
+        <span className="mt-1 text-xs font-normal text-stone-500 dark:text-stone-400">
+          When this manifestation closes — required for every new post.
+        </span>
       </label>
 
       <label className="flex flex-col text-sm font-medium text-stone-700 dark:text-stone-200">

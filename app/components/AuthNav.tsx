@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { ACCOUNT_NAV } from "@/lib/manifestations/intention-copy";
 
 function truncateEmail(email: string, max = 22) {
   if (email.length <= max) return email;
@@ -21,6 +22,7 @@ export function AuthNav() {
   const signInHref = `/sign-in?next=${encodeURIComponent(pathname || "/")}`;
   const [email, setEmail] = useState<string | null>(null);
   const [isAnonymous, setIsAnonymous] = useState(false);
+  const [hasSession, setHasSession] = useState(false);
   const [ready, setReady] = useState(() => !isSupabaseConfigured());
 
   useEffect(() => {
@@ -46,6 +48,7 @@ export function AuthNav() {
         const u = session?.user;
         setEmail(u?.email ?? null);
         setIsAnonymous(Boolean(u?.is_anonymous));
+        setHasSession(Boolean(u));
         setReady(true);
       };
 
@@ -91,6 +94,12 @@ export function AuthNav() {
   if (email) {
     return (
       <div className="flex flex-wrap items-center justify-end gap-1 sm:gap-2">
+        <Link
+          href="/account"
+          className={`${base} text-stone-600 hover:bg-violet-100 hover:text-violet-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-stone-50`}
+        >
+          {ACCOUNT_NAV}
+        </Link>
         <span
           className="max-w-[10rem] truncate text-xs text-stone-500 dark:text-stone-400 sm:max-w-[12rem] sm:text-sm"
           title={email}
@@ -110,6 +119,14 @@ export function AuthNav() {
 
   return (
     <div className="flex flex-wrap items-center justify-end gap-1 sm:gap-2">
+      {hasSession ? (
+        <Link
+          href="/account"
+          className={`${base} text-stone-600 hover:bg-violet-100 hover:text-violet-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-stone-50`}
+        >
+          {ACCOUNT_NAV}
+        </Link>
+      ) : null}
       {isAnonymous ? (
         <span className="hidden text-xs text-stone-500 sm:inline dark:text-stone-400">
           Guest
