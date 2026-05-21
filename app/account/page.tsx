@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import { ManifestationCard } from "@/app/components/ManifestationCard";
 import { NotificationPreferencesForm } from "@/app/components/NotificationPreferencesForm";
+import { SessionStatusCallout } from "@/app/components/SessionStatusCallout";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import {
   accountEmailLabel,
@@ -12,8 +13,7 @@ import {
 } from "@/lib/auth/session-kind";
 import { listAccountManifestations } from "@/lib/manifestations/account-queries";
 import {
-  ACCOUNT_GUEST_SESSION,
-  ACCOUNT_SIGNED_IN_AS,
+  ACCOUNT_GUEST_EMPTY_HINT,
   NOTIFICATIONS_ANONYMOUS_HINT,
   NOTIFICATIONS_HEADING,
   NOTIFICATIONS_HINT,
@@ -64,6 +64,9 @@ export default async function AccountPage() {
   const { created, holding, hint } = await listAccountManifestations(user.id);
   const emailUser = isEmailSignedInUser(user);
   const signedInEmail = accountEmailLabel(user);
+  const guestUser = isGuestSession(user);
+  const showGuestEmptyHint =
+    guestUser && created.length === 0 && holding.length === 0;
   const preferenceState = emailUser
     ? await getHoldUpdatesPreferenceState(supabase, user.id)
     : { frequency: "off" as const, tableMissing: false };
@@ -84,23 +87,20 @@ export default async function AccountPage() {
           </div>
 
           {signedInEmail ? (
-            <p className="rounded-xl border border-emerald-200/80 bg-emerald-50/80 px-3 py-2 text-sm text-emerald-950 dark:border-emerald-900/50 dark:bg-emerald-950/25 dark:text-emerald-100">
-              {ACCOUNT_SIGNED_IN_AS}{" "}
-              <span className="font-medium">{signedInEmail}</span>
-            </p>
-          ) : isGuestSession(user) ? (
-            <p className="rounded-xl border border-violet-200/80 bg-violet-50/70 px-3 py-2 text-sm text-violet-950 dark:border-violet-900/50 dark:bg-violet-950/25 dark:text-violet-100">
-              {ACCOUNT_GUEST_SESSION}{" "}
-              <Link
-                href="/sign-in?next=/account"
-                className="font-medium underline-offset-2 hover:underline"
-              >
-                Sign in with email
-              </Link>
-              .
-            </p>
+            <SessionStatusCallout variant="email" email={signedInEmail} />
+          ) : guestUser ? (
+            <SessionStatusCallout
+              variant="guest"
+              signInHref="/sign-in?next=/account"
+            />
           ) : null}
         </div>
+
+        {showGuestEmptyHint ? (
+          <p className="rounded-xl border border-amber-200/90 bg-amber-50/90 px-4 py-3 text-sm leading-relaxed text-amber-950 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-100">
+            {ACCOUNT_GUEST_EMPTY_HINT}
+          </p>
+        ) : null}
 
         {hint ? (
           <p className="rounded-xl border border-amber-200 bg-amber-50/90 px-3 py-2 text-sm text-amber-950 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-100">

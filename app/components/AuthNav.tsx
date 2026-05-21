@@ -6,12 +6,16 @@ import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 
 import { accountEmailLabel, isGuestSession } from "@/lib/auth/session-kind";
-import { ACCOUNT_NAV } from "@/lib/manifestations/intention-copy";
+import {
+  ACCOUNT_NAV,
+  AUTH_GUEST_BADGE,
+  AUTH_GUEST_NAV_TITLE,
+  AUTH_SIGN_OUT,
+} from "@/lib/manifestations/intention-copy";
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 
 const SIGN_IN_LABEL = "Sign in with email";
-const SIGN_OUT_LABEL = "Sign out";
 
 function truncateEmail(email: string, max = 22) {
   if (email.length <= max) return email;
@@ -61,7 +65,7 @@ function navForUser(
           onClick={() => void signOut()}
           className="rounded-full px-3 py-2 text-sm font-medium text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-stone-50 sm:text-sm"
         >
-          {SIGN_OUT_LABEL}
+          {AUTH_SIGN_OUT}
         </button>
       </div>
     );
@@ -70,15 +74,31 @@ function navForUser(
   if (user && isGuestSession(user)) {
     return (
       <div className="flex flex-wrap items-center justify-end gap-1 sm:gap-2">
+        <span
+          className="rounded-full border border-violet-200 bg-violet-50 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-violet-800 dark:border-violet-800 dark:bg-violet-950/50 dark:text-violet-200"
+          title={AUTH_GUEST_NAV_TITLE}
+        >
+          {AUTH_GUEST_BADGE}
+        </span>
         <Link href="/account" className={navLinkClass(accountActive)}>
           {ACCOUNT_NAV}
         </Link>
-        <Link
-          href={signInHref}
-          className={signInActiveState ? signInActive : signInAccent}
+        {!signInActiveState ? (
+          <Link
+            href={signInHref}
+            className={signInAccent}
+            title="Sign in with email to open your saved manifestations"
+          >
+            {SIGN_IN_LABEL}
+          </Link>
+        ) : null}
+        <button
+          type="button"
+          onClick={() => void signOut()}
+          className="rounded-full px-3 py-2 text-sm font-medium text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-stone-50 sm:text-sm"
         >
-          {SIGN_IN_LABEL}
-        </Link>
+          {AUTH_SIGN_OUT}
+        </button>
       </div>
     );
   }

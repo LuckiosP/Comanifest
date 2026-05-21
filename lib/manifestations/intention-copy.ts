@@ -93,7 +93,7 @@ export const NOTIFICATIONS_HEADING = "Hold updates by email";
 export const NOTIFICATIONS_HINT =
   "When someone holds a manifestation you started, we can email you — never their private commitment notes.";
 export const NOTIFICATIONS_ANONYMOUS_HINT =
-  "Sign in with email on the account page to choose instant, daily, or weekly hold updates.";
+  "Guest sessions cannot save email preferences — sign in with email first.";
 export const NOTIFICATIONS_SAVE = "Save email preferences";
 export const NOTIFICATIONS_SAVE_PENDING = "Saving…";
 export const NOTIFICATIONS_SAVE_SUCCESS = "Email preferences saved.";
@@ -106,8 +106,22 @@ export const NOTIFICATIONS_NOT_CONFIGURED =
   "Your preference is saved. Automated hold emails will send once email delivery is configured on the server (Resend).";
 export const NOTIFICATIONS_MIGRATION_HINT =
   "Run docs/supabase-notifications-migration.sql in Supabase to enable saving hold email preferences.";
+/** Header badge when the session is anonymous (not email-signed-in). */
+export const AUTH_GUEST_BADGE = "Guest";
+export const AUTH_GUEST_NAV_TITLE =
+  "Browsing as guest — sign in with email to use your account across devices.";
+export const AUTH_SIGN_OUT = "Sign out";
+
 export const ACCOUNT_SIGNED_IN_AS = "Signed in as";
-export const ACCOUNT_GUEST_SESSION =
-  "You are browsing as a guest. Sign in with email to keep manifestations across devices and choose hold update emails.";
+export const ACCOUNT_EMAIL_SESSION_HINT =
+  "Your manifestations are tied to this email account across browsers and devices.";
+export const ACCOUNT_GUEST_HEADING =
+  "Browsing as guest — not signed in with email";
+export const ACCOUNT_GUEST_BODY =
+  "Manifestations you create or hold here belong to this browser session only. To see work from another device or an earlier email sign-in, use the same email below — the header should then show your address and Sign out.";
+export const ACCOUNT_GUEST_EMPTY_HINT =
+  "Don't see manifestations you expect? You may be on a new guest session. Sign in with the email you used before — not the same as having your email saved in the browser.";
+export const SIGN_IN_GUEST_CONTEXT =
+  "Enter your email and we'll send one link. If this browser has guest manifestations, we keep them when we can; if you already have an account with that email, we'll sign you into it automatically — no manual sign-out needed.";
 export const SIGN_IN_ALREADY_SIGNED_IN =
   "You are already signed in with email.";

@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { SessionStatusCallout } from "../components/SessionStatusCallout";
 import { SignInForm } from "../components/SignInForm";
 import { SiteHeader } from "../components/SiteHeader";
-import { isEmailSignedInUser } from "@/lib/auth/session-kind";
+import { isEmailSignedInUser, isGuestSession } from "@/lib/auth/session-kind";
+import { SIGN_IN_GUEST_CONTEXT } from "@/lib/manifestations/intention-copy";
 import { safeNextPath } from "@/lib/auth/safe-next-path";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import {
@@ -37,6 +39,7 @@ export default async function SignInPage({ searchParams }: Props) {
   const { next: nextRaw, error, message } = await searchParams;
   const next = safeNextPath(nextRaw);
 
+  let guestOnSignIn = false;
   if (isSupabaseConfigured()) {
     const supabase = await createServerSupabaseClient();
     if (supabase) {
@@ -44,6 +47,7 @@ export default async function SignInPage({ searchParams }: Props) {
       if (isEmailSignedInUser(user)) {
         redirect(next);
       }
+      guestOnSignIn = isGuestSession(user);
     }
   }
 
@@ -85,6 +89,15 @@ export default async function SignInPage({ searchParams }: Props) {
           >
             {errorText}
           </p>
+        ) : null}
+
+        {guestOnSignIn ? (
+          <>
+            <SessionStatusCallout variant="guest" showSignInLink={false} />
+            <p className="text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+              {SIGN_IN_GUEST_CONTEXT}
+            </p>
+          </>
         ) : null}
 
         <SignInForm nextPath={next} />

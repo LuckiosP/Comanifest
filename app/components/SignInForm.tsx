@@ -2,16 +2,21 @@
 
 import type { FormEvent } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { formatAuthError } from "@/lib/auth/format-auth-error";
-import { safeNextPath } from "@/lib/auth/safe-next-path";
+import {
+  sendSignInEmail,
+  signInEmailSuccessMessage,
+} from "@/lib/auth/sign-in-flow";
 import {
   accountEmailLabel,
-  isEmailSignedInUser,
   isGuestSession,
 } from "@/lib/auth/session-kind";
-import { SIGN_IN_ALREADY_SIGNED_IN } from "@/lib/manifestations/intention-copy";
+import {
+  SIGN_IN_ALREADY_SIGNED_IN,
+  SIGN_IN_GUEST_CONTEXT,
+} from "@/lib/manifestations/intention-copy";
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 
@@ -23,15 +28,17 @@ type SignInFormProps = {
 };
 
 export function SignInForm({ nextPath }: SignInFormProps) {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [pending, setPending] = useState(false);
   const [info, setInfo] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [signedInEmail, setSignedInEmail] = useState<string | null>(null);
+  const [isGuest, setIsGuest] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
 
   const configured = isSupabaseConfigured();
-  const next = safeNextPath(nextPath);
+  const next = nextPath;
 
   useEffect(() => {
     if (!configured) {
@@ -52,6 +59,7 @@ export function SignInForm({ nextPath }: SignInFormProps) {
       } = await supabase.auth.getUser();
       if (cancelled) return;
       setSignedInEmail(accountEmailLabel(user));
+      setIsGuest(isGuestSession(user));
       setCheckingSession(false);
     })();
 
@@ -86,62 +94,29 @@ export function SignInForm({ nextPath }: SignInFormProps) {
     const origin = window.location.origin;
     const redirectTo = `${origin}/auth/callback?next=${encodeURIComponent(next)}`;
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (isEmailSignedInUser(user)) {
-      setPending(false);
-      setSignedInEmail(accountEmailLabel(user));
-      setFormError(SIGN_IN_ALREADY_SIGNED_IN);
-      return;
-    }
-
-    const isAnonymousGuest = isGuestSession(user);
-
-    const { error } = isAnonymousGuest
-      ? await supabase.auth.updateUser(
-          { email: trimmed },
-          { emailRedirectTo: redirectTo },
-        )
-      : await supabase.auth.signInWithOtp({
-          email: trimmed,
-          options: {
-            emailRedirectTo: redirectTo,
-            shouldCreateUser: true,
-          },
-        });
+    const result = await sendSignInEmail(supabase, trimmed, redirectTo);
     setPending(false);
 
-    if (error) {
-      const raw = formatAuthError(error);
-      const lower = raw.toLowerCase();
+    if (!result.ok) {
+      const lower = result.message.toLowerCase();
       if (lower.includes("rate limit") || lower.includes("email rate")) {
         setFormError(
           "Supabase is temporarily limiting how many sign-in emails this project can send (this often happens while testing magic links). Wait a bit, avoid clicking “Send magic link” many times in a row, or add custom SMTP under Supabase → Authentication → Settings so mail isn’t as restricted.",
         );
         return;
       }
-      if (
-        isAnonymousGuest &&
-        (lower.includes("already") ||
-          lower.includes("registered") ||
-          lower.includes("exists"))
-      ) {
-        setFormError(
-          "That email already has an account. Sign out, open Sign in again without browsing as a guest first, and request a magic link — or contact support to merge guest manifestations.",
-        );
-        return;
+      if (lower.includes("already signed in")) {
+        setSignedInEmail(trimmed);
       }
-      setFormError(raw);
+      setFormError(result.message);
       return;
     }
 
-    setInfo(
-      isAnonymousGuest
-        ? "Check your inbox for a confirmation link. Open it in this same browser so your guest manifestations stay on this account."
-        : "Check your inbox for a sign-in link. If nothing arrives in a minute, look in spam, or confirm Email auth is enabled in your Supabase project.",
-    );
+    setInfo(signInEmailSuccessMessage(result.mode));
+    if (result.mode === "existing-account") {
+      setIsGuest(false);
+      router.refresh();
+    }
   }
 
   if (!configured) {
@@ -178,6 +153,12 @@ export function SignInForm({ nextPath }: SignInFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      {isGuest ? (
+        <p className="rounded-xl border border-violet-200/80 bg-violet-50/70 px-3 py-2 text-sm text-violet-950 dark:border-violet-900/50 dark:bg-violet-950/25 dark:text-violet-100">
+          {SIGN_IN_GUEST_CONTEXT}
+        </p>
+      ) : null}
+
       {formError ? (
         <p
           role="alert"
@@ -214,13 +195,6 @@ export function SignInForm({ nextPath }: SignInFormProps) {
       >
         {pending ? "Sending link…" : "Send magic link"}
       </button>
-
-      <p className="text-xs leading-relaxed text-stone-500 dark:text-stone-400">
-        If you manifested or held something as a guest, stay in this browser,
-        then sign in here — we attach your email to the same guest account so
-        your manifestations stay yours. Opening the link in a different browser
-        can split accounts.
-      </p>
     </form>
   );
 }
