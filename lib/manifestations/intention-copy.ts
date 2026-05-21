@@ -103,4 +103,11 @@ export const NOTIFICATIONS_FREQUENCY_INSTANT = "Instant";
 export const NOTIFICATIONS_FREQUENCY_DAILY = "Daily digest";
 export const NOTIFICATIONS_FREQUENCY_WEEKLY = "Weekly digest";
 export const NOTIFICATIONS_NOT_CONFIGURED =
-  "Email updates are not configured on this deployment yet.";
+  "Your preference is saved. Automated hold emails will send once email delivery is configured on the server (Resend).";
+export const NOTIFICATIONS_MIGRATION_HINT =
+  "Run docs/supabase-notifications-migration.sql in Supabase to enable saving hold email preferences.";
+export const ACCOUNT_SIGNED_IN_AS = "Signed in as";
+export const ACCOUNT_GUEST_SESSION =
+  "You are browsing as a guest. Sign in with email to keep manifestations across devices and choose hold update emails.";
+export const SIGN_IN_ALREADY_SIGNED_IN =
+  "You are already signed in with email.";

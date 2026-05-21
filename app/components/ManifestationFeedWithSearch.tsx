@@ -209,6 +209,10 @@ export function ManifestationFeedWithSearch({
                   source === "live" && isManifestationOpenForHolds(m)
                 }
                 withdrawEnabled={source === "live"}
+                showShare={
+                  source === "live" &&
+                  (m.viewer_is_creator || m.viewer_has_joined)
+                }
               />
             </li>
           ))}

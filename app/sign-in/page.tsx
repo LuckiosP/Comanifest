@@ -1,8 +1,15 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { SignInForm } from "../components/SignInForm";
 import { SiteHeader } from "../components/SiteHeader";
+import { isEmailSignedInUser } from "@/lib/auth/session-kind";
 import { safeNextPath } from "@/lib/auth/safe-next-path";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
+import {
+  createServerSupabaseClient,
+  getServerAuthUser,
+} from "@/lib/supabase/server";
 
 function decodeExchangeMessage(raw: string | undefined): string | null {
   if (raw == null || !String(raw).trim()) {
@@ -29,6 +36,16 @@ type Props = {  searchParams: Promise<{
 export default async function SignInPage({ searchParams }: Props) {
   const { next: nextRaw, error, message } = await searchParams;
   const next = safeNextPath(nextRaw);
+
+  if (isSupabaseConfigured()) {
+    const supabase = await createServerSupabaseClient();
+    if (supabase) {
+      const user = await getServerAuthUser(supabase);
+      if (isEmailSignedInUser(user)) {
+        redirect(next);
+      }
+    }
+  }
 
   let errorText: string | null = null;
   if (error === "missing_code") {

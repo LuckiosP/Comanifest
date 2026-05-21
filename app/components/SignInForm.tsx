@@ -1,10 +1,17 @@
 "use client";
 
 import type { FormEvent } from "react";
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import { formatAuthError } from "@/lib/auth/format-auth-error";
 import { safeNextPath } from "@/lib/auth/safe-next-path";
+import {
+  accountEmailLabel,
+  isEmailSignedInUser,
+  isGuestSession,
+} from "@/lib/auth/session-kind";
+import { SIGN_IN_ALREADY_SIGNED_IN } from "@/lib/manifestations/intention-copy";
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 
@@ -20,9 +27,38 @@ export function SignInForm({ nextPath }: SignInFormProps) {
   const [pending, setPending] = useState(false);
   const [info, setInfo] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
+  const [signedInEmail, setSignedInEmail] = useState<string | null>(null);
+  const [checkingSession, setCheckingSession] = useState(true);
 
   const configured = isSupabaseConfigured();
   const next = safeNextPath(nextPath);
+
+  useEffect(() => {
+    if (!configured) {
+      setCheckingSession(false);
+      return;
+    }
+
+    let cancelled = false;
+    void (async () => {
+      const supabase = createBrowserSupabaseClient();
+      if (!supabase) {
+        if (!cancelled) setCheckingSession(false);
+        return;
+      }
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (cancelled) return;
+      setSignedInEmail(accountEmailLabel(user));
+      setCheckingSession(false);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [configured]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -51,17 +87,17 @@ export function SignInForm({ nextPath }: SignInFormProps) {
     const redirectTo = `${origin}/auth/callback?next=${encodeURIComponent(next)}`;
 
     const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    const isAnonymousGuest = Boolean(session?.user?.is_anonymous);
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    if (session?.user && !session.user.is_anonymous) {
+    if (isEmailSignedInUser(user)) {
       setPending(false);
-      setFormError(
-        "You are already signed in with email. Sign out first if you need a different account.",
-      );
+      setSignedInEmail(accountEmailLabel(user));
+      setFormError(SIGN_IN_ALREADY_SIGNED_IN);
       return;
     }
+
+    const isAnonymousGuest = isGuestSession(user);
 
     const { error } = isAnonymousGuest
       ? await supabase.auth.updateUser(
@@ -114,6 +150,29 @@ export function SignInForm({ nextPath }: SignInFormProps) {
         Add your Supabase URL and anon key to <code className="rounded bg-white/60 px-1 dark:bg-stone-900">.env.local</code>{" "}
         first, then reload this page.
       </p>
+    );
+  }
+
+  if (checkingSession) {
+    return (
+      <p className="text-sm text-stone-500 dark:text-stone-400">Checking session…</p>
+    );
+  }
+
+  if (signedInEmail) {
+    return (
+      <div className="flex flex-col gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-950 dark:border-emerald-900/50 dark:bg-emerald-950/30 dark:text-emerald-100">
+        <p>
+          {SIGN_IN_ALREADY_SIGNED_IN}{" "}
+          <span className="font-medium">{signedInEmail}</span>.
+        </p>
+        <Link
+          href={next}
+          className="font-medium text-violet-800 underline-offset-2 hover:underline dark:text-violet-300"
+        >
+          Continue to {next === "/" ? "home" : next} →
+        </Link>
+      </div>
     );
   }
 

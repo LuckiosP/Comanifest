@@ -7,6 +7,7 @@ import {
   buildShareText,
   copyManifestationLink,
   facebookShareUrl,
+  resolveManifestationShareUrl,
   SHARE_PLATFORM_LABELS,
 } from "@/lib/manifestations/share-client";
 import {
@@ -48,7 +49,7 @@ export function ShareManifestationControl({
       await navigator.share({
         title: "Comanifest",
         text: buildShareText(title),
-        url: `${window.location.origin}/manifestations/${manifestationId}`,
+        url: resolveManifestationShareUrl(manifestationId),
       });
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") {

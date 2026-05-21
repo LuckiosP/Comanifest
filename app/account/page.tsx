@@ -5,15 +5,23 @@ import { redirect } from "next/navigation";
 import { ManifestationCard } from "@/app/components/ManifestationCard";
 import { NotificationPreferencesForm } from "@/app/components/NotificationPreferencesForm";
 import { SiteHeader } from "@/app/components/SiteHeader";
+import {
+  accountEmailLabel,
+  isEmailSignedInUser,
+  isGuestSession,
+} from "@/lib/auth/session-kind";
 import { listAccountManifestations } from "@/lib/manifestations/account-queries";
 import {
+  ACCOUNT_GUEST_SESSION,
+  ACCOUNT_SIGNED_IN_AS,
   NOTIFICATIONS_ANONYMOUS_HINT,
   NOTIFICATIONS_HEADING,
   NOTIFICATIONS_HINT,
+  NOTIFICATIONS_MIGRATION_HINT,
   NOTIFICATIONS_NOT_CONFIGURED,
 } from "@/lib/manifestations/intention-copy";
 import { isEmailNotificationsConfigured } from "@/lib/notifications/config";
-import { getHoldUpdatesFrequency } from "@/lib/notifications/preferences";
+import { getHoldUpdatesPreferenceState } from "@/lib/notifications/preference-state";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import {
   createServerSupabaseClient,
@@ -54,23 +62,44 @@ export default async function AccountPage() {
   }
 
   const { created, holding, hint } = await listAccountManifestations(user.id);
-  const emailUser = Boolean(user.email && !user.is_anonymous);
-  const holdUpdatesFrequency = emailUser
-    ? await getHoldUpdatesFrequency(supabase, user.id)
-    : "off";
+  const emailUser = isEmailSignedInUser(user);
+  const signedInEmail = accountEmailLabel(user);
+  const preferenceState = emailUser
+    ? await getHoldUpdatesPreferenceState(supabase, user.id)
+    : { frequency: "off" as const, tableMissing: false };
   const notificationsConfigured = isEmailNotificationsConfigured();
 
   return (
     <div className="flex min-h-full flex-col bg-gradient-to-b from-violet-50/80 via-white to-amber-50/40 dark:from-stone-950 dark:via-stone-900 dark:to-stone-950">
       <SiteHeader />
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-10 px-4 py-10 sm:px-6 sm:py-14">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50 sm:text-3xl">
-            My account
-          </h1>
-          <p className="text-sm leading-relaxed text-stone-600 dark:text-stone-300">
-            Manifestations you started and those you are holding with others.
-          </p>
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50 sm:text-3xl">
+              My account
+            </h1>
+            <p className="text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+              Manifestations you started and those you are holding with others.
+            </p>
+          </div>
+
+          {signedInEmail ? (
+            <p className="rounded-xl border border-emerald-200/80 bg-emerald-50/80 px-3 py-2 text-sm text-emerald-950 dark:border-emerald-900/50 dark:bg-emerald-950/25 dark:text-emerald-100">
+              {ACCOUNT_SIGNED_IN_AS}{" "}
+              <span className="font-medium">{signedInEmail}</span>
+            </p>
+          ) : isGuestSession(user) ? (
+            <p className="rounded-xl border border-violet-200/80 bg-violet-50/70 px-3 py-2 text-sm text-violet-950 dark:border-violet-900/50 dark:bg-violet-950/25 dark:text-violet-100">
+              {ACCOUNT_GUEST_SESSION}{" "}
+              <Link
+                href="/sign-in?next=/account"
+                className="font-medium underline-offset-2 hover:underline"
+              >
+                Sign in with email
+              </Link>
+              .
+            </p>
+          ) : null}
         </div>
 
         {hint ? (
@@ -78,35 +107,6 @@ export default async function AccountPage() {
             {hint}
           </p>
         ) : null}
-
-        <section className="flex flex-col gap-3 rounded-2xl border border-stone-200/90 bg-white/80 p-5 shadow-sm dark:border-stone-700/90 dark:bg-stone-800/50">
-          <div className="flex flex-col gap-1">
-            <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-50">
-              {NOTIFICATIONS_HEADING}
-            </h2>
-            <p className="text-sm text-stone-600 dark:text-stone-300">
-              {NOTIFICATIONS_HINT}
-            </p>
-          </div>
-          {!emailUser ? (
-            <p className="text-sm text-stone-600 dark:text-stone-300">
-              {NOTIFICATIONS_ANONYMOUS_HINT}{" "}
-              <Link
-                href="/sign-in?next=/account"
-                className="font-medium text-violet-700 underline-offset-2 hover:underline dark:text-violet-300"
-              >
-                Sign in with email
-              </Link>
-              .
-            </p>
-          ) : !notificationsConfigured ? (
-            <p className="text-sm text-amber-900 dark:text-amber-200">
-              {NOTIFICATIONS_NOT_CONFIGURED}
-            </p>
-          ) : (
-            <NotificationPreferencesForm initialFrequency={holdUpdatesFrequency} />
-          )}
-        </section>
 
         <section className="flex flex-col gap-4">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -180,6 +180,44 @@ export default async function AccountPage() {
                 </li>
               ))}
             </ul>
+          )}
+        </section>
+
+        <section className="flex flex-col gap-3 rounded-2xl border border-stone-200/90 bg-white/80 p-5 shadow-sm dark:border-stone-700/90 dark:bg-stone-800/50">
+          <div className="flex flex-col gap-1">
+            <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-50">
+              {NOTIFICATIONS_HEADING}
+            </h2>
+            <p className="text-sm text-stone-600 dark:text-stone-300">
+              {NOTIFICATIONS_HINT}
+            </p>
+          </div>
+          {!emailUser ? (
+            <p className="text-sm text-stone-600 dark:text-stone-300">
+              {NOTIFICATIONS_ANONYMOUS_HINT}{" "}
+              <Link
+                href="/sign-in?next=/account"
+                className="font-medium text-violet-700 underline-offset-2 hover:underline dark:text-violet-300"
+              >
+                Sign in with email
+              </Link>
+              .
+            </p>
+          ) : preferenceState.tableMissing ? (
+            <p className="text-sm text-amber-900 dark:text-amber-200">
+              {NOTIFICATIONS_MIGRATION_HINT}
+            </p>
+          ) : (
+            <>
+              {!notificationsConfigured ? (
+                <p className="text-sm text-stone-600 dark:text-stone-300">
+                  {NOTIFICATIONS_NOT_CONFIGURED}
+                </p>
+              ) : null}
+              <NotificationPreferencesForm
+                initialFrequency={preferenceState.frequency}
+              />
+            </>
           )}
         </section>
       </main>

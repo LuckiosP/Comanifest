@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
+import { isEmailSignedInUser } from "@/lib/auth/session-kind";
 import {
   HOLD_UPDATES_FREQUENCIES,
   type HoldUpdatesFrequency,
@@ -41,7 +42,7 @@ export async function saveNotificationPreferences(
     return { error: "Sign in to save email preferences." };
   }
 
-  if (user.is_anonymous || !user.email) {
+  if (!isEmailSignedInUser(user)) {
     return {
       error: "Hold email updates require signing in with email, not guest mode.",
     };
@@ -54,7 +55,15 @@ export async function saveNotificationPreferences(
   );
 
   if (!result.ok) {
-    return { error: result.error ?? "Could not save preferences." };
+    const tableMissing =
+      result.error?.includes("notification_preferences") &&
+      (result.error.includes("does not exist") ||
+        result.error.includes("schema cache"));
+    return {
+      error: tableMissing
+        ? "Run docs/supabase-notifications-migration.sql in Supabase first."
+        : result.error ?? "Could not save preferences.",
+    };
   }
 
   revalidatePath("/account");
