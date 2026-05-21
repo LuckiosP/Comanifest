@@ -18,7 +18,7 @@ export const SAMPLE_MANIFESTATIONS: Manifestation[] = [
     intention:
       "Everyone celebrating can feel warmth and ease, outdoors or in — a bright, gentle day.",
     category: "weather",
-    timeframe: "This Saturday",
+    timeframe: null,
     join_count: 48,
     ends_at: sampleEndsAt(SAMPLE_END_OFFSET_DAYS),
     status: "active",
@@ -33,7 +33,7 @@ export const SAMPLE_MANIFESTATIONS: Manifestation[] = [
     intention:
       "Students and teachers breathe a little easier, support each other, and sleep well.",
     category: "wellbeing",
-    timeframe: "Next two weeks",
+    timeframe: null,
     join_count: 112,
     ends_at: sampleEndsAt(SAMPLE_END_OFFSET_DAYS + 7),
     status: "active",

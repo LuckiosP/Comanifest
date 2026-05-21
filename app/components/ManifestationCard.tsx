@@ -43,11 +43,6 @@ export function ManifestationCard({
             {MANIFESTATION_STATUS_LABELS[manifestation.status]}
           </span>
         ) : null}
-        {manifestation.timeframe ? (
-          <span className="text-stone-400 dark:text-stone-500">
-            · {manifestation.timeframe}
-          </span>
-        ) : null}
       </div>
       <h2 className="text-lg font-semibold leading-snug text-stone-900 dark:text-stone-50">
         <Link

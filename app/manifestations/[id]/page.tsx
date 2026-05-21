@@ -71,11 +71,6 @@ export default async function ManifestationDetailPage({ params }: Props) {
               · {MANIFEST_ENDS_LABEL.toLowerCase()}{" "}
               {formatManifestationDate(row.ends_at)}
             </span>
-            {row.timeframe ? (
-              <span className="text-stone-400 dark:text-stone-500">
-                · {row.timeframe}
-              </span>
-            ) : null}
           </div>
 
           <h1 className="text-2xl font-semibold leading-snug text-stone-900 dark:text-stone-50 sm:text-3xl">

@@ -217,17 +217,6 @@ export function CreateManifestationForm() {
         </span>
       </label>
 
-      <label className="flex flex-col text-sm font-medium text-stone-700 dark:text-stone-200">
-        Timeframe (optional)
-        <input
-          name="timeframe"
-          maxLength={120}
-          disabled={!configured || disabled}
-          placeholder="e.g. This weekend, or before the solstice"
-          className={inputClass}
-        />
-      </label>
-
       <button
         type="submit"
         disabled={!configured || disabled}

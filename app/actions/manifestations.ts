@@ -40,7 +40,6 @@ export async function createManifestation(
   const title = String(formData.get("title") ?? "").trim();
   const intention = String(formData.get("intention") ?? "").trim();
   const category = String(formData.get("category") ?? "").trim();
-  const timeframe = String(formData.get("timeframe") ?? "").trim();
   const endsAtInput = String(formData.get("ends_at") ?? "").trim();
 
   if (title.length < 3 || title.length > 200) {
@@ -83,7 +82,7 @@ export async function createManifestation(
     title,
     intention,
     category,
-    timeframe: timeframe.length > 0 ? timeframe : null,
+    timeframe: null,
     join_count: 1,
     ends_at: endsAt.toISOString(),
     status: "active",
