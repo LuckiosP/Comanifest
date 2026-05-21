@@ -144,12 +144,12 @@ export function JoinManifestationControl({
 
   if (!joinsEnabled) {
     return (
-      <div className="flex flex-col items-end gap-1">
+      <div className="flex w-full flex-col gap-1">
         <button
           type="button"
           disabled
           title="Holding is available when the app is connected to your Supabase project"
-          className="rounded-full border border-stone-200 px-4 py-2 text-sm font-medium text-stone-400 dark:border-stone-600 dark:text-stone-500"
+          className="inline-flex h-10 w-full items-center justify-center rounded-full border border-stone-200 px-4 text-sm font-medium text-stone-400 sm:w-auto sm:self-start dark:border-stone-600 dark:text-stone-500"
         >
           Hold
         </button>
@@ -159,7 +159,7 @@ export function JoinManifestationControl({
 
   if (viewerIsCreator) {
     return (
-      <p className="max-w-xs text-right text-xs text-stone-500 dark:text-stone-400">
+      <p className="text-sm text-stone-500 dark:text-stone-400">
         You started this manifestation — you&apos;re already holding it.
       </p>
     );
@@ -167,7 +167,7 @@ export function JoinManifestationControl({
 
   if (withdrew) {
     return (
-      <p className="max-w-xs text-right text-xs text-stone-500 dark:text-stone-400">
+      <p className="text-sm text-stone-500 dark:text-stone-400">
         You stepped back from holding this manifestation.
       </p>
     );
@@ -175,9 +175,7 @@ export function JoinManifestationControl({
 
   if (viewerHasJoined || state?.success) {
     return (
-      <div
-        className={`flex flex-col gap-2 ${variant === "card" ? "items-end text-right" : "items-start"}`}
-      >
+      <div className="flex w-full flex-col items-start gap-2">
         <span className="rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-medium text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-100">
           {HOLD_BADGE}
         </span>
@@ -194,9 +192,9 @@ export function JoinManifestationControl({
 
   if (variant === "card" && !expanded) {
     return (
-      <div className="flex flex-col items-end gap-2 text-right">
+      <div className="flex w-full flex-col gap-2">
         {authError ? (
-          <div className="w-full max-w-xs rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-950 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-100 sm:max-w-sm">
+          <div className="w-full rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-950 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-100">
             <p>{authError}</p>
             <button
               type="button"
@@ -216,7 +214,7 @@ export function JoinManifestationControl({
           type="button"
           disabled={Boolean(authError)}
           onClick={() => setExpanded(true)}
-          className="rounded-full border border-violet-300 bg-violet-50 px-4 py-2 text-sm font-medium text-violet-900 shadow-sm transition hover:bg-violet-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-violet-700 dark:bg-violet-950/50 dark:text-violet-100 dark:hover:bg-violet-900/60"
+          className="inline-flex h-10 w-full items-center justify-center rounded-full border border-violet-300 bg-violet-50 px-4 text-sm font-medium text-violet-900 shadow-sm transition hover:bg-violet-100 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:self-start dark:border-violet-700 dark:bg-violet-950/50 dark:text-violet-100 dark:hover:bg-violet-900/60"
         >
           {HOLD_CTA_EXPAND}
         </button>
@@ -229,7 +227,7 @@ export function JoinManifestationControl({
   return (
     <form
       action={formAction}
-      className={`flex w-full flex-col gap-3 ${variant === "card" ? "max-w-sm sm:max-w-xs" : "max-w-lg"}`}
+      className={`flex w-full flex-col gap-3 ${variant === "detail" ? "max-w-lg" : ""}`}
     >
       <input type="hidden" name="manifestation_id" value={manifestationId} />
 
@@ -240,7 +238,7 @@ export function JoinManifestationControl({
             setExpanded(false);
             setCaptchaToken(null);
           }}
-          className="self-end text-xs font-medium text-stone-500 underline-offset-2 hover:underline dark:text-stone-400"
+          className="self-start text-xs font-medium text-stone-500 underline-offset-2 hover:underline dark:text-stone-400"
         >
           Cancel
         </button>
@@ -322,7 +320,7 @@ export function JoinManifestationControl({
       <button
         type="submit"
         disabled={disabled}
-        className="inline-flex h-10 items-center justify-center rounded-full bg-violet-600 px-5 text-sm font-medium text-white shadow-sm transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-violet-500 dark:hover:bg-violet-400"
+        className="inline-flex h-10 w-full items-center justify-center rounded-full bg-violet-600 px-5 text-sm font-medium text-white shadow-sm transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-violet-500 dark:hover:bg-violet-400"
       >
         {pending
           ? HOLD_SUBMIT_PENDING

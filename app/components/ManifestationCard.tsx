@@ -68,21 +68,17 @@ export function ManifestationCard({
         {manifestation.intention}
       </p>
       <div className="flex flex-col gap-3 border-t border-stone-100 pt-3 dark:border-stone-700/80">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <p className="text-sm text-stone-500 dark:text-stone-400">
-            {holdingCountLabel(manifestation.join_count)}
-          </p>
-          <div className="flex min-w-0 flex-1 justify-end sm:max-w-[58%]">
-            <JoinManifestationControl
-              manifestationId={manifestation.id}
-              joinsEnabled={joinsEnabled}
-              withdrawEnabled={withdrawEnabled}
-              viewerHasJoined={manifestation.viewer_has_joined}
-              viewerIsCreator={manifestation.viewer_is_creator}
-              variant="card"
-            />
-          </div>
-        </div>
+        <p className="text-sm text-stone-500 dark:text-stone-400">
+          {holdingCountLabel(manifestation.join_count)}
+        </p>
+        <JoinManifestationControl
+          manifestationId={manifestation.id}
+          joinsEnabled={joinsEnabled}
+          withdrawEnabled={withdrawEnabled}
+          viewerHasJoined={manifestation.viewer_has_joined}
+          viewerIsCreator={manifestation.viewer_is_creator}
+          variant="card"
+        />
         {showEditLink &&
         isManifestationEditable(manifestation) &&
         !manifestation.id.startsWith("sample-") ? (
