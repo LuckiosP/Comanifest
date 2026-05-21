@@ -1,15 +1,19 @@
 import Link from "next/link";
 
-import { ManifestationSearchForm } from "@/app/components/ManifestationSearchForm";
+import { ManifestationHeaderSearch } from "@/app/components/ManifestationHeaderSearch";
 import { MANIFEST_NAV } from "@/lib/manifestations/intention-copy";
 
 import { AuthNav } from "./AuthNav";
 
 type SiteHeaderProps = {
   searchQuery?: string;
+  hideSearch?: boolean;
 };
 
-export function SiteHeader({ searchQuery = "" }: SiteHeaderProps) {
+export function SiteHeader({
+  searchQuery = "",
+  hideSearch = false,
+}: SiteHeaderProps) {
   return (
     <header className="flex w-full flex-col gap-3 border-b border-stone-200/80 bg-white/70 px-4 py-4 backdrop-blur-sm dark:border-stone-700/80 dark:bg-stone-900/70 sm:px-8">
       <div className="flex w-full items-center justify-between gap-4">
@@ -20,9 +24,11 @@ export function SiteHeader({ searchQuery = "" }: SiteHeaderProps) {
           Comanifest
         </Link>
         <nav className="flex flex-wrap items-center justify-end gap-1 text-sm font-medium text-stone-600 dark:text-stone-300 sm:gap-2">
-          <div className="hidden min-w-0 md:flex">
-            <ManifestationSearchForm defaultQuery={searchQuery} compact />
-          </div>
+          {!hideSearch ? (
+            <div className="hidden min-w-0 md:flex">
+              <ManifestationHeaderSearch defaultQuery={searchQuery} />
+            </div>
+          ) : null}
           <Link
             href="/guidelines"
             className="rounded-full px-3 py-2 transition-colors hover:bg-violet-100 hover:text-violet-900 dark:hover:bg-stone-800 dark:hover:text-stone-50"

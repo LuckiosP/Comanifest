@@ -1,9 +1,4 @@
 import { SAMPLE_MANIFESTATIONS } from "@/lib/manifestations/sample-data";
-import {
-  buildManifestationSearchOrFilter,
-  matchesManifestationSearch,
-  normalizeSearchQuery,
-} from "@/lib/manifestations/search";
 import { canViewArchivedManifestation } from "@/lib/manifestations/lifecycle";
 import { createServerSupabaseClient, getServerAuthUser } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
@@ -62,38 +57,24 @@ function sortManifestations(
 
 type DbManifestationRow = Manifestation & { user_id: string };
 
-function sampleListRows(
-  sort: ManifestationSort,
-  searchQuery?: string,
-): ManifestationListRow[] {
-  const term = normalizeSearchQuery(searchQuery);
-  let rows: ManifestationListRow[] = SAMPLE_MANIFESTATIONS.map((m) => ({
+function sampleListRows(sort: ManifestationSort): ManifestationListRow[] {
+  const rows: ManifestationListRow[] = SAMPLE_MANIFESTATIONS.map((m) => ({
     ...m,
     viewer_has_joined: false,
     viewer_is_creator: false,
   }));
-  if (term) {
-    rows = rows.filter((row) => matchesManifestationSearch(row, term));
-  }
   return sortManifestations(rows, sort);
 }
 
-export async function listManifestations(
-  sort: ManifestationSort,
-  searchQuery?: string,
-): Promise<{
+export async function listManifestations(sort: ManifestationSort): Promise<{
   rows: ManifestationListRow[];
   source: "live" | "sample";
   hint?: string;
-  searchQuery: string;
 }> {
-  const term = normalizeSearchQuery(searchQuery);
-
   if (!isSupabaseConfigured()) {
     return {
       source: "sample",
-      rows: sampleListRows(sort, term),
-      searchQuery: term,
+      rows: sampleListRows(sort),
       hint: "Add Supabase keys in .env.local to load real manifestations.",
     };
   }
@@ -102,22 +83,16 @@ export async function listManifestations(
   if (!supabase) {
     return {
       source: "sample",
-      rows: sampleListRows(sort, term),
-      searchQuery: term,
+      rows: sampleListRows(sort),
       hint: "Could not create a Supabase client.",
     };
   }
 
-  let query = supabase
+  const { data, error } = await supabase
     .from("manifestations")
     .select(MANIFESTATION_SELECT)
-    .eq("status", "active");
-
-  if (term) {
-    query = query.or(buildManifestationSearchOrFilter(term));
-  }
-
-  const { data, error } = await query.order("created_at", { ascending: false });
+    .eq("status", "active")
+    .order("created_at", { ascending: false });
 
   if (error) {
     const hint = error.message.includes("ends_at")
@@ -125,8 +100,7 @@ export async function listManifestations(
       : `Showing examples while Supabase returned an error: ${formatSupabaseQueryError(error)}`;
     return {
       source: "sample",
-      rows: sampleListRows(sort, term),
-      searchQuery: term,
+      rows: sampleListRows(sort),
       hint,
     };
   }
@@ -134,7 +108,7 @@ export async function listManifestations(
   const raw = (data ?? []) as DbManifestationRow[];
 
   if (raw.length === 0) {
-    return { source: "live", rows: [], searchQuery: term };
+    return { source: "live", rows: [] };
   }
 
   const user = await getServerAuthUser(supabase);
@@ -164,7 +138,7 @@ export async function listManifestations(
     };
   });
 
-  return { source: "live", rows: sortManifestations(rows, sort), searchQuery: term };
+  return { source: "live", rows: sortManifestations(rows, sort) };
 }
 
 /** Cheap server round-trip so create (and other pages) can show the same connectivity hints as the feed. */

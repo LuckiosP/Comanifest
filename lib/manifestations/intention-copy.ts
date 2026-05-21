@@ -39,10 +39,12 @@ export const ACCOUNT_NAV = "My account";
 export const MANIFEST_ENDS_LABEL = "Holds until";
 
 /** Feed search (phase 4). */
-export const SEARCH_PLACEHOLDER = "Search title, intention, or category";
-export const SEARCH_SUBMIT = "Search";
+export const SEARCH_PLACEHOLDER = "Search by vibe, title, or intention…";
+export const SEARCH_HINT =
+  "Results update as you type — we match the feeling and related words, not just exact phrases.";
 export const SEARCH_CLEAR = "Clear search";
-export const SEARCH_NO_RESULTS = "No manifestations match your search.";
+export const SEARCH_NO_RESULTS =
+  "Nothing quite matches that vibe yet — try a feeling or a few related words.";
 
 /** Edit flow — creator updates an active manifestation. */
 export const MANIFEST_EDIT_CTA = "Edit manifestation";
