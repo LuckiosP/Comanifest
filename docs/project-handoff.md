@@ -68,7 +68,7 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 | Route | Purpose |
 |--------|--------|
 | `/` | Marketing-style **home**: hero, CTAs to feed + create, short “Ground rules” + link to full guidelines |
-| `/manifestations` | **Feed** of manifestations; **sort** via `?sort=joined` or default newest |
+| `/manifestations` | **Feed** of manifestations; **sort** via `?sort=joined` or default newest; **search** via `?q=` (title, intention, category) |
 | `/manifestations/new` | **Start a manifestation** form (`MANIFEST_CTA`); server action **`createManifestation`** |
 | `/manifestations/[id]` | **Detail** for one manifestation: full intention, metadata, **hold** UI (`JoinManifestationControl`); **`getManifestationById`** returns sample rows, live UUID rows, and **`viewer_has_joined` / `viewer_is_creator`** for the current session |
 | `/manifestations/[id]/edit` | **Edit** an active manifestation you created (title, intention, category, **Holds until**); **`updateManifestation`** server action; creator-only |
@@ -203,7 +203,7 @@ Roadmap detail and priority: **`docs/comanifest-brief.md` → §7 Status & roadm
 - **Phase 1 — Schema** ✅ compulsory **`ends_at`**, **`status`**, creator reflection fields  
 - **Phase 2 — My account** ✅ `/account` — manifestations I started + I’m holding  
 - **Phase 3 — Own your manifestations** ✅ **edit**; **withdraw hold**; **archive** / **delete** (delete when `join_count ≤ 1` only)  
-- **Phase 4 — Search** on feed  
+- **Phase 4 — Search** ✅ feed + header **`?q=`** search (title, intention, category)  
 - **Phase 5 — Similar manifestations** suggested on create  
 - **Phase 6 — Closure:** creator-only success reflection after end date  
 - **Phase 7 — Feature suggestion box**  

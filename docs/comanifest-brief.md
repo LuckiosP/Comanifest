@@ -249,7 +249,7 @@ Work in **thin slices** — each step should ship something usable on live.
 | **1 — Data model** ✅ | Compulsory **`ends_at`** on manifestations; **`status`** (e.g. active / archived / deleted); optional creator **reflection** fields for post-end evaluation | Everything else (closure, feed filters, account lists) depends on dates and lifecycle |
 | **2 — My account** ✅ | **`/account`**: manifestations I **started** + I’m **holding** | Core user need; uses existing `user_id` + joins |
 | **3 — Own your manifestations** | **Edit** ✅; **withdraw hold** ✅; **archive** / **delete** ✅ | Account page needs actions, not just lists |
-| **4 — Search** | Feed + header **search** (title / intention / category) | Needed before duplicate-nudge is credible |
+| **4 — Search** ✅ | Feed + header **search** (title / intention / category) via **`?q=`** | Needed before duplicate-nudge is credible |
 | **5 — Similar on create** | On **Start a manifestation**, query similar rows and **suggest** before submit | Reuses search; reduces duplicate manifestations |
 | **6 — Closure & evaluation** | After **`ends_at`**, prompt **creator only** to reflect on success (gentle copy) | Requires phase 1 dates + “ready to close” UI |
 | **7 — Feature suggestions** | Simple **suggestion box** (Supabase table + form, or link to GitHub Issues) | Independent; can ship anytime after phase 2 |

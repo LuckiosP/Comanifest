@@ -38,6 +38,12 @@ export const ACCOUNT_NAV = "My account";
 /** Label beside the required end date on create + detail views. */
 export const MANIFEST_ENDS_LABEL = "Holds until";
 
+/** Feed search (phase 4). */
+export const SEARCH_PLACEHOLDER = "Search title, intention, or category";
+export const SEARCH_SUBMIT = "Search";
+export const SEARCH_CLEAR = "Clear search";
+export const SEARCH_NO_RESULTS = "No manifestations match your search.";
+
 /** Edit flow — creator updates an active manifestation. */
 export const MANIFEST_EDIT_CTA = "Edit manifestation";
 export const MANIFEST_EDIT_SUBMIT = "Save changes";

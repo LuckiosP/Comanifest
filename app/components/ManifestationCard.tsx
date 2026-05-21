@@ -109,7 +109,13 @@ export function ManifestationCard({
   );
 }
 
-export function FeedSortLinks({ current }: { current: "newest" | "joined" }) {
+export function FeedSortLinks({
+  current,
+  searchQuery,
+}: {
+  current: "newest" | "joined";
+  searchQuery?: string;
+}) {
   const base =
     "rounded-full px-3 py-1.5 text-sm font-medium transition-colors";
   const active =
@@ -117,17 +123,22 @@ export function FeedSortLinks({ current }: { current: "newest" | "joined" }) {
   const idle =
     "text-stone-600 hover:bg-violet-100 hover:text-violet-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-stone-50";
 
+  const q = searchQuery ? `&q=${encodeURIComponent(searchQuery)}` : "";
+  const qOnly = searchQuery
+    ? `?q=${encodeURIComponent(searchQuery)}`
+    : "";
+
   return (
     <div className="flex flex-wrap items-center gap-2">
       <span className="text-sm text-stone-500 dark:text-stone-400">Sort:</span>
       <Link
-        href="/manifestations"
+        href={`/manifestations${qOnly}`}
         className={`${base} ${current === "newest" ? active : idle}`}
       >
         Newest
       </Link>
       <Link
-        href="/manifestations?sort=joined"
+        href={`/manifestations?sort=joined${q}`}
         className={`${base} ${current === "joined" ? active : idle}`}
       >
         Widest circle
