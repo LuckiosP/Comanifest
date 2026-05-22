@@ -11,6 +11,7 @@ import {
 import {
   copyManifestationLink,
   facebookShareUrl,
+  instagramShareUrl,
   SHARE_PLATFORM_LABELS,
   shareManifestationToInstagram,
 } from "@/lib/manifestations/share-client";
@@ -40,9 +41,7 @@ export function ShareManifestationControl({
 
   const onInstagramShare = useCallback(async () => {
     const result = await shareManifestationToInstagram(manifestationId, title);
-    if (result.message) {
-      showMessage(result.message);
-    }
+    showMessage(result.message);
   }, [manifestationId, showMessage, title]);
 
   const buttonClass = compact
@@ -67,15 +66,17 @@ export function ShareManifestationControl({
         >
           <FacebookIcon className={`${iconClass} text-[#1877F2]`} />
         </a>
-        <button
-          type="button"
-          onClick={() => void onInstagramShare()}
+        <a
+          href={instagramShareUrl()}
+          target="_blank"
+          rel="noopener noreferrer"
           className={buttonClass}
           aria-label={`${SHARE_PLATFORM_LABELS.label} on ${SHARE_PLATFORM_LABELS.instagram}`}
           title={SHARE_PLATFORM_LABELS.instagram}
+          onClick={() => void onInstagramShare()}
         >
           <InstagramIcon className={iconClass} />
-        </button>
+        </a>
         <button
           type="button"
           onClick={() => void onCopyLink()}

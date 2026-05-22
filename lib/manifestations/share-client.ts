@@ -24,6 +24,10 @@ export function facebookShareUrl(manifestationId: string): string {
   return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
 }
 
+export function instagramShareUrl(): string {
+  return "https://www.instagram.com/";
+}
+
 export async function copyManifestationLink(
   manifestationId: string,
 ): Promise<{ ok: boolean; message: string }> {
@@ -39,27 +43,13 @@ export async function copyManifestationLink(
 export async function shareManifestationToInstagram(
   manifestationId: string,
   title: string,
-): Promise<{ ok: boolean; message: string | null }> {
+): Promise<{ ok: boolean; message: string }> {
   const url = resolveManifestationShareUrl(manifestationId);
   const text = buildShareText(title);
-
-  if (typeof navigator !== "undefined" && "share" in navigator) {
-    try {
-      await navigator.share({
-        title: "Comanifest",
-        text,
-        url,
-      });
-      return { ok: true, message: null };
-    } catch (err) {
-      if (err instanceof Error && err.name === "AbortError") {
-        return { ok: false, message: null };
-      }
-    }
-  }
+  const payload = `${text}\n\n${url}`;
 
   try {
-    await navigator.clipboard.writeText(url);
+    await navigator.clipboard.writeText(payload);
     return { ok: true, message: SHARE_INSTAGRAM_COPY_SUCCESS };
   } catch {
     return { ok: false, message: "Could not copy the link." };
