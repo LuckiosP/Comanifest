@@ -39,6 +39,15 @@ export default function GuidelinesPage() {
           </li>
           <li className="rounded-2xl border border-stone-200/90 bg-white/70 p-5 dark:border-stone-700/80 dark:bg-stone-800/40">
             <h2 className="font-semibold text-stone-900 dark:text-stone-50">
+              Your IP stays yours
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+              The manifestations, intentions, reflections, and other original
+              content you write remain your intellectual property.
+            </p>
+          </li>
+          <li className="rounded-2xl border border-stone-200/90 bg-white/70 p-5 dark:border-stone-700/80 dark:bg-stone-800/40">
+            <h2 className="font-semibold text-stone-900 dark:text-stone-50">
               No targeting individuals
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-300">

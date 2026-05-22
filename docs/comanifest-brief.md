@@ -109,6 +109,7 @@ A clear, simple set of principles:
 
 - do no harm  
 - inclusivity  
+- user-owned IP: manifestations, intentions, reflections, and other original content people write remain their intellectual property  
 - no targeting individuals  
 - no negative or punitive intentions  
 - no political manipulation  
