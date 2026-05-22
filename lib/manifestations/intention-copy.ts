@@ -71,6 +71,35 @@ export const MANIFEST_DELETE_SUCCESS =
 export const MANIFEST_DELETE_BLOCKED =
   "Others are still holding this manifestation. Archive it first, or wait until they withdraw, before deleting.";
 
+/** Creator closure & reflection (phase 6). */
+export const MANIFEST_CLOSE_CTA = "Close manifestation";
+export const MANIFEST_CLOSE_EARLY_CTA = "Close early";
+export const MANIFEST_CLOSE_PENDING = "Closing…";
+export const MANIFEST_CLOSE_CONFIRM =
+  "I understand this closes the manifestation for new holds and shares a short reflection with people already holding.";
+export const MANIFEST_CLOSE_SUCCESS =
+  "This manifestation is closed. Thank you for reflecting with the circle.";
+export const MANIFEST_CLOSE_PAST_END_PROMPT =
+  "The hold-until date has passed. When you are ready, close with a gentle reflection — only you evaluate success.";
+export const MANIFEST_CLOSE_EARLY_HINT =
+  "You can close before the hold-until date if the intention feels complete — add a short reflection for people holding with you.";
+export const MANIFEST_CLOSE_REFLECTION_LABEL =
+  "Your reflection (shared with holders)";
+export const MANIFEST_CLOSE_REFLECTION_PLACEHOLDER =
+  "How did it feel? What did you notice — in the world or in yourself? No need for a verdict.";
+export const MANIFEST_CLOSE_SUCCESS_LABEL = "How did it land for you?";
+export const MANIFEST_CLOSE_SUCCESS_YES = "It landed well";
+export const MANIFEST_CLOSE_SUCCESS_UNSURE = "Still unfolding / mixed";
+export const MANIFEST_CLOSE_SUCCESS_NO = "Not as hoped";
+export const MANIFEST_CLOSED_BANNER = "Closed — this manifestation no longer accepts new holds.";
+export const MANIFEST_CREATOR_REFLECTION_HEADING = "Creator reflection";
+export const MANIFEST_CREATOR_REFLECTION_SUCCESS_YES =
+  "The creator felt this manifestation landed well.";
+export const MANIFEST_CREATOR_REFLECTION_SUCCESS_NO =
+  "The creator felt this did not land as hoped.";
+export const MANIFEST_CREATOR_REFLECTION_SUCCESS_UNSURE =
+  "The creator felt this is still unfolding or mixed.";
+
 /** Similar manifestations on create (phase 5). */
 export const SIMILAR_MANIFESTATIONS_HEADING =
   "Something similar may already be live";

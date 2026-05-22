@@ -3,18 +3,23 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { JoinManifestationControl } from "../../components/JoinManifestationControl";
+import { CloseManifestationControl } from "../../components/CloseManifestationControl";
 import { CreatorManifestationActions } from "../../components/CreatorManifestationActions";
+import { CreatorReflectionPanel } from "../../components/CreatorReflectionPanel";
 import { ShareManifestationControl } from "../../components/ShareManifestationControl";
 import { SiteHeader } from "../../components/SiteHeader";
 import {
   holdingCountLabel,
   MANIFEST_ARCHIVED_BANNER,
+  MANIFEST_CLOSED_BANNER,
   MANIFEST_EDIT_LINK,
   MANIFEST_ENDS_LABEL,
 } from "@/lib/manifestations/intention-copy";
 import { formatManifestationDate } from "@/lib/manifestations/dates";
 import { getManifestationById } from "@/lib/manifestations/queries";
 import {
+  hasCreatorReflection,
+  isManifestationClosable,
   isManifestationEditable,
   isManifestationOpenForHolds,
 } from "@/lib/manifestations/lifecycle";
@@ -67,6 +72,11 @@ export default async function ManifestationDetailPage({ params }: Props) {
     MANIFESTATION_CATEGORY_LABELS[row.category] ?? row.category;
   const canShare =
     source === "live" && (viewer_is_creator || viewer_has_joined);
+  const showClose =
+    viewer_is_creator && source === "live" && isManifestationClosable(row);
+  const archivedBanner = hasCreatorReflection(row)
+    ? MANIFEST_CLOSED_BANNER
+    : MANIFEST_ARCHIVED_BANNER;
 
   return (
     <div className="flex min-h-full flex-col bg-gradient-to-b from-violet-50/80 via-white to-amber-50/40 dark:from-stone-950 dark:via-stone-900 dark:to-stone-950">
@@ -87,7 +97,7 @@ export default async function ManifestationDetailPage({ params }: Props) {
 
         {row.status === "archived" ? (
           <p className="rounded-xl border border-stone-200 bg-stone-50/90 px-3 py-2 text-sm text-stone-700 dark:border-stone-700 dark:bg-stone-800/50 dark:text-stone-200">
-            {MANIFEST_ARCHIVED_BANNER}
+            {archivedBanner}
           </p>
         ) : null}
 
@@ -122,7 +132,16 @@ export default async function ManifestationDetailPage({ params }: Props) {
             {row.intention}
           </p>
 
+          <CreatorReflectionPanel manifestation={row} />
+
           <div className="flex flex-col gap-4 border-t border-stone-100 pt-4 dark:border-stone-700/80">
+            {showClose ? (
+              <CloseManifestationControl
+                manifestationId={row.id}
+                endsAt={row.ends_at}
+                variant="detail"
+              />
+            ) : null}
             <p className="text-sm text-stone-500 dark:text-stone-400">
               {holdingCountLabel(row.join_count)}
             </p>

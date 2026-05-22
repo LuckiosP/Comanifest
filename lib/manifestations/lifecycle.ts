@@ -9,6 +9,40 @@ export function isManifestationOpenForHolds(
   );
 }
 
+export function isManifestationPastEndDate(
+  manifestation: Pick<Manifestation, "ends_at">,
+): boolean {
+  return new Date(manifestation.ends_at).getTime() < Date.now();
+}
+
+/** Creator may close with reflection while the manifestation is still active. */
+export function isManifestationClosable(
+  manifestation: Pick<Manifestation, "status">,
+): boolean {
+  return manifestation.status === "active";
+}
+
+export function hasCreatorReflection(
+  manifestation: Pick<
+    Manifestation,
+    "creator_reflection" | "reflected_at"
+  >,
+): boolean {
+  return Boolean(
+    manifestation.reflected_at?.trim() ||
+      manifestation.creator_reflection?.trim(),
+  );
+}
+
+export function shouldPromptCreatorToClose(
+  manifestation: Pick<Manifestation, "status" | "ends_at">,
+): boolean {
+  return (
+    isManifestationClosable(manifestation) &&
+    isManifestationPastEndDate(manifestation)
+  );
+}
+
 export function isManifestationEditable(
   manifestation: Pick<Manifestation, "status">,
 ): boolean {

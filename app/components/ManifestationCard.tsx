@@ -1,6 +1,8 @@
 import Link from "next/link";
 
+import { CloseManifestationControl } from "@/app/components/CloseManifestationControl";
 import { CreatorManifestationActions } from "@/app/components/CreatorManifestationActions";
+import { CreatorReflectionPanel } from "@/app/components/CreatorReflectionPanel";
 import { JoinManifestationControl } from "@/app/components/JoinManifestationControl";
 import { ShareManifestationControl } from "@/app/components/ShareManifestationControl";
 import {
@@ -9,7 +11,7 @@ import {
   MANIFEST_ENDS_LABEL,
 } from "@/lib/manifestations/intention-copy";
 import { formatManifestationDate } from "@/lib/manifestations/dates";
-import { isManifestationEditable } from "@/lib/manifestations/lifecycle";
+import { isManifestationClosable, isManifestationEditable } from "@/lib/manifestations/lifecycle";
 import {
   MANIFESTATION_CATEGORY_LABELS,
   MANIFESTATION_STATUS_LABELS,
@@ -67,6 +69,7 @@ export function ManifestationCard({
       <p className="line-clamp-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
         {manifestation.intention}
       </p>
+      <CreatorReflectionPanel manifestation={manifestation} />
       <div className="flex flex-col gap-3 border-t border-stone-100 pt-3 dark:border-stone-700/80">
         <p className="text-sm text-stone-500 dark:text-stone-400">
           {holdingCountLabel(manifestation.join_count)}
@@ -88,6 +91,16 @@ export function ManifestationCard({
           >
             {MANIFEST_EDIT_LINK}
           </Link>
+        ) : null}
+        {showCreatorActions &&
+        manifestation.viewer_is_creator &&
+        isManifestationClosable(manifestation) &&
+        !manifestation.id.startsWith("sample-") ? (
+          <CloseManifestationControl
+            manifestationId={manifestation.id}
+            endsAt={manifestation.ends_at}
+            variant="compact"
+          />
         ) : null}
         {showCreatorActions &&
         manifestation.viewer_is_creator &&

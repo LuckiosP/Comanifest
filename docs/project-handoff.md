@@ -221,7 +221,7 @@ Roadmap detail and priority: **`docs/comanifest-brief.md` → §7 Status & roadm
 - **Phase 3 — Own your manifestations** ✅ **edit**; **withdraw hold**; **archive** / **delete** (delete when `join_count ≤ 1` only)  
 - **Phase 4 — Search** ✅ feed + header **`?q=`** search (title, intention, category)  
 - **Phase 5 — Similar manifestations** ✅ debounced suggestions on **`/manifestations/new`** before submit  
-- **Phase 6 — Closure:** creator-only success reflection after end date  
+- **Phase 6 — Closure:** ✅ creator **close** with reflection (anytime while active, including before **`ends_at`**); holders see reflection on detail + account cards  
 - **Phase 7 — Feature suggestion box**  
 - **Phase 8 — Share:** ✅ Facebook, Bluesky, native share / copy link on detail + account (creator or holder); Open Graph on detail  
 - **Phase 9 — Creator email updates:** ✅ instant / daily / weekly / off on **`/account`** (email sign-in); Resend + Vercel cron for digests  
