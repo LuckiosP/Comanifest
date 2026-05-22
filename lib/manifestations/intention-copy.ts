@@ -104,18 +104,19 @@ export const MANIFEST_CREATOR_REFLECTION_SUCCESS_UNSURE =
 export const SIMILAR_MANIFESTATIONS_HEADING =
   "Something similar may already be live";
 export const SIMILAR_MANIFESTATIONS_HINT =
-  "Consider holding an existing manifestation instead of starting a duplicate — you can still manifest your own if none of these fit.";
-export const SIMILAR_MANIFESTATIONS_LOADING = "Looking for similar manifestations…";
+  "Updates as you type — same vibe matching as search. Consider holding an existing manifestation instead of starting a duplicate.";
+export const SIMILAR_MANIFESTATIONS_NO_RESULTS =
+  "Nothing quite matches yet — keep typing, or manifest your own if none of these fit.";
 export const SIMILAR_MANIFESTATIONS_HOLD_LINK = "Hold this one instead →";
 
 /** Share (phase 8). */
 export const SHARE_LABEL = "Share";
 export const SHARE_FACEBOOK = "Facebook";
-export const SHARE_BLUESKY = "Bluesky";
 export const SHARE_INSTAGRAM = "Instagram";
-export const SHARE_COPY_LINK = "Copy link";
+export const SHARE_LINK = "Link";
 export const SHARE_COPY_SUCCESS = "Link copied — paste it wherever you like.";
-export const SHARE_NATIVE = "Share…";
+export const SHARE_INSTAGRAM_COPY_SUCCESS =
+  "Link copied — paste it in Instagram.";
 
 /** Creator hold email updates (phase 9). */
 export const NOTIFICATIONS_HEADING = "Hold updates by email";

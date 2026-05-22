@@ -3,10 +3,13 @@ import Link from "next/link";
 import { CreateManifestationForm } from "../../components/CreateManifestationForm";
 import { SiteHeader } from "../../components/SiteHeader";
 import { MANIFEST_CTA } from "@/lib/manifestations/intention-copy";
-import { probeManifestationsTable } from "@/lib/manifestations/queries";
+import { listManifestations, probeManifestationsTable } from "@/lib/manifestations/queries";
 
 export default async function NewManifestationPage() {
-  const { hint: supabaseHint } = await probeManifestationsTable();
+  const [{ hint: supabaseHint }, { rows, source }] = await Promise.all([
+    probeManifestationsTable(),
+    listManifestations("newest"),
+  ]);
 
   return (
     <div className="flex min-h-full flex-col bg-gradient-to-b from-violet-50/80 via-white to-amber-50/40 dark:from-stone-950 dark:via-stone-900 dark:to-stone-950">
@@ -35,7 +38,10 @@ export default async function NewManifestationPage() {
           </p>
         ) : null}
 
-        <CreateManifestationForm />
+        <CreateManifestationForm
+          similarCandidates={rows}
+          similarSource={source}
+        />
 
         <Link
           href="/manifestations"

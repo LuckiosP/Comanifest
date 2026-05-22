@@ -1,9 +1,10 @@
 import {
-  SHARE_BLUESKY,
   SHARE_COPY_SUCCESS,
   SHARE_FACEBOOK,
   SHARE_INSTAGRAM,
+  SHARE_INSTAGRAM_COPY_SUCCESS,
   SHARE_LABEL,
+  SHARE_LINK,
 } from "@/lib/manifestations/intention-copy";
 import { manifestationPublicUrl } from "@/lib/site-url";
 
@@ -23,12 +24,6 @@ export function facebookShareUrl(manifestationId: string): string {
   return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
 }
 
-export function blueskyShareUrl(manifestationId: string, title: string): string {
-  const url = resolveManifestationShareUrl(manifestationId);
-  const text = buildShareText(title);
-  return `https://bsky.app/intent/compose?text=${encodeURIComponent(`${text}\n\n${url}`)}`;
-}
-
 export async function copyManifestationLink(
   manifestationId: string,
 ): Promise<{ ok: boolean; message: string }> {
@@ -41,9 +36,39 @@ export async function copyManifestationLink(
   }
 }
 
+export async function shareManifestationToInstagram(
+  manifestationId: string,
+  title: string,
+): Promise<{ ok: boolean; message: string | null }> {
+  const url = resolveManifestationShareUrl(manifestationId);
+  const text = buildShareText(title);
+
+  if (typeof navigator !== "undefined" && "share" in navigator) {
+    try {
+      await navigator.share({
+        title: "Comanifest",
+        text,
+        url,
+      });
+      return { ok: true, message: null };
+    } catch (err) {
+      if (err instanceof Error && err.name === "AbortError") {
+        return { ok: false, message: null };
+      }
+    }
+  }
+
+  try {
+    await navigator.clipboard.writeText(url);
+    return { ok: true, message: SHARE_INSTAGRAM_COPY_SUCCESS };
+  } catch {
+    return { ok: false, message: "Could not copy the link." };
+  }
+}
+
 export const SHARE_PLATFORM_LABELS = {
   facebook: SHARE_FACEBOOK,
-  bluesky: SHARE_BLUESKY,
   instagram: SHARE_INSTAGRAM,
+  link: SHARE_LINK,
   label: SHARE_LABEL,
 } as const;

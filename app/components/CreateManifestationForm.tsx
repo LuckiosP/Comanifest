@@ -20,6 +20,7 @@ import { localTodayDateInputValue } from "@/lib/manifestations/dates";
 import {
   MANIFESTATION_CATEGORY_LABELS,
   type ManifestationCategory,
+  type ManifestationListRow,
 } from "@/lib/types/manifestation";
 
 const initialState: CreateManifestationState = {};
@@ -27,7 +28,15 @@ const initialState: CreateManifestationState = {};
 const inputClass =
   "mt-1 w-full rounded-xl border border-stone-200 bg-white px-3 py-2 text-stone-900 shadow-sm outline-none transition placeholder:text-stone-400 focus:border-violet-400 focus:ring-2 focus:ring-violet-200 dark:border-stone-600 dark:bg-stone-900 dark:text-stone-100 dark:focus:border-violet-500 dark:focus:ring-violet-900";
 
-export function CreateManifestationForm() {
+type CreateManifestationFormProps = {
+  similarCandidates?: ManifestationListRow[];
+  similarSource?: "live" | "sample";
+};
+
+export function CreateManifestationForm({
+  similarCandidates = [],
+  similarSource = "sample",
+}: CreateManifestationFormProps) {
   const [state, formAction, pending] = useActionState(
     createManifestation,
     initialState,
@@ -176,6 +185,15 @@ export function CreateManifestationForm() {
         />
       </label>
 
+      {configured && similarSource === "live" ? (
+        <SimilarManifestationsPanel
+          title={title}
+          intention={intention}
+          candidates={similarCandidates}
+          source={similarSource}
+        />
+      ) : null}
+
       <label className="flex flex-col text-sm font-medium text-stone-700 dark:text-stone-200">
         Intention behind it
         <textarea
@@ -191,10 +209,6 @@ export function CreateManifestationForm() {
           className={`${inputClass} resize-y min-h-[120px]`}
         />
       </label>
-
-      {configured ? (
-        <SimilarManifestationsPanel title={title} intention={intention} />
-      ) : null}
 
       <label className="flex flex-col text-sm font-medium text-stone-700 dark:text-stone-200">
         Category

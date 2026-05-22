@@ -3,18 +3,11 @@
 import { useCallback, useState } from "react";
 
 import {
-  blueskyShareUrl,
-  buildShareText,
   copyManifestationLink,
   facebookShareUrl,
-  resolveManifestationShareUrl,
   SHARE_PLATFORM_LABELS,
+  shareManifestationToInstagram,
 } from "@/lib/manifestations/share-client";
-import {
-  SHARE_COPY_LINK,
-  SHARE_COPY_SUCCESS,
-  SHARE_NATIVE,
-} from "@/lib/manifestations/intention-copy";
 
 type ShareManifestationControlProps = {
   manifestationId: string;
@@ -36,28 +29,15 @@ export function ShareManifestationControl({
 
   const onCopyLink = useCallback(async () => {
     const result = await copyManifestationLink(manifestationId);
-    showMessage(result.ok ? result.message : result.message);
+    showMessage(result.message);
   }, [manifestationId, showMessage]);
 
-  const onNativeShare = useCallback(async () => {
-    if (!navigator.share) {
-      await onCopyLink();
-      return;
+  const onInstagramShare = useCallback(async () => {
+    const result = await shareManifestationToInstagram(manifestationId, title);
+    if (result.message) {
+      showMessage(result.message);
     }
-
-    try {
-      await navigator.share({
-        title: "Comanifest",
-        text: buildShareText(title),
-        url: resolveManifestationShareUrl(manifestationId),
-      });
-    } catch (err) {
-      if (err instanceof Error && err.name === "AbortError") {
-        return;
-      }
-      await onCopyLink();
-    }
-  }, [manifestationId, onCopyLink, title]);
+  }, [manifestationId, showMessage, title]);
 
   const buttonClass = compact
     ? "rounded-full border border-stone-200 bg-white px-2.5 py-1 text-xs font-medium text-stone-700 transition hover:border-violet-300 hover:text-violet-800 dark:border-stone-600 dark:bg-stone-900 dark:text-stone-200 dark:hover:border-violet-700 dark:hover:text-violet-200"
@@ -77,26 +57,20 @@ export function ShareManifestationControl({
         >
           {SHARE_PLATFORM_LABELS.facebook}
         </a>
-        <a
-          href={blueskyShareUrl(manifestationId, title)}
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          type="button"
+          onClick={() => void onInstagramShare()}
           className={buttonClass}
         >
-          {SHARE_PLATFORM_LABELS.bluesky}
-        </a>
-        <button type="button" onClick={() => void onNativeShare()} className={buttonClass}>
-          {typeof navigator !== "undefined" && "share" in navigator
-            ? SHARE_NATIVE
-            : SHARE_PLATFORM_LABELS.instagram}
+          {SHARE_PLATFORM_LABELS.instagram}
         </button>
         <button type="button" onClick={() => void onCopyLink()} className={buttonClass}>
-          {SHARE_COPY_LINK}
+          {SHARE_PLATFORM_LABELS.link}
         </button>
       </div>
       {message ? (
         <p className="text-xs text-violet-800 dark:text-violet-200" role="status">
-          {message === SHARE_COPY_SUCCESS ? message : message}
+          {message}
         </p>
       ) : null}
     </div>

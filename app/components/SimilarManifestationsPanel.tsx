@@ -1,65 +1,42 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 
-import { fetchSimilarManifestations } from "@/app/actions/similar-manifestations";
 import {
   holdingCountLabel,
   SIMILAR_MANIFESTATIONS_HEADING,
   SIMILAR_MANIFESTATIONS_HINT,
   SIMILAR_MANIFESTATIONS_HOLD_LINK,
-  SIMILAR_MANIFESTATIONS_LOADING,
+  SIMILAR_MANIFESTATIONS_NO_RESULTS,
 } from "@/lib/manifestations/intention-copy";
+import {
+  rankSimilarManifestations,
+  shouldShowSimilarSuggestions,
+} from "@/lib/manifestations/similar-ranking";
 import type { ManifestationListRow } from "@/lib/types/manifestation";
 
 type SimilarManifestationsPanelProps = {
   title: string;
   intention: string;
+  candidates: ManifestationListRow[];
+  source: "live" | "sample";
 };
 
 export function SimilarManifestationsPanel({
   title,
   intention,
+  candidates,
+  source,
 }: SimilarManifestationsPanelProps) {
-  const [rows, setRows] = useState<ManifestationListRow[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const visible = source === "live" && shouldShowSimilarSuggestions(title, intention);
 
-  useEffect(() => {
-    const combined = `${title.trim()} ${intention.trim()}`.trim();
-    if (combined.length < 8) {
-      setRows([]);
-      setLoading(false);
-      setError(null);
-      return;
-    }
+  const rows = useMemo(
+    () => rankSimilarManifestations(candidates, title, intention),
+    [candidates, title, intention],
+  );
 
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-
-    const timer = window.setTimeout(() => {
-      void (async () => {
-        const result = await fetchSimilarManifestations(title, intention);
-        if (cancelled) return;
-        setLoading(false);
-        if (result.error) {
-          setError(result.error);
-          setRows([]);
-          return;
-        }
-        setRows(result.rows);
-      })();
-    }, 450);
-
-    return () => {
-      cancelled = true;
-      window.clearTimeout(timer);
-    };
-  }, [title, intention]);
-
-  if (!loading && rows.length === 0 && !error) {
+  if (!visible) {
     return null;
   }
 
@@ -75,17 +52,7 @@ export function SimilarManifestationsPanel({
         {SIMILAR_MANIFESTATIONS_HINT}
       </p>
 
-      {loading ? (
-        <p className="mt-3 text-sm text-violet-800/80 dark:text-violet-200/80">
-          {SIMILAR_MANIFESTATIONS_LOADING}
-        </p>
-      ) : null}
-
-      {error ? (
-        <p className="mt-3 text-sm text-amber-900 dark:text-amber-200">{error}</p>
-      ) : null}
-
-      {!loading && rows.length > 0 ? (
+      {rows.length > 0 ? (
         <ul className="mt-3 flex flex-col gap-2">
           {rows.map((row) => (
             <li
@@ -112,7 +79,11 @@ export function SimilarManifestationsPanel({
             </li>
           ))}
         </ul>
-      ) : null}
+      ) : (
+        <p className="mt-3 text-sm text-violet-900/80 dark:text-violet-200/80">
+          {SIMILAR_MANIFESTATIONS_NO_RESULTS}
+        </p>
+      )}
     </section>
   );
 }
