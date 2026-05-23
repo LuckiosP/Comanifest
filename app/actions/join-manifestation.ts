@@ -109,7 +109,7 @@ export async function joinManifestation(
   revalidatePath("/account");
   revalidatePath(`/manifestations/${manifestationId}`);
 
-  void notifyCreatorOnNewHold(manifestationId);
+  await notifyCreatorOnNewHold(manifestationId);
 
   return {
     success:
