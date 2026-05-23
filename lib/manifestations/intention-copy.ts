@@ -71,6 +71,9 @@ export const MANIFEST_DELETE_SUCCESS =
 export const MANIFEST_DELETE_BLOCKED =
   "Others are still holding this manifestation. Archive it first, or wait until they withdraw, before deleting.";
 
+export const MANIFEST_MANAGE_HEADING = "Manage this manifestation";
+export const MANIFEST_REMOVE_HEADING = "Archive or remove";
+
 /** Creator closure & reflection (phase 6). */
 export const MANIFEST_CLOSE_CTA = "Close manifestation";
 export const MANIFEST_CLOSE_EARLY_CTA = "Close early";

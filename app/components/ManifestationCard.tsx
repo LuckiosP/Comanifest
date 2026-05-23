@@ -1,17 +1,17 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 
-import { CloseManifestationControl } from "@/app/components/CloseManifestationControl";
 import { CreatorManifestationActions } from "@/app/components/CreatorManifestationActions";
 import { CreatorReflectionPanel } from "@/app/components/CreatorReflectionPanel";
 import { JoinManifestationControl } from "@/app/components/JoinManifestationControl";
 import { ShareManifestationControl } from "@/app/components/ShareManifestationControl";
 import {
   holdingCountLabel,
-  MANIFEST_EDIT_LINK,
   MANIFEST_ENDS_LABEL,
+  SHARE_LABEL,
 } from "@/lib/manifestations/intention-copy";
 import { formatManifestationDate } from "@/lib/manifestations/dates";
-import { isManifestationClosable, isManifestationEditable } from "@/lib/manifestations/lifecycle";
+import { isManifestationClosable } from "@/lib/manifestations/lifecycle";
 import {
   MANIFESTATION_CATEGORY_LABELS,
   MANIFESTATION_STATUS_LABELS,
@@ -28,6 +28,25 @@ type ManifestationCardProps = {
   showShare?: boolean;
 };
 
+function CardSection({
+  children,
+  label,
+}: {
+  children: ReactNode;
+  label?: string;
+}) {
+  return (
+    <div className="flex flex-col gap-3 border-t border-stone-100 pt-3 dark:border-stone-700/80">
+      {label ? (
+        <p className="text-xs font-medium uppercase tracking-wide text-stone-500 dark:text-stone-400">
+          {label}
+        </p>
+      ) : null}
+      {children}
+    </div>
+  );
+}
+
 export function ManifestationCard({
   manifestation,
   joinsEnabled,
@@ -40,6 +59,10 @@ export function ManifestationCard({
   const label =
     MANIFESTATION_CATEGORY_LABELS[manifestation.category] ??
     manifestation.category;
+  const isSample = manifestation.id.startsWith("sample-");
+  const showManage =
+    showCreatorActions && manifestation.viewer_is_creator && !isSample;
+  const showShareSection = showShare && !isSample;
 
   return (
     <article className="flex flex-col gap-3 rounded-2xl border border-stone-200/90 bg-white/80 p-5 shadow-sm backdrop-blur-sm dark:border-stone-700/90 dark:bg-stone-800/50">
@@ -70,7 +93,8 @@ export function ManifestationCard({
         {manifestation.intention}
       </p>
       <CreatorReflectionPanel manifestation={manifestation} />
-      <div className="flex flex-col gap-3 border-t border-stone-100 pt-3 dark:border-stone-700/80">
+
+      <CardSection>
         <p className="text-sm text-stone-500 dark:text-stone-400">
           {holdingCountLabel(manifestation.join_count)}
         </p>
@@ -82,44 +106,30 @@ export function ManifestationCard({
           viewerIsCreator={manifestation.viewer_is_creator}
           variant="card"
         />
-        {showEditLink &&
-        isManifestationEditable(manifestation) &&
-        !manifestation.id.startsWith("sample-") ? (
-          <Link
-            href={`/manifestations/${manifestation.id}/edit`}
-            className="w-fit text-sm font-medium text-violet-700 underline-offset-2 hover:underline dark:text-violet-300"
-          >
-            {MANIFEST_EDIT_LINK}
-          </Link>
-        ) : null}
-        {showCreatorActions &&
-        manifestation.viewer_is_creator &&
-        isManifestationClosable(manifestation) &&
-        !manifestation.id.startsWith("sample-") ? (
-          <CloseManifestationControl
-            manifestationId={manifestation.id}
-            endsAt={manifestation.ends_at}
-            variant="compact"
-          />
-        ) : null}
-        {showCreatorActions &&
-        manifestation.viewer_is_creator &&
-        !manifestation.id.startsWith("sample-") ? (
-          <CreatorManifestationActions
-            manifestationId={manifestation.id}
-            status={manifestation.status}
-            joinCount={manifestation.join_count}
-          />
-        ) : null}
-        {showShare && !manifestation.id.startsWith("sample-") ? (
+      </CardSection>
+
+      {showShareSection ? (
+        <CardSection label={SHARE_LABEL}>
           <ShareManifestationControl
             manifestationId={manifestation.id}
             title={manifestation.title}
             compact
           />
-        ) : null}
-      </div>
-      {manifestation.id.startsWith("sample-") ? (
+        </CardSection>
+      ) : null}
+
+      {showManage ? (
+        <CreatorManifestationActions
+          manifestationId={manifestation.id}
+          status={manifestation.status}
+          joinCount={manifestation.join_count}
+          endsAt={manifestation.ends_at}
+          showEditLink={showEditLink}
+          showClose={isManifestationClosable(manifestation)}
+        />
+      ) : null}
+
+      {isSample ? (
         <p className="text-xs text-amber-700/90 dark:text-amber-300/90">
           Example card — not stored in your database.
         </p>

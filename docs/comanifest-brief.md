@@ -162,7 +162,19 @@ Creators with an **email on their account** (magic-link sign-in) can opt in to u
 - Requires **notification preferences** stored per user; a **delivery pipeline** (Supabase Edge Function + transactional email provider, or similar) and a **scheduled job** for digests.  
 - Tied to **stable identity** — guests without email cannot receive these until they sign in with email (see anonymous→email linking).
 
-### J. Operator dashboard (“behind the scenes”)
+### J. Manifestation moderation (new manifestations)
+
+Before a new manifestation appears in the public feed, the platform should **screen it lightly** and **hold anything uncertain** until a human approves it.
+
+**Flow:**
+
+1. **Filter on create** — when someone submits a new manifestation, run an **educated guess** (heuristic rules, keyword/context checks, and/or model-assisted scoring — TBD) as to whether the content **might** breach the **guidelines** (section **D**). Most submissions should pass automatically; only ambiguous or risky ones are flagged.
+2. **Pending state** — flagged manifestations are stored as **`pending`**: **visible only to the manifestor** on their account and detail page; **hidden** from the public feed, search, similar-manifestation suggestions, and share until approved. An email goes to **`hello@manifest.org`** so an operator knows something needs review.
+3. **Email approval** — the review email includes **Approve** and **Decline** actions (signed links or one-click tokens). **Decline** may include **optional feedback** to the manifestor (gentle copy — not a tribunal). On **approve**, status becomes **`active`** and the manifestation joins the public feed; on **decline**, it stays off the feed (archived or rejected — TBD) and the creator sees the feedback on their account/detail page.
+
+**Principles:** default to **trust** for wholesome content; **pending** is a safety net, not a gate on every post. Operators need a minimal audit trail (who approved/declined, when). Revisit filter thresholds after launch data.
+
+### K. Operator dashboard (“behind the scenes”)
 
 A **private admin area** (not linked from the public site) for platform analysis:
 
@@ -250,12 +262,16 @@ Work in **thin slices** — each step should ship something usable on live.
 | **2 — My account** ✅ | **`/account`**: manifestations I **started** + I’m **holding** | Core user need; uses existing `user_id` + joins |
 | **3 — Own your manifestations** | **Edit** ✅; **withdraw hold** ✅; **archive** / **delete** ✅ | Account page needs actions, not just lists |
 | **4 — Search** ✅ | Feed + header **search** (title / intention / category) via **`?q=`** | Needed before duplicate-nudge is credible |
-| **5 — Similar on create** | On **Start a manifestation**, query similar rows and **suggest** before submit | Reuses search; reduces duplicate manifestations |
-| **6 — Closure & evaluation** | After **`ends_at`**, prompt **creator only** to reflect on success (gentle copy) | Requires phase 1 dates + “ready to close” UI |
+| **5 — Similar on create** ✅ | On **Start a manifestation**, query similar rows and **suggest** before submit | Reuses search; reduces duplicate manifestations |
+| **6 — Closure & evaluation** ✅ | After **`ends_at`**, prompt **creator only** to reflect on success (gentle copy) | Requires phase 1 dates + “ready to close” UI |
 | **7 — Feature suggestions** | Simple **suggestion box** (Supabase table + form, or link to GitHub Issues) | Independent; can ship anytime after phase 2 |
-| **8 — Share** | **Share** manifestations you **created** or **hold** — Facebook, Instagram, Bluesky + link preview (OG meta) | Growth; best after public detail URLs are stable |
-| **9 — Creator email updates** | Notify creators when their manifestation is **held** — frequency: each hold / daily / weekly / off | Needs email identity + notification prefs + email provider |
-| **10 — Operator dashboard** | Private **`/admin`** analytics: users, manifests, holds, category, geography (aggregated) | Needs admin auth, service role, privacy review — after core loop + pentest prep |
+| **8 — Share** ✅ | **Share** manifestations you **created** or **hold** — Facebook, Instagram, Bluesky + link preview (OG meta) | Growth; best after public detail URLs are stable |
+| **9 — Creator email updates** ✅ | Notify creators when their manifestation is **held** — frequency: each hold / daily / weekly / off | Needs email identity + notification prefs + email provider |
+| **10 — Manifestation moderation** | Screen **new** manifestations before they go public (see section **3 J**) | Safety before wide launch; share + feed must respect **`pending`** |
+| **10a — Content filter** | On create, **educated guess** whether content might breach guidelines; auto-approve most posts | First slice — defines what gets flagged; needs moderation fields on **`manifestations`** |
+| **10b — Pending & operator alert** | Flagged → **`pending`**; **creator-only** visibility (account + detail); email **`hello@manifest.org`** | Depends on 10a; feed, search, similar panel, and share exclude **`pending`** |
+| **10c — Email approve / decline** | Review email with **Approve** / **Decline** links; optional **feedback** to manifestor on decline | Depends on 10b; signed one-click tokens; on approve → **`active`** + public feed |
+| **11 — Operator dashboard** | Private **`/admin`** analytics: users, manifests, holds, category, geography (aggregated) | Needs admin auth, service role, privacy review — after core loop + moderation + pentest prep |
 | **Later** | Custom domain, anonymous→email linking, **security pentest** (`docs/security-pentest.md`), polish | Before wide launch |
 
 **Phase 3 build order (recommended slices):** (a) **Edit** ✅ → (b) **Withdraw hold** ✅ → (c) **Archive / delete** ✅.
@@ -266,11 +282,15 @@ Work in **thin slices** — each step should ship something usable on live.
 
 **Phase 9 (email) — scope:** `notification_preferences` (or profile fields); trigger on new join for “instant”; cron/queue for digests; requires **custom SMTP** or provider (Supabase auth email alone is not enough for product notifications).
 
-**Phase 10 (dashboard) — scope:** operator-only route; charts/tables from Supabase (aggregates); geography TBD; no public nav link.
+**Phase 10 (moderation) — build order:** (a) **Content filter** on create → (b) **`pending`** status + creator-only visibility + alert to **`hello@manifest.org`** → (c) **Email approve / decline** with optional feedback. Most manifestations should ship **`active`** immediately; only uncertain ones enter **`pending`**.
 
-**Not done yet:** custom domain, phases 3b–10 above, anonymous→email linking UX, **security pentest**.
+**Phase 10 (moderation) — scope:** extend **`status`** (or add **`moderation_status`**) with **`pending`**; RLS + queries hide **`pending`** from public feed/search/similar/share; creator sees “awaiting review” on **`/account`** and their detail page; filter implementation TBD (rules-first, model-assisted later); review emails via transactional provider (reuse Resend stack from phase 9); signed approve/decline URLs with expiry; audit fields (reviewed_at, reviewed_by, decline_feedback).
 
-**Open product decisions (TBD when building):** Can creators close before `ends_at`? Delete vs archive when others still hold? Show archived manifestations in search? Can **`ends_at`** be moved earlier if others already hold? Share text/caption wording per platform? Include holder count only vs “someone new held” in emails? Which admin emails get dashboard access? How is geography collected and disclosed?
+**Phase 11 (dashboard) — scope:** operator-only route; charts/tables from Supabase (aggregates); geography TBD; no public nav link; optional moderation queue view later (email-first for now).
+
+**Not done yet:** custom domain, phases 7 and 10–11 above, anonymous→email linking UX, **security pentest**.
+
+**Open product decisions (TBD when building):** Can creators close before `ends_at`? Delete vs archive when others still hold? Show archived manifestations in search? Can **`ends_at`** be moved earlier if others already hold? Share text/caption wording per platform? Include holder count only vs “someone new held” in emails? Which admin emails get dashboard access? How is geography collected and disclosed? **Moderation:** filter strictness and false-positive handling; decline → archive vs delete; can manifestor edit while **`pending`**; SLA copy for creators waiting on review; who receives **`hello@manifest.org`** in dev vs prod?
 
 ---
 

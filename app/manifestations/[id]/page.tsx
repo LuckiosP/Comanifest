@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { JoinManifestationControl } from "../../components/JoinManifestationControl";
-import { CloseManifestationControl } from "../../components/CloseManifestationControl";
 import { CreatorManifestationActions } from "../../components/CreatorManifestationActions";
 import { CreatorReflectionPanel } from "../../components/CreatorReflectionPanel";
 import { ShareManifestationControl } from "../../components/ShareManifestationControl";
@@ -12,8 +11,8 @@ import {
   holdingCountLabel,
   MANIFEST_ARCHIVED_BANNER,
   MANIFEST_CLOSED_BANNER,
-  MANIFEST_EDIT_LINK,
   MANIFEST_ENDS_LABEL,
+  SHARE_LABEL,
 } from "@/lib/manifestations/intention-copy";
 import { formatManifestationDate } from "@/lib/manifestations/dates";
 import { getManifestationById } from "@/lib/manifestations/queries";
@@ -117,17 +116,6 @@ export default async function ManifestationDetailPage({ params }: Props) {
             {row.title}
           </h1>
 
-          {viewer_is_creator &&
-          source === "live" &&
-          isManifestationEditable(row) ? (
-            <Link
-              href={`/manifestations/${row.id}/edit`}
-              className="w-fit text-sm font-medium text-violet-700 underline-offset-2 hover:underline dark:text-violet-300"
-            >
-              {MANIFEST_EDIT_LINK} →
-            </Link>
-          ) : null}
-
           <p className="text-base leading-relaxed text-stone-700 dark:text-stone-200">
             {row.intention}
           </p>
@@ -135,37 +123,43 @@ export default async function ManifestationDetailPage({ params }: Props) {
           <CreatorReflectionPanel manifestation={row} />
 
           <div className="flex flex-col gap-4 border-t border-stone-100 pt-4 dark:border-stone-700/80">
-            {showClose ? (
-              <CloseManifestationControl
+            <div className="flex flex-col gap-3">
+              <p className="text-sm text-stone-500 dark:text-stone-400">
+                {holdingCountLabel(row.join_count)}
+              </p>
+              <JoinManifestationControl
                 manifestationId={row.id}
-                endsAt={row.ends_at}
+                joinsEnabled={
+                  source === "live" && isManifestationOpenForHolds(row)
+                }
+                withdrawEnabled={source === "live"}
+                viewerHasJoined={viewer_has_joined}
+                viewerIsCreator={viewer_is_creator}
                 variant="detail"
               />
+            </div>
+
+            {canShare ? (
+              <div className="flex flex-col gap-3 border-t border-stone-100 pt-4 dark:border-stone-700/80">
+                <p className="text-xs font-medium uppercase tracking-wide text-stone-500 dark:text-stone-400">
+                  {SHARE_LABEL}
+                </p>
+                <ShareManifestationControl
+                  manifestationId={row.id}
+                  title={row.title}
+                />
+              </div>
             ) : null}
-            <p className="text-sm text-stone-500 dark:text-stone-400">
-              {holdingCountLabel(row.join_count)}
-            </p>
-            <JoinManifestationControl
-              manifestationId={row.id}
-              joinsEnabled={
-                source === "live" && isManifestationOpenForHolds(row)
-              }
-              withdrawEnabled={source === "live"}
-              viewerHasJoined={viewer_has_joined}
-              viewerIsCreator={viewer_is_creator}
-              variant="detail"
-            />
+
             {viewer_is_creator && source === "live" ? (
               <CreatorManifestationActions
                 manifestationId={row.id}
                 status={row.status}
                 joinCount={row.join_count}
-              />
-            ) : null}
-            {canShare ? (
-              <ShareManifestationControl
-                manifestationId={row.id}
-                title={row.title}
+                endsAt={row.ends_at}
+                showEditLink={isManifestationEditable(row)}
+                showClose={showClose}
+                closeVariant="detail"
               />
             ) : null}
           </div>

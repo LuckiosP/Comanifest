@@ -225,7 +225,8 @@ Roadmap detail and priority: **`docs/comanifest-brief.md` → §7 Status & roadm
 - **Phase 7 — Feature suggestion box**  
 - **Phase 8 — Share:** ✅ Facebook, Bluesky, native share / copy link on detail + account (creator or holder); Open Graph on detail  
 - **Phase 9 — Creator email updates:** ✅ instant / daily / weekly / off on **`/account`** (email sign-in); Resend + Vercel cron for digests  
-- **Phase 10 — Operator dashboard:** private admin analytics (users, manifests, holds, category, geography) — operator auth + privacy review  
+- **Phase 10 — Manifestation moderation:** (a) **content filter** on create (educated guess vs guidelines) → (b) **`pending`** + creator-only visibility + email **`hello@manifest.org`** → (c) **email approve / decline** with optional feedback to manifestor  
+- **Phase 11 — Operator dashboard:** private admin analytics (users, manifests, holds, category, geography) — operator auth + privacy review  
 - **Security review / pentest** — before wider launch; **`docs/security-pentest.md`**  
 - **Custom domain** — **`docs/deploying.md` Step 3**  
 - **Anonymous → email linking** — ✅ **`SignInForm`** uses **`updateUser`** for guest sessions; recovery SQL in **`docs/recover-guest-manifestations.sql`** if accounts already split  
@@ -249,4 +250,4 @@ That gives the assistant the same structural context chat history used to hold.
 
 ---
 
-*Last updated: 2026-05-19 — phases 5, 8, 9 shipped (similar on create, share, hold email updates).*
+*Last updated: 2026-05-23 — phase 10 (manifestation moderation) added to roadmap.*

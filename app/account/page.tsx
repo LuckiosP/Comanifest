@@ -108,6 +108,44 @@ export default async function AccountPage() {
           </p>
         ) : null}
 
+        <section className="flex flex-col gap-3 rounded-2xl border border-stone-200/90 bg-white/80 p-5 shadow-sm dark:border-stone-700/90 dark:bg-stone-800/50">
+          <div className="flex flex-col gap-1">
+            <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-50">
+              {NOTIFICATIONS_HEADING}
+            </h2>
+            <p className="text-sm text-stone-600 dark:text-stone-300">
+              {NOTIFICATIONS_HINT}
+            </p>
+          </div>
+          {!emailUser ? (
+            <p className="text-sm text-stone-600 dark:text-stone-300">
+              {NOTIFICATIONS_ANONYMOUS_HINT}{" "}
+              <Link
+                href="/sign-in?next=/account"
+                className="font-medium text-violet-700 underline-offset-2 hover:underline dark:text-violet-300"
+              >
+                Sign in with email
+              </Link>
+              .
+            </p>
+          ) : preferenceState.tableMissing ? (
+            <p className="text-sm text-amber-900 dark:text-amber-200">
+              {NOTIFICATIONS_MIGRATION_HINT}
+            </p>
+          ) : (
+            <>
+              {!notificationsConfigured ? (
+                <p className="text-sm text-stone-600 dark:text-stone-300">
+                  {NOTIFICATIONS_NOT_CONFIGURED}
+                </p>
+              ) : null}
+              <NotificationPreferencesForm
+                initialFrequency={preferenceState.frequency}
+              />
+            </>
+          )}
+        </section>
+
         <section className="flex flex-col gap-4">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-50">
@@ -180,44 +218,6 @@ export default async function AccountPage() {
                 </li>
               ))}
             </ul>
-          )}
-        </section>
-
-        <section className="flex flex-col gap-3 rounded-2xl border border-stone-200/90 bg-white/80 p-5 shadow-sm dark:border-stone-700/90 dark:bg-stone-800/50">
-          <div className="flex flex-col gap-1">
-            <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-50">
-              {NOTIFICATIONS_HEADING}
-            </h2>
-            <p className="text-sm text-stone-600 dark:text-stone-300">
-              {NOTIFICATIONS_HINT}
-            </p>
-          </div>
-          {!emailUser ? (
-            <p className="text-sm text-stone-600 dark:text-stone-300">
-              {NOTIFICATIONS_ANONYMOUS_HINT}{" "}
-              <Link
-                href="/sign-in?next=/account"
-                className="font-medium text-violet-700 underline-offset-2 hover:underline dark:text-violet-300"
-              >
-                Sign in with email
-              </Link>
-              .
-            </p>
-          ) : preferenceState.tableMissing ? (
-            <p className="text-sm text-amber-900 dark:text-amber-200">
-              {NOTIFICATIONS_MIGRATION_HINT}
-            </p>
-          ) : (
-            <>
-              {!notificationsConfigured ? (
-                <p className="text-sm text-stone-600 dark:text-stone-300">
-                  {NOTIFICATIONS_NOT_CONFIGURED}
-                </p>
-              ) : null}
-              <NotificationPreferencesForm
-                initialFrequency={preferenceState.frequency}
-              />
-            </>
           )}
         </section>
       </main>
