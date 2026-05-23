@@ -109,7 +109,7 @@ export async function joinManifestation(
   revalidatePath("/account");
   revalidatePath(`/manifestations/${manifestationId}`);
 
-  await notifyCreatorOnNewHold(manifestationId);
+  await notifyCreatorOnNewHold(manifestationId, supabase);
 
   return {
     success:

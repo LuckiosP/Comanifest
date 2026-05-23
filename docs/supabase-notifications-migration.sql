@@ -78,6 +78,7 @@ $$;
 
 revoke all on function public.queue_hold_notification_event(uuid, uuid, text, integer, text) from public;
 grant execute on function public.queue_hold_notification_event(uuid, uuid, text, integer, text) to authenticated;
+grant execute on function public.queue_hold_notification_event(uuid, uuid, text, integer, text) to service_role;
 
 create or replace function public.get_creator_hold_notification_plan(
   p_manifestation_id uuid
@@ -110,3 +111,4 @@ $$;
 
 revoke all on function public.get_creator_hold_notification_plan(uuid) from public;
 grant execute on function public.get_creator_hold_notification_plan(uuid) to authenticated;
+grant execute on function public.get_creator_hold_notification_plan(uuid) to service_role;
