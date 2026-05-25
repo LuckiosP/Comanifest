@@ -97,11 +97,11 @@ as $$
 begin
   return query
   select
-    m.user_id as creator_id,
-    u.email as creator_email,
-    coalesce(p.hold_updates_frequency, 'off') as hold_updates_frequency,
-    m.title as manifestation_title,
-    m.join_count as join_count
+    m.user_id,
+    u.email::text,
+    coalesce(p.hold_updates_frequency, 'off')::text,
+    m.title::text,
+    m.join_count::integer
   from public.manifestations m
   join auth.users u on u.id = m.user_id
   left join public.notification_preferences p on p.user_id = m.user_id
