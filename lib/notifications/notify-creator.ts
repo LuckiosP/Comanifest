@@ -65,6 +65,10 @@ export async function notifyCreatorOnNewHold(
   }
 
   if (plan.hold_updates_frequency === "off") {
+    console.error(
+      "[hold-notify] creator preference is off:",
+      plan.creator_id ?? "unknown creator",
+    );
     return;
   }
 
