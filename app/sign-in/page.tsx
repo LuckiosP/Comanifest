@@ -108,6 +108,17 @@ export default async function SignInPage({ searchParams }: Props) {
         >
           ← Back without signing in
         </Link>
+
+        <p className="text-xs leading-relaxed text-stone-500 dark:text-stone-400">
+          By signing in, you agree to our{" "}
+          <Link
+            href="/privacy"
+            className="font-medium text-stone-600 underline-offset-2 hover:text-violet-700 hover:underline dark:text-stone-300 dark:hover:text-violet-300"
+          >
+            privacy policy
+          </Link>
+          .
+        </p>
       </main>
     </div>
   );

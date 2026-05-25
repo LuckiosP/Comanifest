@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { SiteFooter } from "../components/SiteFooter";
 import { SiteHeader } from "../components/SiteHeader";
 import { MANIFEST_CTA } from "@/lib/manifestations/intention-copy";
 
@@ -92,6 +93,7 @@ export default function GuidelinesPage() {
           </Link>
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }

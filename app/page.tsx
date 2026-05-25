@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { SiteFooter } from "./components/SiteFooter";
 import { SiteHeader } from "./components/SiteHeader";
 import { MANIFEST_CTA } from "@/lib/manifestations/intention-copy";
 
@@ -60,9 +61,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="mt-auto border-t border-stone-200/60 bg-white/50 px-4 py-6 text-center text-sm text-stone-500 backdrop-blur-sm dark:border-stone-800 dark:bg-stone-900/50 dark:text-stone-400">
-        Comanifest — experiment generously, care for each other.
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
