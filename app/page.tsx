@@ -6,6 +6,7 @@ import {
   HOME_DESCRIPTOR,
   HOME_FOOTER_FEEDBACK,
   HOME_FOOTER_GUIDELINES,
+  HOME_FOOTER_PRIVACY,
 } from "@/lib/manifestations/intention-copy";
 import { listManifestations } from "@/lib/manifestations/queries";
 import Link from "next/link";
@@ -38,6 +39,15 @@ export default async function Home() {
 
       <footer className="px-4 pb-8 text-center">
         <p className="text-xs text-stone-400 dark:text-stone-500">
+          <Link
+            href="/privacy"
+            className="underline-offset-2 hover:text-stone-600 hover:underline dark:hover:text-stone-300"
+          >
+            {HOME_FOOTER_PRIVACY}
+          </Link>
+          <span aria-hidden="true" className="mx-2">
+            ·
+          </span>
           <Link
             href="/guidelines"
             className="underline-offset-2 hover:text-stone-600 hover:underline dark:hover:text-stone-300"

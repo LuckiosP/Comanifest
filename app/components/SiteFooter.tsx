@@ -1,3 +1,4 @@
+import { FEATURE_SUGGESTIONS_EMAIL } from "@/lib/manifestations/intention-copy";
 import Link from "next/link";
 
 export function SiteFooter() {
@@ -18,6 +19,13 @@ export function SiteFooter() {
         >
           Community guidelines
         </Link>
+        <span aria-hidden="true">·</span>
+        <a
+          href={`mailto:${FEATURE_SUGGESTIONS_EMAIL}`}
+          className="font-medium text-stone-600 underline-offset-2 hover:text-violet-700 hover:underline dark:text-stone-300 dark:hover:text-violet-300"
+        >
+          Feedback
+        </a>
       </p>
     </footer>
   );

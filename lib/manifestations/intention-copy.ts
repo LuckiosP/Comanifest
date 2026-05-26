@@ -50,6 +50,7 @@ export const HOME_START_OWN_HINT =
   "Nothing close enough? Name yours and invite others to hold it with you.";
 export const HOME_DESCRIPTOR =
   "Name a hopeful outcome, find others already holding something similar, or start your own gathering. Comanifest is playful, sincere, and built for uplift — not petitions, promises, or harm.";
+export const HOME_FOOTER_PRIVACY = "Privacy";
 export const HOME_FOOTER_GUIDELINES = "Guidelines";
 export const HOME_FOOTER_FEEDBACK = "Feedback";
 export const SEARCH_HINT =
