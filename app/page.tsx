@@ -11,7 +11,7 @@ import {
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-b from-violet-50/80 via-white to-amber-50/40 dark:from-stone-950 dark:via-stone-900 dark:to-stone-950">
+    <div className="flex min-h-screen flex-col design-page-shell">
       <SiteHeader />
 
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-12 px-4 py-12 sm:px-8 sm:py-16">

@@ -1,22 +1,26 @@
-"use client";
+﻿"use client";
 
 type DesignPreviewBannerProps = {
   label: string;
   branch: string;
 };
 
-/** Shown only on design/* branches — not production. */
+/** Shown only on design/* branches ΓÇö not production. */
 export function DesignPreviewBanner({ label, branch }: DesignPreviewBannerProps) {
   return (
     <div
       role="status"
-      className="border-b border-amber-200/80 bg-amber-50 px-4 py-2 text-center text-xs text-amber-950 dark:border-amber-900/60 dark:bg-amber-950/80 dark:text-amber-100"
+      className="border-b-4 border-amber-500 bg-amber-400 px-4 py-3 text-center text-sm font-medium text-amber-950"
     >
-      <strong>Design preview:</strong> {label} · branch{" "}
-      <code className="rounded bg-amber-100/80 px-1 py-0.5 font-mono text-[11px] dark:bg-amber-900/50">
-        {branch}
-      </code>
-      · localhost only · production unchanged
+      <p>
+        <strong>Design preview ΓÇö {label}</strong> ({branch})
+      </p>
+      <p className="mt-1 text-xs font-normal">
+        Use <strong>http://localhost:3000</strong> after{" "}
+        <code className="rounded bg-amber-950/10 px-1">npm run dev</code> on
+        this branch.{" "}
+        <strong>www.comanifest.org stays on the current live look.</strong>
+      </p>
     </div>
   );
 }
