@@ -5,8 +5,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --design-page-bg: linear-gradient(180deg, #e8e0ff 0%, #faf8ff 45%, #ffe8d6 100%);
-  --design-page-bg-dark: linear-gradient(180deg, #1a1b2e 0%, #252640 50%, #1f2038 100%);
+  --design-page-bg: linear-gradient(180deg, #dcd3ed 0%, #f5f2fa 45%, #ffe8d6 100%);
+  --design-page-bg-dark: linear-gradient(180deg, #1a1b2e 0%, #221a42 50%, #1f2038 100%);
 }
 
 @theme inline {
@@ -14,16 +14,16 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-violet-50: #f0eeff;
-  --color-violet-100: #e4dfff;
-  --color-violet-200: #cfc4ff;
-  --color-violet-300: #c7b7ff;
-  --color-violet-400: #a894ff;
-  --color-violet-500: #8b72e8;
-  --color-violet-600: #5c4fd6;
-  --color-violet-700: #4538b8;
-  --color-violet-800: #352d8f;
-  --color-violet-900: #2a2466;
+  --color-violet-50: #ece7f5;
+  --color-violet-100: #dcd3ed;
+  --color-violet-200: #c2b4e0;
+  --color-violet-300: #a691d4;
+  --color-violet-400: #8870be;
+  --color-violet-500: #6b54a8;
+  --color-violet-600: #523e8c;
+  --color-violet-700: #3f2f72;
+  --color-violet-800: #2f2358;
+  --color-violet-900: #221a42;
   --color-violet-950: #1a1b2e;
 }
 

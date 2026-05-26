@@ -1,32 +1,32 @@
 /* Runtime palette overrides — switch via html[data-design-theme="…"] (no git branch needed). */
 
 :root {
-  --palette-violet-50: #f5f3ff;
-  --palette-violet-100: #ede9fe;
-  --palette-violet-200: #ddd6fe;
-  --palette-violet-300: #c4b5fd;
-  --palette-violet-400: #a78bfa;
-  --palette-violet-500: #8b5cf6;
-  --palette-violet-600: #7c3aed;
-  --palette-violet-700: #6d28d9;
-  --palette-violet-800: #5b21b6;
-  --palette-violet-900: #4c1d95;
-  --palette-violet-950: #2e1065;
+  --palette-violet-50: #ece7f5;
+  --palette-violet-100: #dcd3ed;
+  --palette-violet-200: #c2b4e0;
+  --palette-violet-300: #a691d4;
+  --palette-violet-400: #8870be;
+  --palette-violet-500: #6b54a8;
+  --palette-violet-600: #523e8c;
+  --palette-violet-700: #3f2f72;
+  --palette-violet-800: #2f2358;
+  --palette-violet-900: #221a42;
+  --palette-violet-950: #1a1b2e;
 }
 
 html[data-design-theme="cosmic-indigo"] {
   --background: #ffffff;
   --foreground: #171717;
-  --palette-violet-50: #f0eeff;
-  --palette-violet-100: #e4dfff;
-  --palette-violet-200: #cfc4ff;
-  --palette-violet-300: #c7b7ff;
-  --palette-violet-400: #a894ff;
-  --palette-violet-500: #8b72e8;
-  --palette-violet-600: #5c4fd6;
-  --palette-violet-700: #4538b8;
-  --palette-violet-800: #352d8f;
-  --palette-violet-900: #2a2466;
+  --palette-violet-50: #ece7f5;
+  --palette-violet-100: #dcd3ed;
+  --palette-violet-200: #c2b4e0;
+  --palette-violet-300: #a691d4;
+  --palette-violet-400: #8870be;
+  --palette-violet-500: #6b54a8;
+  --palette-violet-600: #523e8c;
+  --palette-violet-700: #3f2f72;
+  --palette-violet-800: #2f2358;
+  --palette-violet-900: #221a42;
   --palette-violet-950: #1a1b2e;
 }
 
