@@ -166,9 +166,9 @@ export const MODERATION_APPROVE_SUBMIT = "Approve and publish";
 export const MODERATION_APPROVE_SUBMIT_PENDING = "Approving…";
 
 /** Feature suggestions (phase 7). */
-export const FEATURE_SUGGESTIONS_HEADING = "Help us grow Comanifest";
+export const FEATURE_SUGGESTIONS_HEADING = "Shape the gathering";
 export const FEATURE_SUGGESTIONS_BODY =
-  "Have an idea for the product itself — not a manifestation? We'd love to hear it.";
+  "Comanifest is still a small experiment. If something about how this space works could feel clearer or kinder — the gathering itself, not a manifestation — we'd love a note at";
 export const FEATURE_SUGGESTIONS_EMAIL = "hello@comanifest.org";
 
 /** Header badge when the session is anonymous (not email-signed-in). */
