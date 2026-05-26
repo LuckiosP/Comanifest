@@ -2,10 +2,10 @@
 -- Run this in the Supabase Dashboard: SQL Editor → New query → Run.
 --
 -- If you already ran an older version of this file, run the incremental migrations instead
--- of re-running the full script:
---   - **`docs/supabase-join-migration.sql`** — hold rows + join_count trigger
---   - **`docs/supabase-phase1-lifecycle-migration.sql`** — ends_at, status, creator reflection
---   - **`docs/supabase-withdraw-hold-migration.sql`** — withdraw hold (delete join + decrement count)
+-- of re-running the full script (see docs/supabase/README.md):
+--   - **`docs/supabase/migrations/join.sql`** — hold rows + join_count trigger
+--   - **`docs/supabase/migrations/phase1-lifecycle.sql`** — ends_at, status, creator reflection
+--   - **`docs/supabase/migrations/withdraw-hold.sql`** — withdraw hold (delete join + decrement count)
 --
 -- Before testing the app:
 -- 1. Create a project at https://supabase.com

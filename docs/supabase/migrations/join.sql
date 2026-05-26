@@ -1,6 +1,6 @@
 -- Comanifest — Join flow (additive migration)
--- Run once in Supabase SQL Editor if you already created `manifestations` from an older `supabase-schema.sql`.
--- New projects can rely on the full `docs/supabase-schema.sql` instead (includes this block).
+-- Run once in Supabase SQL Editor if you already created `manifestations` from an older schema.
+-- New projects can rely on the full `docs/supabase/schema.sql` instead (includes this block).
 
 create table public.manifestation_joins (
   id uuid primary key default gen_random_uuid(),

@@ -201,7 +201,7 @@ export async function withdrawHold(
   if (!deleted?.length) {
     return {
       error:
-        "Could not withdraw your hold. Run docs/supabase-withdraw-hold-migration.sql in the Supabase SQL Editor (adds delete permission and updates the hold count).",
+        "Could not withdraw your hold. Run docs/supabase/migrations/withdraw-hold.sql in the Supabase SQL Editor (adds delete permission and updates the hold count).",
     };
   }
 

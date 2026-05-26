@@ -61,7 +61,7 @@ export async function saveNotificationPreferences(
         result.error.includes("schema cache"));
     return {
       error: tableMissing
-        ? "Run docs/supabase-notifications-migration.sql in Supabase first."
+        ? "Run docs/supabase/migrations/notifications.sql in Supabase first."
         : result.error ?? "Could not save preferences.",
     };
   }

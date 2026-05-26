@@ -1,5 +1,5 @@
 -- Hotfix: join_count starts at 1 (creator is already "in"), not 0.
--- Run this if you already applied supabase-security-hardening-migration.sql with join_count = 0.
+-- Run this if you already applied docs/supabase/migrations/security-hardening.sql with join_count = 0.
 
 drop policy if exists "Users can insert their own manifestations" on public.manifestations;
 

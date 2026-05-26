@@ -138,7 +138,7 @@ export const NOTIFICATIONS_FREQUENCY_WEEKLY = "Weekly digest";
 export const NOTIFICATIONS_NOT_CONFIGURED =
   "Your preference is saved. Automated hold emails will send once email delivery is configured on the server (Resend).";
 export const NOTIFICATIONS_MIGRATION_HINT =
-  "Run docs/supabase-notifications-migration.sql in Supabase to enable saving hold email preferences.";
+  "Run docs/supabase/migrations/notifications.sql in Supabase to enable saving hold email preferences.";
 
 /** Moderation (phase 10). */
 export const MODERATION_PENDING_BANNER =
