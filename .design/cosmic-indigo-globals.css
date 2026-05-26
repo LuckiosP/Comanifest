@@ -1,10 +1,12 @@
 @import "tailwindcss";
 
-/* DESIGN BRANCH: design/cosmic-indigo — remaps violet-* site-wide to midnight/lavender palette */
+/* DESIGN BRANCH: design/cosmic-indigo */
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --design-page-bg: linear-gradient(180deg, #e8e0ff 0%, #faf8ff 45%, #ffe8d6 100%);
+  --design-page-bg-dark: linear-gradient(180deg, #1a1b2e 0%, #252640 50%, #1f2038 100%);
 }
 
 @theme inline {
@@ -34,4 +36,15 @@
 
 body {
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.design-page-shell {
+  background-image: var(--design-page-bg);
+  min-height: 100vh;
+}
+
+@media (prefers-color-scheme: dark) {
+  .design-page-shell {
+    background-image: var(--design-page-bg-dark);
+  }
 }

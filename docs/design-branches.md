@@ -8,11 +8,13 @@
 | **`design/warm-dawn`** | Peach / rose / amber — softer human warmth |
 | **`design/electric-teal`** | Teal accent — synchronicity / flow from brand guidelines |
 
-Each branch shows a small **Design preview** banner at the top so you know you’re not on live.
+Each branch shows a **bright yellow Design preview banner** at the top and **`[Design: …]` in the browser tab** — only on localhost, not on www.comanifest.org.
 
 ---
 
 ## View a design on localhost
+
+**Important:** Design branches do **not** change the live site. You must use **`http://localhost:3000`**, not `www.comanifest.org`.
 
 From the project folder (`C:\Projects\comanifest-app`):
 
@@ -23,22 +25,41 @@ In the terminal where `npm run dev` is running, press **Ctrl+C**.
 ### 2. Switch to a design branch
 
 ```powershell
+cd C:\Projects\comanifest-app
 git fetch origin
 git checkout design/cosmic-indigo
 ```
 
 Use `design/warm-dawn` or `design/electric-teal` instead for the other looks.
 
-### 3. Install (only if prompted) and run
+Check you’re on the right branch:
 
 ```powershell
-npm install
-npm run dev
+git branch --show-current
 ```
+
+### 3. Clear cache and start dev (recommended)
+
+```powershell
+npm run dev:fresh
+```
+
+Or manually: delete the `.next` folder, then `npm run dev`.
 
 ### 4. Open the site
 
-[http://localhost:3000](http://localhost:3000) — browse home, feed, create, detail, account. Take screenshots.
+[http://localhost:3000](http://localhost:3000) — **not** the production URL.
+
+**You should see:**
+- Yellow banner: “Design preview — …”
+- Browser tab title starting with `[Design: …]`
+- Obviously different page background and button colours per branch
+
+| Branch | What to look for |
+|--------|------------------|
+| `design/cosmic-indigo` | Lavender / deep indigo buttons |
+| `design/warm-dawn` | Peach / coral buttons and warm pink-tinted background |
+| `design/electric-teal` | Teal / mint buttons and green-tinted background |
 
 ### 5. Try another design
 
@@ -46,17 +67,29 @@ Stop dev (**Ctrl+C**), then:
 
 ```powershell
 git checkout design/warm-dawn
-npm run dev
+npm run dev:fresh
 ```
 
-Reload the browser (hard refresh **Ctrl+Shift+R** if colours look stuck).
+Hard refresh the browser (**Ctrl+Shift+R**) if needed.
 
 ### 6. Go back to normal / production code
 
 ```powershell
 git checkout main
-npm run dev
+npm run dev:fresh
 ```
+
+No yellow banner = you’re back on the live look locally.
+
+---
+
+## Troubleshooting — “colours aren’t changing”
+
+1. **Wrong URL** — `www.comanifest.org` always shows **live** (`main`). Use **localhost:3000**.
+2. **Wrong branch** — run `git branch --show-current`. Must be `design/…`, not `main`.
+3. **Stale dev cache** — stop dev, run `npm run dev:fresh`.
+4. **Dev still running from old branch** — always **Ctrl+C** before `git checkout`.
+5. **No yellow banner** — you’re not on a design branch, or not on localhost.
 
 ---
 
