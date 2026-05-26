@@ -7,7 +7,7 @@ export type ManifestationCategory =
   | "symbolic"
   | "other";
 
-export type ManifestationStatus = "active" | "archived" | "deleted";
+export type ManifestationStatus = "active" | "pending" | "archived" | "deleted";
 
 export type Manifestation = {
   id: string;
@@ -22,6 +22,10 @@ export type Manifestation = {
   creator_reflection: string | null;
   creator_reflection_success: boolean | null;
   reflected_at: string | null;
+  moderation_flagged_reason: string | null;
+  moderation_reviewed_at: string | null;
+  moderation_reviewed_by: string | null;
+  moderation_decline_feedback: string | null;
 };
 
 /** Feed/detail row with server-computed viewer flags (no `user_id` exposed). */
@@ -32,6 +36,7 @@ export type ManifestationListRow = Manifestation & {
 
 export const MANIFESTATION_STATUS_LABELS: Record<ManifestationStatus, string> = {
   active: "Active",
+  pending: "Awaiting review",
   archived: "Archived",
   deleted: "Deleted",
 };

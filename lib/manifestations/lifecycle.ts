@@ -9,6 +9,12 @@ export function isManifestationOpenForHolds(
   );
 }
 
+export function isManifestationPending(
+  manifestation: Pick<Manifestation, "status">,
+): boolean {
+  return manifestation.status === "pending";
+}
+
 export function isManifestationPastEndDate(
   manifestation: Pick<Manifestation, "ends_at">,
 ): boolean {
@@ -46,7 +52,7 @@ export function shouldPromptCreatorToClose(
 export function isManifestationEditable(
   manifestation: Pick<Manifestation, "status">,
 ): boolean {
-  return manifestation.status === "active";
+  return manifestation.status === "active" || manifestation.status === "pending";
 }
 
 /** Creator-only: hide from the public feed; holders may still view and withdraw. */
@@ -70,6 +76,9 @@ export function canViewArchivedManifestation(options: {
   viewerIsCreator: boolean;
   viewerHasJoined: boolean;
 }): boolean {
+  if (options.status === "pending") {
+    return options.viewerIsCreator;
+  }
   if (options.status !== "archived") {
     return true;
   }

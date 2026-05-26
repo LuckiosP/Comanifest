@@ -9,6 +9,7 @@ Collective intention, together — manifest hopeful outcomes and hold them with 
 | Doc | What it's for |
 |-----|----------------|
 | [`docs/comanifest-brief.md`](docs/comanifest-brief.md) | Product vision, tone, **manifest / hold** vocabulary |
+| [`docs/brand-guidelines.md`](docs/brand-guidelines.md) | Visual identity, colours, typography, motion, brand voice |
 | [`docs/project-handoff.md`](docs/project-handoff.md) | What's built, file map, Supabase setup, troubleshooting |
 | [`docs/deploying.md`](docs/deploying.md) | GitHub → Vercel → Supabase URLs; **keeping local & live in sync** |
 | [`docs/security-pentest.md`](docs/security-pentest.md) | **Future security review / pentest** checklist and briefing |

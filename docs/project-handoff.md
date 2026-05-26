@@ -4,7 +4,7 @@ This file is the **durable project memory** when you open the repo in a **new fo
 
 For product vision, tone, and roadmap, use **`docs/comanifest-brief.md`** — that is the source of truth for *what* Comanifest is.
 
-**Documentation split:** the **brief** = product vision and tone. **This handoff** = implementation map, setup, file pointers, and project history — keep it **up to date** when behaviour, routes, env, or notable fixes change (see [Keeping this document current](#keeping-this-document-current)).
+**Documentation split:** the **brief** = product vision and tone. **`docs/brand-guidelines.md`** = visual identity, look & feel, and brand direction. **This handoff** = implementation map, setup, file pointers, and project history — keep it **up to date** when behaviour, routes, env, or notable fixes change (see [Keeping this document current](#keeping-this-document-current)).
 
 ---
 
@@ -227,10 +227,13 @@ Roadmap detail and priority: **`docs/comanifest-brief.md` → §7 Status & roadm
 - **Phase 9 — Creator email updates:** ✅ instant / daily / weekly / off on **`/account`** (email sign-in); Resend + Vercel cron for digests  
 - **Phase 10 — Manifestation moderation:** (a) **content filter** on create (educated guess vs guidelines) → (b) **`pending`** + creator-only visibility + email **`hello@manifest.org`** → (c) **email approve / decline** with optional feedback to manifestor  
 - **Phase 11 — Operator dashboard:** private admin analytics (users, manifests, holds, category, geography) — operator auth + privacy review  
+- **Phase 12 — Creator interim updates:** while **active**, optional creator notes on “how it’s going” for holders; does not close or archive  
 - **Security review / pentest** — before wider launch; **`docs/security-pentest.md`**  
 - **Custom domain** — **`docs/deploying.md` Step 3**  
 - **Anonymous → email linking** — ✅ **`SignInForm`** uses **`updateUser`** for guest sessions; recovery SQL in **`docs/recover-guest-manifestations.sql`** if accounts already split  
 - **Polish** (motion, typography, empty states): deferred  
+
+**Backlog (not yet triaged):** see **`docs/comanifest-brief.md` → §7 Backlog** — e.g. granular closure / success reporting (multi-axis qualitative evaluation at close).
 
 ---
 
@@ -250,4 +253,4 @@ That gives the assistant the same structural context chat history used to hold.
 
 ---
 
-*Last updated: 2026-05-23 — phase 10 (manifestation moderation) added to roadmap.*
+*Last updated: 2026-05-25 — phase 12 (creator interim updates) added to roadmap; granular closure noted in untriaged backlog.*

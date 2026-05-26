@@ -9,6 +9,9 @@ import { ShareManifestationControl } from "../../components/ShareManifestationCo
 import { SiteHeader } from "../../components/SiteHeader";
 import {
   holdingCountLabel,
+  MODERATION_DECLINED_BANNER,
+  MODERATION_DECLINED_FEEDBACK_LABEL,
+  MODERATION_PENDING_BANNER,
   MANIFEST_ARCHIVED_BANNER,
   MANIFEST_CLOSED_BANNER,
   MANIFEST_ENDS_LABEL,
@@ -35,6 +38,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!result) {
     return { title: "Manifestation — Comanifest" };
   }
+  const robots =
+    result.row.status === "pending"
+      ? { index: false, follow: false }
+      : undefined;
   const description =
     result.row.intention.length > 160
       ? `${result.row.intention.slice(0, 157)}…`
@@ -43,6 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${result.row.title} — Comanifest`,
     description,
+    robots,
     openGraph: {
       title: result.row.title,
       description,
@@ -70,7 +78,9 @@ export default async function ManifestationDetailPage({ params }: Props) {
   const label =
     MANIFESTATION_CATEGORY_LABELS[row.category] ?? row.category;
   const canShare =
-    source === "live" && (viewer_is_creator || viewer_has_joined);
+    source === "live" &&
+    row.status === "active" &&
+    (viewer_is_creator || viewer_has_joined);
   const showClose =
     viewer_is_creator && source === "live" && isManifestationClosable(row);
   const archivedBanner = hasCreatorReflection(row)
@@ -94,7 +104,21 @@ export default async function ManifestationDetailPage({ params }: Props) {
           </p>
         ) : null}
 
-        {row.status === "archived" ? (
+        {row.status === "pending" && viewer_is_creator ? (
+          <p className="rounded-xl border border-amber-200 bg-amber-50/90 px-3 py-2 text-sm text-amber-950 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-100">
+            {MODERATION_PENDING_BANNER}
+          </p>
+        ) : null}
+
+        {row.status === "archived" && viewer_is_creator && row.moderation_decline_feedback ? (
+          <div className="rounded-xl border border-stone-200 bg-stone-50/90 px-3 py-2 text-sm text-stone-700 dark:border-stone-700 dark:bg-stone-800/50 dark:text-stone-200">
+            <p>{MODERATION_DECLINED_BANNER}</p>
+            <p className="mt-2">
+              <span className="font-medium">{MODERATION_DECLINED_FEEDBACK_LABEL}:</span>{" "}
+              {row.moderation_decline_feedback}
+            </p>
+          </div>
+        ) : row.status === "archived" ? (
           <p className="rounded-xl border border-stone-200 bg-stone-50/90 px-3 py-2 text-sm text-stone-700 dark:border-stone-700 dark:bg-stone-800/50 dark:text-stone-200">
             {archivedBanner}
           </p>

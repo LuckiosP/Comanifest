@@ -25,6 +25,10 @@ export const SAMPLE_MANIFESTATIONS: Manifestation[] = [
     creator_reflection: null,
     creator_reflection_success: null,
     reflected_at: null,
+    moderation_flagged_reason: null,
+    moderation_reviewed_at: null,
+    moderation_reviewed_by: null,
+    moderation_decline_feedback: null,
   },
   {
     id: "sample-2",
@@ -40,6 +44,10 @@ export const SAMPLE_MANIFESTATIONS: Manifestation[] = [
     creator_reflection: null,
     creator_reflection_success: null,
     reflected_at: null,
+    moderation_flagged_reason: null,
+    moderation_reviewed_at: null,
+    moderation_reviewed_by: null,
+    moderation_decline_feedback: null,
   },
   {
     id: "sample-3",
@@ -55,5 +63,9 @@ export const SAMPLE_MANIFESTATIONS: Manifestation[] = [
     creator_reflection: null,
     creator_reflection_success: null,
     reflected_at: null,
+    moderation_flagged_reason: null,
+    moderation_reviewed_at: null,
+    moderation_reviewed_by: null,
+    moderation_decline_feedback: null,
   },
 ];

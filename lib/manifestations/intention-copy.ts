@@ -139,6 +139,27 @@ export const NOTIFICATIONS_NOT_CONFIGURED =
   "Your preference is saved. Automated hold emails will send once email delivery is configured on the server (Resend).";
 export const NOTIFICATIONS_MIGRATION_HINT =
   "Run docs/supabase-notifications-migration.sql in Supabase to enable saving hold email preferences.";
+
+/** Moderation (phase 10). */
+export const MODERATION_PENDING_BANNER =
+  "Awaiting a gentle review before this appears in the public feed. Only you can see it for now — we'll email you when it's live.";
+export const MODERATION_DECLINED_BANNER =
+  "This manifestation wasn't published to the public feed after review.";
+export const MODERATION_DECLINED_FEEDBACK_LABEL = "Note from review";
+export const MODERATION_REVIEW_APPROVED_TITLE = "Manifestation approved";
+export const MODERATION_REVIEW_APPROVED_BODY =
+  "It's now live on Comanifest and visible in the public feed.";
+export const MODERATION_REVIEW_DECLINED_TITLE = "Manifestation declined";
+export const MODERATION_REVIEW_DECLINED_BODY =
+  "The creator has been notified. It stays off the public feed.";
+export const MODERATION_REVIEW_ERROR_TITLE = "Review link problem";
+export const MODERATION_DECLINE_HEADING = "Decline manifestation";
+export const MODERATION_DECLINE_HINT =
+  "Optional: add gentle feedback for the creator. This is not shared publicly.";
+export const MODERATION_DECLINE_FEEDBACK_LABEL = "Feedback for the creator (optional)";
+export const MODERATION_DECLINE_SUBMIT = "Decline and send feedback";
+export const MODERATION_DECLINE_SUBMIT_PENDING = "Declining…";
+
 /** Header badge when the session is anonymous (not email-signed-in). */
 export const AUTH_GUEST_BADGE = "Guest";
 export const AUTH_GUEST_NAV_TITLE =

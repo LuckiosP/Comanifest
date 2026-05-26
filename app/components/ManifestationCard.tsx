@@ -62,7 +62,8 @@ export function ManifestationCard({
   const isSample = manifestation.id.startsWith("sample-");
   const showManage =
     showCreatorActions && manifestation.viewer_is_creator && !isSample;
-  const showShareSection = showShare && !isSample;
+  const showShareSection =
+    showShare && !isSample && manifestation.status === "active";
 
   return (
     <article className="flex flex-col gap-3 rounded-2xl border border-stone-200/90 bg-white/80 p-5 shadow-sm backdrop-blur-sm dark:border-stone-700/90 dark:bg-stone-800/50">

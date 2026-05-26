@@ -8,7 +8,7 @@ import {
 } from "./queries";
 
 const MANIFESTATION_SELECT =
-  "id, created_at, user_id, title, intention, category, timeframe, join_count, ends_at, status, creator_reflection, creator_reflection_success, reflected_at";
+  "id, created_at, user_id, title, intention, category, timeframe, join_count, ends_at, status, creator_reflection, creator_reflection_success, reflected_at, moderation_flagged_reason, moderation_reviewed_at, moderation_reviewed_by, moderation_decline_feedback";
 
 const PHASE1_MIGRATION_HINT =
   "Run docs/supabase-phase1-lifecycle-migration.sql in the Supabase SQL Editor.";

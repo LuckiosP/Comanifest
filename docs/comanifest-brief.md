@@ -125,6 +125,8 @@ Every manifestation has an **end date**. When that date passes (or the creator c
 
 This replaces the vague “outcome tracking (future)” idea with a **creator-led closure** tied to **compulsory end dates**.
 
+**While still active (planned — phase 12):** the creator may post optional **interim updates** — short notes on how things are going so far, visible to people already holding. This is separate from closure reflection; it does not archive the manifestation or block new holds.
+
 ### F. My account
 
 Signed-in users need an **account home** where they can easily see:
@@ -210,6 +212,8 @@ Access **restricted** to operators only (e.g. allowlisted admin emails, Supabase
 
 ## 5. Design principles
 
+Full visual identity (colours, typography, motion, imagery): **`docs/brand-guidelines.md`**.
+
 The UI should feel:
 
 - simple  
@@ -272,6 +276,7 @@ Work in **thin slices** — each step should ship something usable on live.
 | **10b — Pending & operator alert** | Flagged → **`pending`**; **creator-only** visibility (account + detail); email **`hello@manifest.org`** | Depends on 10a; feed, search, similar panel, and share exclude **`pending`** |
 | **10c — Email approve / decline** | Review email with **Approve** / **Decline** links; optional **feedback** to manifestor on decline | Depends on 10b; signed one-click tokens; on approve → **`active`** + public feed |
 | **11 — Operator dashboard** | Private **`/admin`** analytics: users, manifests, holds, category, geography (aggregated) | Needs admin auth, service role, privacy review — after core loop + moderation + pentest prep |
+| **12 — Creator interim updates** | While **active**, creator posts optional “how it’s going” notes visible to holders; does not close or archive | Long-running manifestations stay connected between create and closure; reuses reflection UI / creator-update patterns |
 | **Later** | Custom domain, anonymous→email linking, **security pentest** (`docs/security-pentest.md`), polish | Before wide launch |
 
 **Phase 3 build order (recommended slices):** (a) **Edit** ✅ → (b) **Withdraw hold** ✅ → (c) **Archive / delete** ✅.
@@ -288,7 +293,15 @@ Work in **thin slices** — each step should ship something usable on live.
 
 **Phase 11 (dashboard) — scope:** operator-only route; charts/tables from Supabase (aggregates); geography TBD; no public nav link; optional moderation queue view later (email-first for now).
 
-**Not done yet:** custom domain, phases 7 and 10–11 above, anonymous→email linking UX, **security pentest**.
+**Phase 12 (interim updates) — scope:** creator-only compose on detail + **`/account`** while **`status = active`**; holders (and creator) see read-only updates on detail; optional soft sentiment (e.g. encouraging / steady / uncertain) — not success/failure scoring; strings in **`intention-copy.ts`**. **Data:** single latest note on **`manifestations`** or a **`manifestation_updates`** table if we want a timeline (TBD). **Optional later:** notify holders when the creator posts (reuse phase 9 stack). Does **not** change **`ends_at`**, archive, or closure reflection fields.
+
+**Not done yet:** custom domain, phases 7 and 10–12 above, anonymous→email linking UX, **security pentest**.
+
+### Backlog (not yet triaged)
+
+Ideas captured for reference — **no priority or build order assigned yet.**
+
+- **Granular closure / success reporting** — optional multi-axis *qualitative* evaluation at close (e.g. outcome shifted vs how holding felt vs what the circle noticed), alongside or instead of the current yes / unsure / no + free-text reflection. Keep non-scored (no ratings or “success %”); may overlap with richer free-text prompts alone. Revisit after phase 12 ships and we see how creators use closure today.
 
 **Open product decisions (TBD when building):** Can creators close before `ends_at`? Delete vs archive when others still hold? Show archived manifestations in search? Can **`ends_at`** be moved earlier if others already hold? Share text/caption wording per platform? Include holder count only vs “someone new held” in emails? Which admin emails get dashboard access? How is geography collected and disclosed? **Moderation:** filter strictness and false-positive handling; decline → archive vs delete; can manifestor edit while **`pending`**; SLA copy for creators waiting on review; who receives **`hello@manifest.org`** in dev vs prod?
 

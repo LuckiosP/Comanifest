@@ -3,6 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import {
+  queuePendingModerationReview,
+  resolveInitialManifestationStatus,
+} from "@/lib/moderation/create-flow";
 import { parseManifestationFormFields } from "@/lib/manifestations/manifestation-form-fields";
 import {
   createServerSupabaseClient,
@@ -44,25 +48,46 @@ export async function createManifestation(
   }
 
   const { title, intention, category, endsAt } = parsed;
+  const { status, flaggedReason } = resolveInitialManifestationStatus(title, intention);
 
-  const { error } = await supabase.from("manifestations").insert({
-    user_id: user.id,
-    title,
-    intention,
-    category,
-    timeframe: null,
-    join_count: 1,
-    ends_at: endsAt.toISOString(),
-    status: "active",
-  });
+  const { data: inserted, error } = await supabase
+    .from("manifestations")
+    .insert({
+      user_id: user.id,
+      title,
+      intention,
+      category,
+      timeframe: null,
+      join_count: 1,
+      ends_at: endsAt.toISOString(),
+      status,
+      moderation_flagged_reason: flaggedReason,
+    })
+    .select("id")
+    .single();
 
   if (error) {
     return { error: error.message };
   }
 
+  if (status === "pending") {
+    await queuePendingModerationReview({
+      manifestationId: inserted.id,
+      title,
+      intention,
+      category,
+      flaggedReason: flaggedReason ?? "Flagged for manual review.",
+      creator: user,
+    });
+  }
+
   revalidatePath("/manifestations");
   revalidatePath("/account");
-  redirect("/manifestations");
+  redirect(
+    status === "pending"
+      ? `/manifestations/${inserted.id}`
+      : "/manifestations",
+  );
 }
 
 export async function updateManifestation(
@@ -126,7 +151,7 @@ export async function updateManifestation(
     })
     .eq("id", manifestationId)
     .eq("user_id", user.id)
-    .eq("status", "active");
+    .in("status", ["active", "pending"]);
 
   if (error) {
     return { error: error.message };
