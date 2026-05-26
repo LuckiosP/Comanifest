@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 export default async function AccountPage() {
   if (!isSupabaseConfigured()) {
     return (
-      <div className="flex min-h-full flex-col bg-gradient-to-b from-violet-50/80 via-white to-amber-50/40 dark:from-stone-950 dark:via-stone-900 dark:to-stone-950">
+      <div className="flex min-h-full flex-col design-page-shell">
         <SiteHeader />
         <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-10 sm:px-6 sm:py-14">
           <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">
@@ -73,7 +73,7 @@ export default async function AccountPage() {
   const notificationsConfigured = isEmailNotificationsConfigured();
 
   return (
-    <div className="flex min-h-full flex-col bg-gradient-to-b from-violet-50/80 via-white to-amber-50/40 dark:from-stone-950 dark:via-stone-900 dark:to-stone-950">
+    <div className="flex min-h-full flex-col design-page-shell">
       <SiteHeader />
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-10 px-4 py-10 sm:px-6 sm:py-14">
         <div className="flex flex-col gap-3">
