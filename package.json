@@ -2,7 +2,7 @@
   "name": "comanifest-app",
   "version": "0.1.0",
   "private": true,
-  "author": "Richard Spencer <hello@comanifest.org>",
+  "author": "Promoderation Ltd <hello@comanifest.org>",
   "scripts": {
     "dev": "set NODE_OPTIONS=--dns-result-order=ipv4first&& set NODE_USE_SYSTEM_CA=1&& next dev",
     "dev:posix": "NODE_OPTIONS=--dns-result-order=ipv4first NODE_USE_SYSTEM_CA=1 next dev",

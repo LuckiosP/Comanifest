@@ -2,7 +2,7 @@
 
 Collective intention, together — manifest hopeful outcomes and hold them with a community.
 
-**Owner:** Richard Spencer · **IP:** [`LICENSE`](LICENSE) · [`docs/intellectual-property.md`](docs/intellectual-property.md)
+**Owner:** Promoderation Ltd · **IP:** [`LICENSE`](LICENSE) · [`docs/intellectual-property.md`](docs/intellectual-property.md)
 
 **Live:** deployed on **Vercel** (auto-builds from GitHub). **Local:** `npm run dev` → [http://localhost:3000](http://localhost:3000).
 

@@ -1,6 +1,6 @@
 # Intellectual property — Comanifest
 
-**Owner:** Richard Spencer (GitHub: [LuckiosP](https://github.com/LuckiosP))  
+**Owner:** Promoderation Ltd (GitHub: [LuckiosP](https://github.com/LuckiosP))  
 **Contact:** [hello@comanifest.org](mailto:hello@comanifest.org)
 
 This document states how Comanifest intellectual property is held in this project. It is **not legal advice**; for registration, contracts, or disputes, consult a qualified lawyer.
@@ -9,7 +9,7 @@ This document states how Comanifest intellectual property is held in this projec
 
 ## What is owned
 
-All **original** Comanifest material is proprietary to Richard Spencer, including:
+All **original** Comanifest material is proprietary to Promoderation Ltd, including:
 
 | Asset | Location / form |
 |-------|------------------|
@@ -36,7 +36,7 @@ Keep the repo **private** unless you deliberately open-source or assign rights. 
 
 ## AI-assisted development
 
-Work created in this repo with AI tools (e.g. Cursor) is treated as **work product for the project owner**, same as hand-written code, unless a separate agreement says otherwise. Commit history on `main` under your GitHub account supports continuity of ownership.
+Work created in this repo with AI tools (e.g. Cursor) is treated as **work product for Promoderation Ltd**, same as hand-written code, unless a separate agreement says otherwise. Commit history on `main` under the project GitHub account supports continuity of ownership.
 
 ---
 
@@ -61,4 +61,4 @@ Work created in this repo with AI tools (e.g. Cursor) is treated as **work produ
 
 ## Updates
 
-If ownership structure changes (e.g. company formation), update **`LICENSE`**, this file, and the brief header in the same commit.
+If ownership structure changes (e.g. acquisition or rebrand), update **`LICENSE`**, this file, and the brief header in the same commit.

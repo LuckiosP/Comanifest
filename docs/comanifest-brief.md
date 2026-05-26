@@ -1,6 +1,6 @@
 # Comanifest — project brief
 
-**Intellectual property:** Comanifest (concept, brief, brand, and code) is proprietary to **Richard Spencer**. See [`LICENSE`](../LICENSE) and [`docs/intellectual-property.md`](./intellectual-property.md).
+**Intellectual property:** Comanifest (concept, brief, brand, and code) is proprietary to **Promoderation Ltd**. See [`LICENSE`](../LICENSE) and [`docs/intellectual-property.md`](./intellectual-property.md).
 
 For a concise record of what has been implemented in the repo and how to run it, see the [project handoff](./project-handoff.md).
 
