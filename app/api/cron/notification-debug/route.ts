@@ -74,12 +74,23 @@ export async function GET(request: Request) {
   };
 
   if (sendTest && plan.hold_updates_frequency === "instant" && email) {
-    const result = await sendTransactionalEmail({
-      to: email,
-      subject: `Comanifest test: hold update for “${plan.manifestation_title}”`,
-      html: "<p>This is a test hold-update email from Comanifest.</p>",
-    });
-    diagnostics.testSend = result;
+    const isProduction =
+      process.env.VERCEL_ENV === "production" ||
+      process.env.NODE_ENV === "production";
+
+    if (isProduction) {
+      diagnostics.testSend = {
+        ok: false,
+        error: "Test sends are disabled in production.",
+      };
+    } else {
+      const result = await sendTransactionalEmail({
+        to: email,
+        subject: `Comanifest test: hold update for “${plan.manifestation_title}”`,
+        html: "<p>This is a test hold-update email from Comanifest.</p>",
+      });
+      diagnostics.testSend = result;
+    }
   }
 
   return NextResponse.json(diagnostics);

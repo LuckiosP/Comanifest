@@ -9,6 +9,8 @@ import {
 } from "./review-tokens";
 import type { ModerationReviewResult } from "./types";
 
+const MAX_DECLINE_FEEDBACK_LENGTH = 1000;
+
 type ManifestationReviewRow = {
   id: string;
   title: string;
@@ -146,7 +148,7 @@ export async function declineManifestationByToken(
     return { ok: false, error: "Server configuration is incomplete." };
   }
 
-  const trimmedFeedback = feedback?.trim() || null;
+  const trimmedFeedback = feedback?.trim().slice(0, MAX_DECLINE_FEEDBACK_LENGTH) || null;
   const reviewedAt = new Date().toISOString();
   const { error } = await supabase
     .from("manifestations")

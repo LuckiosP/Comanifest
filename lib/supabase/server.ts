@@ -46,22 +46,12 @@ export async function createServerSupabaseClient() {
   );
 }
 
-/**
- * Prefer `getUser()` (validates JWT with Supabase). If there is no user, fall back to
- * `getSession()` from cookies so inserts still work when the auth API round-trip fails
- * (e.g. transient network/TLS) but the browser session is present.
- */
+/** Validates the session JWT with Supabase Auth (no cookie-only fallback). */
 export async function getServerAuthUser(
   supabase: SupabaseClient,
 ): Promise<User | null> {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (user) {
-    return user;
-  }
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  return session?.user ?? null;
+  return user ?? null;
 }

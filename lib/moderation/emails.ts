@@ -19,7 +19,7 @@ export async function sendModerationReviewRequestEmail(
   flaggedReason: string,
 ): Promise<{ ok: boolean; error?: string }> {
   const siteUrl = getPublicSiteUrl();
-  const approveUrl = `${siteUrl}/api/moderation/approve?token=${encodeURIComponent(token)}`;
+  const approveUrl = `${siteUrl}/moderation/approve?token=${encodeURIComponent(token)}`;
   const declineUrl = `${siteUrl}/moderation/decline?token=${encodeURIComponent(token)}`;
   const detailUrl = manifestationPublicUrl(input.manifestationId);
   const category =

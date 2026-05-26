@@ -159,6 +159,11 @@ export const MODERATION_DECLINE_HINT =
 export const MODERATION_DECLINE_FEEDBACK_LABEL = "Feedback for the creator (optional)";
 export const MODERATION_DECLINE_SUBMIT = "Decline and send feedback";
 export const MODERATION_DECLINE_SUBMIT_PENDING = "Declining…";
+export const MODERATION_APPROVE_HEADING = "Approve manifestation";
+export const MODERATION_APPROVE_HINT =
+  "Confirm to publish this manifestation in the public feed.";
+export const MODERATION_APPROVE_SUBMIT = "Approve and publish";
+export const MODERATION_APPROVE_SUBMIT_PENDING = "Approving…";
 
 /** Header badge when the session is anonymous (not email-signed-in). */
 export const AUTH_GUEST_BADGE = "Guest";
