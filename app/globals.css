@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+/* DESIGN BRANCH: design/cosmic-indigo — remaps violet-* site-wide to midnight/lavender palette */
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -10,18 +12,26 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-violet-50: #f0eeff;
+  --color-violet-100: #e4dfff;
+  --color-violet-200: #cfc4ff;
+  --color-violet-300: #c7b7ff;
+  --color-violet-400: #a894ff;
+  --color-violet-500: #8b72e8;
+  --color-violet-600: #5c4fd6;
+  --color-violet-700: #4538b8;
+  --color-violet-800: #352d8f;
+  --color-violet-900: #2a2466;
+  --color-violet-950: #1a1b2e;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #1a1b2e;
     --foreground: #ededed;
   }
 }
 
 body {
-  /* Background and text colour come from `app/layout.tsx` (Tailwind) so they
-     are not overridden here — a plain `body` rule would win over utility
-     classes and could make the app look “blank” or wrong. */
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
