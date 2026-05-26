@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { ComanifestLogoMark } from "@/app/components/ComanifestLogoMark";
-import { SiteManifestButton, SiteNav } from "@/app/components/SiteNav";
+import { SiteNav } from "@/app/components/SiteNav";
 
 type SiteHeaderProps = {
   searchQuery?: string;
@@ -23,7 +23,6 @@ export function SiteHeader({
             <ComanifestLogoMark priority />
             <span className="truncate">Comanifest</span>
           </Link>
-          <SiteManifestButton />
         </div>
         <SiteNav searchQuery={searchQuery} hideSearch={hideSearch} />
       </div>

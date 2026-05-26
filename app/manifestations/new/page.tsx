@@ -3,9 +3,17 @@ import Link from "next/link";
 import { CreateManifestationForm } from "../../components/CreateManifestationForm";
 import { SiteHeader } from "../../components/SiteHeader";
 import { MANIFEST_CTA } from "@/lib/manifestations/intention-copy";
+import { normalizeSearchQuery } from "@/lib/manifestations/search";
 import { listManifestations, probeManifestationsTable } from "@/lib/manifestations/queries";
 
-export default async function NewManifestationPage() {
+type Props = {
+  searchParams: Promise<{ q?: string }>;
+};
+
+export default async function NewManifestationPage({ searchParams }: Props) {
+  const { q } = await searchParams;
+  const initialTitle = normalizeSearchQuery(q);
+
   const [{ hint: supabaseHint }, { rows, source }] = await Promise.all([
     probeManifestationsTable(),
     listManifestations("newest"),
@@ -41,6 +49,7 @@ export default async function NewManifestationPage() {
         <CreateManifestationForm
           similarCandidates={rows}
           similarSource={source}
+          initialTitle={initialTitle}
         />
 
         <Link

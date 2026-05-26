@@ -40,6 +40,18 @@ export const MANIFEST_ENDS_LABEL = "Holds until";
 
 /** Feed search (phase 4). */
 export const SEARCH_PLACEHOLDER = "Search by vibe, title, or intention…";
+export const BROWSE_NAV = "Browse";
+export const HOME_TAGLINE = "Collective intention, together";
+export const HOME_MANIFEST_PLACEHOLDER = "What do you want to manifest?";
+export const HOME_MANIFEST_SUBMIT = "Manifest";
+export const HOME_SIMILAR_HEADING = "Already gathering — hold with them?";
+export const HOME_START_OWN = "Start your own manifestation";
+export const HOME_START_OWN_HINT =
+  "Nothing close enough? Name yours and invite others to hold it with you.";
+export const HOME_DESCRIPTOR =
+  "Name a hopeful outcome, find others already holding something similar, or start your own gathering. Comanifest is playful, sincere, and built for uplift — not petitions, promises, or harm.";
+export const HOME_FOOTER_GUIDELINES = "Guidelines";
+export const HOME_FOOTER_FEEDBACK = "Feedback";
 export const SEARCH_HINT =
   "Results update as you type — we match the feeling and related words, not just exact phrases.";
 export const SEARCH_CLEAR = "Clear search";

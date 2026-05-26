@@ -31,11 +31,13 @@ const inputClass =
 type CreateManifestationFormProps = {
   similarCandidates?: ManifestationListRow[];
   similarSource?: "live" | "sample";
+  initialTitle?: string;
 };
 
 export function CreateManifestationForm({
   similarCandidates = [],
   similarSource = "sample",
+  initialTitle = "",
 }: CreateManifestationFormProps) {
   const [state, formAction, pending] = useActionState(
     createManifestation,
@@ -45,7 +47,7 @@ export function CreateManifestationForm({
   const [authError, setAuthError] = useState<string | null>(null);
   const [retryTick, setRetryTick] = useState(0);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(initialTitle);
   const [intention, setIntention] = useState("");
   const turnstileSiteKey = getTurnstileSiteKey();
 

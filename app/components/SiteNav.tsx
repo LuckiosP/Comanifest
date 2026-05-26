@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { ManifestationHeaderSearch } from "@/app/components/ManifestationHeaderSearch";
-import { MANIFEST_NAV } from "@/lib/manifestations/intention-copy";
+import { BROWSE_NAV, MANIFEST_NAV } from "@/lib/manifestations/intention-copy";
 
 import { AuthNav } from "./AuthNav";
 
@@ -71,7 +71,7 @@ export function SiteNav({ searchQuery = "", hideSearch = false }: SiteNavProps) 
         href="/manifestations"
         className={navLinkClass(isManifestationsActive(pathname))}
       >
-        Manifestations
+        {BROWSE_NAV}
       </Link>
       <AuthNav />
     </nav>
