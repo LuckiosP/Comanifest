@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+/* DESIGN BRANCH: design/warm-dawn — remaps violet-* to peach / rose / amber warmth */
+
+:root {
+  --background: #fffbf7;
+  --foreground: #292018;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-violet-50: #fff5ee;
+  --color-violet-100: #ffead9;
+  --color-violet-200: #ffd4bc;
+  --color-violet-300: #ffb896;
+  --color-violet-400: #f7947a;
+  --color-violet-500: #e86f5c;
+  --color-violet-600: #d14e42;
+  --color-violet-700: #b03a34;
+  --color-violet-800: #8c2f2c;
+  --color-violet-900: #6b2826;
+  --color-violet-950: #451816;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #2a1814;
+    --foreground: #f5ebe4;
+  }
+}
+
+body {
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
