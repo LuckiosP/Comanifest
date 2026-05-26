@@ -2,12 +2,15 @@
 
 Collective intention, together — manifest hopeful outcomes and hold them with a community.
 
+**Owner:** Richard Spencer · **IP:** [`LICENSE`](LICENSE) · [`docs/intellectual-property.md`](docs/intellectual-property.md)
+
 **Live:** deployed on **Vercel** (auto-builds from GitHub). **Local:** `npm run dev` → [http://localhost:3000](http://localhost:3000).
 
 ## Docs (read these first)
 
 | Doc | What it's for |
 |-----|----------------|
+| [`docs/intellectual-property.md`](docs/intellectual-property.md) | **Ownership** — concept, brief, brand, code (proprietary) |
 | [`docs/comanifest-brief.md`](docs/comanifest-brief.md) | Product vision, tone, **manifest / hold** vocabulary |
 | [`docs/brand-guidelines.md`](docs/brand-guidelines.md) | Visual identity, colours, typography, motion, brand voice |
 | [`docs/project-handoff.md`](docs/project-handoff.md) | What's built, file map, Supabase setup, troubleshooting |
