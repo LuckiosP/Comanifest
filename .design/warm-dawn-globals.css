@@ -1,10 +1,12 @@
 @import "tailwindcss";
 
-/* DESIGN BRANCH: design/warm-dawn — remaps violet-* to peach / rose / amber warmth */
+/* DESIGN BRANCH: design/warm-dawn */
 
 :root {
   --background: #fffbf7;
   --foreground: #292018;
+  --design-page-bg: linear-gradient(180deg, #ffe8d6 0%, #fff8f2 50%, #ffd4bc 100%);
+  --design-page-bg-dark: linear-gradient(180deg, #451816 0%, #2a1814 50%, #1a0f0d 100%);
 }
 
 @theme inline {
@@ -34,4 +36,15 @@
 
 body {
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.design-page-shell {
+  background-image: var(--design-page-bg);
+  min-height: 100vh;
+}
+
+@media (prefers-color-scheme: dark) {
+  .design-page-shell {
+    background-image: var(--design-page-bg-dark);
+  }
 }

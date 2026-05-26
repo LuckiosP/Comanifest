@@ -20,7 +20,7 @@ export default async function ManifestationsPage({
   const { rows, hint, source } = await listManifestations(sortKey);
 
   return (
-    <div className="flex min-h-full flex-col bg-gradient-to-b from-violet-50/80 via-white to-amber-50/40 dark:from-stone-950 dark:via-stone-900 dark:to-stone-950">
+    <div className="flex min-h-full flex-col design-page-shell">
       <SiteHeader searchQuery={searchQuery} hideSearch />
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-10 sm:px-6 sm:py-14">
         {hint ? (

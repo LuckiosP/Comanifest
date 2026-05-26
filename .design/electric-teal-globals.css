@@ -1,10 +1,12 @@
 @import "tailwindcss";
 
-/* DESIGN BRANCH: design/electric-teal — remaps violet-* to teal / cosmic flow accents */
+/* DESIGN BRANCH: design/electric-teal */
 
 :root {
   --background: #f4fbfb;
   --foreground: #0f2424;
+  --design-page-bg: linear-gradient(180deg, #ccfbf1 0%, #f0fdfa 45%, #ecfeff 100%);
+  --design-page-bg-dark: linear-gradient(180deg, #042f2e 0%, #0f3d3a 50%, #134e4a 100%);
 }
 
 @theme inline {
@@ -34,4 +36,15 @@
 
 body {
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.design-page-shell {
+  background-image: var(--design-page-bg);
+  min-height: 100vh;
+}
+
+@media (prefers-color-scheme: dark) {
+  .design-page-shell {
+    background-image: var(--design-page-bg-dark);
+  }
 }
