@@ -15,6 +15,7 @@ Comanifest — the **concept**, **name**, **brand**, **brief**, **documentation*
 - **Not personal property** of founders, directors, employees, contractors, or contributors.
 - Work on this project (including AI-assisted development) is **work product of the company**, unless a separate written agreement with Promoderation Ltd says otherwise.
 - The GitHub account used to host the repo does **not** change who owns the IP.
+- **Public-facing identity** is **Comanifest** (privacy policy, site copy). Promoderation Ltd appears in **`LICENSE`** and this file — not required on user-facing pages unless law or counsel says otherwise.
 
 ---
 
