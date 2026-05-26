@@ -11,6 +11,7 @@ Collective intention, together — manifest hopeful outcomes and hold them with 
 | Doc | What it's for |
 |-----|----------------|
 | [`docs/intellectual-property.md`](docs/intellectual-property.md) | **Ownership** — concept, brief, brand, code (proprietary) |
+| [`docs/design-branches.md`](docs/design-branches.md) | **Design experiments** — local-only appearance branches |
 | [`docs/comanifest-brief.md`](docs/comanifest-brief.md) | Product vision, tone, **manifest / hold** vocabulary |
 | [`docs/brand-guidelines.md`](docs/brand-guidelines.md) | Visual identity, colours, typography, motion, brand voice |
 | [`docs/project-handoff.md`](docs/project-handoff.md) | What's built, file map, Supabase setup, troubleshooting |
