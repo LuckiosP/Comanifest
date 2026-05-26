@@ -37,8 +37,8 @@ export default function PrivacyPage() {
           <section className={sectionClass}>
             <h2 className={headingClass}>Who we are</h2>
             <p className={bodyClass}>
-              Comanifest (&quot;we&quot;, &quot;us&quot;) runs the website and
-              service at{" "}
+              Comanifest is operated by <strong>Promoderation Ltd</strong>{" "}
+              (&quot;we&quot;, &quot;us&quot;). We run the website and service at{" "}
               <Link
                 href="/"
                 className="font-medium text-violet-700 underline-offset-2 hover:underline dark:text-violet-300"
