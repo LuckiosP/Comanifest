@@ -26,6 +26,8 @@ export type Manifestation = {
   moderation_reviewed_at: string | null;
   moderation_reviewed_by: string | null;
   moderation_decline_feedback: string | null;
+  /** ISO country at create; operator aggregates only — not shown in public UI. */
+  creator_country?: string | null;
 };
 
 /** Feed/detail row with server-computed viewer flags (no `user_id` exposed). */

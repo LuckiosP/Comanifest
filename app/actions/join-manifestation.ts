@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
+import { getRequestCountryCode } from "@/lib/geography/request-country";
 import {
   JOIN_COMMITMENT_MAX_LEN,
   JOIN_COMMITMENT_MIN_LEN,
@@ -92,10 +93,13 @@ export async function joinManifestation(
     };
   }
 
+  const holderCountry = await getRequestCountryCode();
+
   const { error } = await supabase.from("manifestation_joins").insert({
     user_id: user.id,
     manifestation_id: manifestationId,
     commitment_note: note,
+    holder_country: holderCountry,
   });
 
   if (error) {

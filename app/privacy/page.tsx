@@ -116,7 +116,10 @@ export default function PrivacyPage() {
                 We use cookies and similar storage to keep you signed in. Our
                 hosting and database providers may log standard request data
                 (such as IP address, browser type, and timestamps) for security
-                and reliability. When bot protection is enabled, Cloudflare
+                and reliability. When you manifest or hold, we may store an
+                approximate country code derived from your connection (for
+                aggregated community statistics only — never shown on your public
+                profile or manifestation page). When bot protection is enabled, Cloudflare
                 Turnstile may process interaction signals to help block abuse.
               </p>
             </div>

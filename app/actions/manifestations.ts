@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { getRequestCountryCode } from "@/lib/geography/request-country";
 import {
   queuePendingModerationReview,
   resolveInitialManifestationStatus,
@@ -49,6 +50,7 @@ export async function createManifestation(
 
   const { title, intention, category, endsAt } = parsed;
   const { status, flaggedReason } = resolveInitialManifestationStatus(title, intention);
+  const creatorCountry = await getRequestCountryCode();
 
   const { data: inserted, error } = await supabase
     .from("manifestations")
@@ -62,6 +64,7 @@ export async function createManifestation(
       ends_at: endsAt.toISOString(),
       status,
       moderation_flagged_reason: flaggedReason,
+      creator_country: creatorCountry,
     })
     .select("id")
     .single();
