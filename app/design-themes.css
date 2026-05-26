@@ -1,0 +1,80 @@
+/* Runtime palette overrides — switch via html[data-design-theme="…"] (no git branch needed). */
+
+:root {
+  --palette-violet-50: #f5f3ff;
+  --palette-violet-100: #ede9fe;
+  --palette-violet-200: #ddd6fe;
+  --palette-violet-300: #c4b5fd;
+  --palette-violet-400: #a78bfa;
+  --palette-violet-500: #8b5cf6;
+  --palette-violet-600: #7c3aed;
+  --palette-violet-700: #6d28d9;
+  --palette-violet-800: #5b21b6;
+  --palette-violet-900: #4c1d95;
+  --palette-violet-950: #2e1065;
+}
+
+html[data-design-theme="cosmic-indigo"] {
+  --background: #ffffff;
+  --foreground: #171717;
+  --palette-violet-50: #f0eeff;
+  --palette-violet-100: #e4dfff;
+  --palette-violet-200: #cfc4ff;
+  --palette-violet-300: #c7b7ff;
+  --palette-violet-400: #a894ff;
+  --palette-violet-500: #8b72e8;
+  --palette-violet-600: #5c4fd6;
+  --palette-violet-700: #4538b8;
+  --palette-violet-800: #352d8f;
+  --palette-violet-900: #2a2466;
+  --palette-violet-950: #1a1b2e;
+}
+
+html[data-design-theme="warm-dawn"] {
+  --background: #fffbf7;
+  --foreground: #292018;
+  --palette-violet-50: #fff5ee;
+  --palette-violet-100: #ffead9;
+  --palette-violet-200: #ffd4bc;
+  --palette-violet-300: #ffb896;
+  --palette-violet-400: #f7947a;
+  --palette-violet-500: #e86f5c;
+  --palette-violet-600: #d14e42;
+  --palette-violet-700: #b03a34;
+  --palette-violet-800: #8c2f2c;
+  --palette-violet-900: #6b2826;
+  --palette-violet-950: #451816;
+}
+
+html[data-design-theme="electric-teal"] {
+  --background: #f4fbfb;
+  --foreground: #0f2424;
+  --palette-violet-50: #ecfeff;
+  --palette-violet-100: #cffafe;
+  --palette-violet-200: #a5f3fc;
+  --palette-violet-300: #67e8f9;
+  --palette-violet-400: #3dd9d0;
+  --palette-violet-500: #2ee6d6;
+  --palette-violet-600: #0d9488;
+  --palette-violet-700: #0f766e;
+  --palette-violet-800: #115e59;
+  --palette-violet-900: #134e4a;
+  --palette-violet-950: #042f2e;
+}
+
+@media (prefers-color-scheme: dark) {
+  html[data-design-theme="cosmic-indigo"] {
+    --background: #1a1b2e;
+    --foreground: #ededed;
+  }
+
+  html[data-design-theme="warm-dawn"] {
+    --background: #2a1814;
+    --foreground: #f5ebe4;
+  }
+
+  html[data-design-theme="electric-teal"] {
+    --background: #042f2e;
+    --foreground: #e6fffa;
+  }
+}

@@ -132,7 +132,28 @@ Use spacing to create a sense of breath and invitation.
 
 ---
 
-## 7. Iconography & symbolic language
+## 7. Logo mark
+
+**Concept:** string-art constellation — seventeen nail-stars, cosmic threads woven in the outer ring (clear centre for the manifestation). **Midnight medallion** favicon on `#1A1B2E`.
+
+| Element | Meaning |
+|---------|---------|
+| Central ember | Shared focus, collective intention |
+| Stars (uneven ring) | People, each holding their own manifestation |
+| Constellation threads | Connection, interdependence, synchronicity |
+
+**Style:** organic hand-drawn linework, thin connections, soft cosmic gradients, gentle glow, dreamlike but minimal. Archetypal and Jungian; magical, **not** religious.
+
+**Palette (mark):** midnight `#1A1B2E` + moonlit silver / white — night-sky constellation; light- and dark-background SVG variants.
+
+**Canonical prompt & assets:** [`.design/logo-prompt.md`](../.design/logo-prompt.md)  
+**Files:** `public/brand/comanifest-logo-mark.svg` (primary), `.png` (raster concept), `app/icon.svg` (favicon)
+
+Pair the mark with the wordmark **Comanifest** — do not embed text in the icon.
+
+---
+
+## 8. Iconography & symbolic language
 
 ### Shape language
 
@@ -153,7 +174,7 @@ Avoid corporate icon sets entirely.
 
 ---
 
-## 8. Motion & interaction (energetic subtlety)
+## 9. Motion & interaction (energetic subtlety)
 
 ### Motion tone
 
@@ -174,7 +195,7 @@ Motion should feel like energy moving, not UI reacting.
 
 ---
 
-## 9. Imagery & illustration (collective unconscious)
+## 10. Imagery & illustration (collective unconscious)
 
 ### Imagery style
 
@@ -197,7 +218,7 @@ The imagery should feel like archetypes emerging from mist.
 
 ---
 
-## 10. Brand voice (mythic + playful)
+## 11. Brand voice (mythic + playful)
 
 For UI copy rules and the manifest / hold vocabulary, see [`comanifest-brief.md` → Voice & vocabulary](./comanifest-brief.md#voice--vocabulary). Shared strings live in **`lib/manifestations/intention-copy.ts`**.
 
@@ -233,7 +254,7 @@ For UI copy rules and the manifest / hold vocabulary, see [`comanifest-brief.md`
 
 ---
 
-## 11. What Comanifest is not
+## 12. What Comanifest is not
 
 - not a petition site
 - not a political tool
@@ -246,7 +267,7 @@ It is a playful, communal experiment in shared imagination.
 
 ---
 
-## 12. Summary for designers / Cursor
+## 13. Summary for designers / Cursor
 
 Comanifest’s visual identity should feel like:
 

@@ -5,7 +5,7 @@
   "author": "Promoderation Ltd <hello@comanifest.org>",
   "scripts": {
     "dev": "set NODE_OPTIONS=--dns-result-order=ipv4first&& set NODE_USE_SYSTEM_CA=1&& next dev",
-    "dev:fresh": "if exist .next rmdir /s /q .next && npm run dev",
+    "dev:fresh": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/dev-fresh.ps1",
     "dev:posix": "NODE_OPTIONS=--dns-result-order=ipv4first NODE_USE_SYSTEM_CA=1 next dev",
     "build": "set NODE_OPTIONS=--dns-result-order=ipv4first&& set NODE_USE_SYSTEM_CA=1&& next build",
     "start": "set NODE_OPTIONS=--dns-result-order=ipv4first&& set NODE_USE_SYSTEM_CA=1&& next start",

@@ -1,124 +1,67 @@
-# Design branches — try appearances locally
+# Design preview — try appearances locally
 
-**Production (`main`) is unchanged.** These branches only swap colours and atmosphere — same pages, same flows.
+**Production (`main`) is unchanged.** Preview palettes swap accent colours only — same pages, same flows.
 
-| Branch | Vibe |
-|--------|------|
-| **`design/cosmic-indigo`** | Brand “midnight + lavender” — deeper, dreamier |
-| **`design/warm-dawn`** | Peach / rose / amber — softer human warmth |
-| **`design/electric-teal`** | Teal accent — synchronicity / flow from brand guidelines |
-
-Each branch shows a **bright yellow Design preview banner** at the top and **`[Design: …]` in the browser tab** — only on localhost, not on www.comanifest.org.
+| Palette | Vibe |
+|---------|------|
+| **Cosmic indigo** | Midnight and lavender — deeper, dreamier |
+| **Warm dawn** | Peach, rose, and amber — softer human warmth |
+| **Electric teal** | Teal and mint — synchronicity and flow |
 
 ---
 
-## View a design on localhost
+## How to preview (recommended)
 
-**Important:** Design branches do **not** change the live site. You must use **`http://localhost:3000`**, not `www.comanifest.org`.
+Stay on **`main`**. One dev server, no git branch switching.
 
-From the project folder (`C:\Projects\comanifest-app`):
-
-### 1. Stop dev server if it’s running
-
-In the terminal where `npm run dev` is running, press **Ctrl+C**.
-
-### 2. Switch to a design branch
+### 1. Start dev (Windows PowerShell)
 
 ```powershell
 cd C:\Projects\comanifest-app
-git fetch origin
-git checkout design/cosmic-indigo
+npm.cmd run dev
 ```
 
-Use `design/warm-dawn` or `design/electric-teal` instead for the other looks.
+### 2. Open the picker
 
-Check you’re on the right branch:
+[http://localhost:3000/design-preview](http://localhost:3000/design-preview)
 
-```powershell
-git branch --show-current
-```
+Click a palette. Colours update **instantly** across the site (cookie + CSS variables). Browse home, feed, create, detail, account. Take screenshots.
 
-### 3. Clear cache and start dev (recommended)
+### 3. Switch or reset
 
-```powershell
-npm run dev:fresh
-```
-
-Or manually: delete the `.next` folder, then `npm run dev`.
-
-### 4. Open the site
-
-[http://localhost:3000](http://localhost:3000) — **not** the production URL.
-
-**You should see:**
-- Yellow banner: “Design preview — …”
-- Browser tab title starting with `[Design: …]`
-- Obviously different page background and button colours per branch
-
-| Branch | What to look for |
-|--------|------------------|
-| `design/cosmic-indigo` | Lavender / deep indigo buttons |
-| `design/warm-dawn` | Peach / coral buttons and warm pink-tinted background |
-| `design/electric-teal` | Teal / mint buttons and green-tinted background |
-
-### 5. Try another design
-
-Stop dev (**Ctrl+C**), then:
-
-```powershell
-git checkout design/warm-dawn
-npm run dev:fresh
-```
-
-Hard refresh the browser (**Ctrl+Shift+R**) if needed.
-
-### 6. Go back to normal / production code
-
-```powershell
-git checkout main
-npm run dev:fresh
-```
-
-No yellow banner = you’re back on the live look locally.
+- **Another palette:** go back to `/design-preview` and pick another
+- **Back to live look:** click **Reset to default**
+- A small amber banner at the top confirms when a preview palette is active
 
 ---
 
-## Troubleshooting — “colours aren’t changing”
+## Compare to production
 
-1. **Wrong URL** — `www.comanifest.org` always shows **live** (`main`). Use **localhost:3000**.
-2. **Wrong branch** — run `git branch --show-current`. Must be `design/…`, not `main`.
-3. **Stale dev cache** — stop dev, run `npm run dev:fresh`.
-4. **Dev still running from old branch** — always **Ctrl+C** before `git checkout`.
-5. **No yellow banner** — you’re not on a design branch, or not on localhost.
-
----
-
-## Compare to live production
-
-| | Local design branch | Live site |
-|--|---------------------|-----------|
+| | Local preview | Live site |
+|--|---------------|-----------|
 | URL | `http://localhost:3000` | `https://www.comanifest.org` |
-| Database | Same Supabase as `.env.local` | Same project |
-| Code | Design branch only | `main` |
+| Code | `main` | `main` |
+| Palette | Your cookie choice | Default (no preview) |
 
-**Tip:** avoid creating real manifestations while screenshotting — or use obvious test titles like `DESIGN TEST`.
+**Tip:** avoid creating real manifestations while screenshotting — use obvious test titles like `DESIGN TEST`.
+
+Preview is **dev-only** by default. To enable on a staging deploy, set `NEXT_PUBLIC_ENABLE_DESIGN_PREVIEW=true`.
 
 ---
 
 ## If you pick a winner
 
-1. `git checkout main`
-2. `git merge design/cosmic-indigo` (or whichever branch)
-3. Review diff, then `git push` → Vercel updates production
-
-Or ask in Cursor to port the palette from the chosen branch into `main`.
+Copy the chosen palette block from `app/design-themes.css` into `app/globals.css` (or ask in Cursor to port it). Push `main` → Vercel updates production.
 
 ---
 
-## Delete a design you don’t want
+## Deprecated: design/* git branches
+
+The earlier `design/cosmic-indigo`, `design/warm-dawn`, and `design/electric-teal` branches required git checkout and often broke Turbopack cache on Windows. **Do not use them.** They can be deleted when convenient:
 
 ```powershell
-git checkout main
-git branch -D design/electric-teal
-git push origin --delete design/electric-teal
+git branch -D design/cosmic-indigo design/warm-dawn design/electric-teal
+git push origin --delete design/cosmic-indigo design/warm-dawn design/electric-teal
 ```
+
+Palette source files remain in `.design/` for reference. Logo brief and prompt: [`.design/logo-prompt.md`](../.design/logo-prompt.md).

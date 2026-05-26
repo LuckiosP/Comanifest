@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { ComanifestLogoMark } from "@/app/components/ComanifestLogoMark";
 import { SiteManifestButton, SiteNav } from "@/app/components/SiteNav";
 
 type SiteHeaderProps = {
@@ -17,9 +18,10 @@ export function SiteHeader({
         <div className="flex min-w-0 flex-wrap items-center gap-3 sm:gap-4">
           <Link
             href="/"
-            className="text-lg font-semibold tracking-tight text-violet-800 dark:text-violet-200"
+            className="flex min-w-0 items-center gap-2.5 text-lg font-semibold tracking-tight text-violet-800 dark:text-violet-200"
           >
-            Comanifest
+            <ComanifestLogoMark priority />
+            <span className="truncate">Comanifest</span>
           </Link>
           <SiteManifestButton />
         </div>
