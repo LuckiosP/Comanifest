@@ -24,6 +24,15 @@ export function getNotificationFromEmail(): string | undefined {
   return process.env.NOTIFICATION_FROM_EMAIL?.trim();
 }
 
+/** Where replies to transactional mail should go (hello@ inbox, not the send-only From address). */
+export function getNotificationReplyToEmail(): string {
+  return (
+    process.env.NOTIFICATION_REPLY_TO_EMAIL?.trim() ||
+    process.env.MODERATION_REVIEW_EMAIL?.trim() ||
+    "hello@comanifest.org"
+  );
+}
+
 export function getResendApiKey(): string | undefined {
   return process.env.RESEND_API_KEY?.trim();
 }

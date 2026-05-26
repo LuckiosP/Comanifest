@@ -2,6 +2,7 @@ import { manifestationPublicUrl } from "@/lib/site-url";
 
 import {
   getNotificationFromEmail,
+  getNotificationReplyToEmail,
   getResendApiKey,
   isEmailNotificationsConfigured,
 } from "./config";
@@ -19,6 +20,8 @@ export async function sendTransactionalEmail(
     return { ok: false, error: "Email is not configured." };
   }
 
+  const replyTo = getNotificationReplyToEmail();
+
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -27,6 +30,7 @@ export async function sendTransactionalEmail(
     },
     body: JSON.stringify({
       from: getNotificationFromEmail(),
+      reply_to: replyTo,
       to: input.to,
       subject: input.subject,
       html: input.html,

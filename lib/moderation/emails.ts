@@ -1,5 +1,6 @@
 import { getPublicSiteUrl, manifestationPublicUrl } from "@/lib/site-url";
 import { sendTransactionalEmail } from "@/lib/notifications/email";
+import { getNotificationReplyToEmail } from "@/lib/notifications/config";
 import { MANIFESTATION_CATEGORY_LABELS } from "@/lib/types/manifestation";
 
 import { getModerationReviewEmail } from "./config";
@@ -62,7 +63,7 @@ export async function sendModerationDeclinedEmailToCreator(options: {
     <p>After a gentle review, we are not publishing it in the public feed right now. This is not a judgment of you — only a check that the wording fits our community guidelines.</p>
     ${feedbackBlock}
     <p>You can edit and submit a new manifestation anytime from your account.</p>
-    <p style="color:#666;font-size:12px;">Questions? Reply to this email if you need help.</p>
+    <p style="color:#666;font-size:12px;">Questions? Email <a href="mailto:${escapeHtml(getNotificationReplyToEmail())}">${escapeHtml(getNotificationReplyToEmail())}</a>.</p>
   `.trim();
 
   return sendTransactionalEmail({

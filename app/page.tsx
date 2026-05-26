@@ -2,7 +2,12 @@ import Link from "next/link";
 
 import { SiteFooter } from "./components/SiteFooter";
 import { SiteHeader } from "./components/SiteHeader";
-import { MANIFEST_CTA } from "@/lib/manifestations/intention-copy";
+import {
+  FEATURE_SUGGESTIONS_BODY,
+  FEATURE_SUGGESTIONS_EMAIL,
+  FEATURE_SUGGESTIONS_HEADING,
+  MANIFEST_CTA,
+} from "@/lib/manifestations/intention-copy";
 
 export default function Home() {
   return (
@@ -56,6 +61,22 @@ export default function Home() {
             >
               Read the full guidelines
             </Link>
+            .
+          </p>
+        </section>
+
+        <section className="rounded-3xl border border-stone-200/80 bg-white/60 p-6 shadow-sm backdrop-blur-sm dark:border-stone-700/80 dark:bg-stone-800/40 sm:p-8">
+          <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-50">
+            {FEATURE_SUGGESTIONS_HEADING}
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+            {FEATURE_SUGGESTIONS_BODY}{" "}
+            <a
+              href={`mailto:${FEATURE_SUGGESTIONS_EMAIL}`}
+              className="font-medium text-violet-700 underline-offset-2 hover:underline dark:text-violet-300"
+            >
+              {FEATURE_SUGGESTIONS_EMAIL}
+            </a>
             .
           </p>
         </section>
