@@ -277,7 +277,7 @@ Work in **thin slices** — each step should ship something usable on live.
 | **10a — Content filter** | On create, **educated guess** whether content might breach guidelines; auto-approve most posts | First slice — defines what gets flagged; needs moderation fields on **`manifestations`** |
 | **10b — Pending & operator alert** | Flagged → **`pending`**; **creator-only** visibility (account + detail); email **`hello@manifest.org`** | Depends on 10a; feed, search, similar panel, and share exclude **`pending`** |
 | **10c — Email approve / decline** | Review email with **Approve** / **Decline** links; optional **feedback** to manifestor on decline | Depends on 10b; signed one-click tokens; on approve → **`active`** + public feed |
-| **11 — Operator dashboard** | Private **`/admin`** analytics: users, manifests, holds, category, geography (aggregated) | Needs admin auth, service role, privacy review — after core loop + moderation + pentest prep |
+| **11 — Operator dashboard** 🚧 | Private **`/admin`** analytics: users, manifests, holds, category, geography (aggregated) | First slice shipped: allowlisted email + service-role aggregates; charts/trends later |
 | **12 — Creator interim updates** | While **active**, creator posts optional “how it’s going” notes visible to holders; does not close or archive | Long-running manifestations stay connected between create and closure; reuses reflection UI / creator-update patterns |
 | **Later** | Custom domain, anonymous→email linking, **security pentest** (`docs/security-pentest.md`), polish | Before wide launch |
 

@@ -178,6 +178,15 @@ export const MODERATION_APPROVE_HINT =
 export const MODERATION_APPROVE_SUBMIT = "Approve and publish";
 export const MODERATION_APPROVE_SUBMIT_PENDING = "Approving…";
 
+/** Operator dashboard (phase 11). */
+export const ADMIN_DASHBOARD_TITLE = "Operator dashboard";
+export const ADMIN_DASHBOARD_LEAD =
+  "Aggregated platform activity — no commitment notes or private holder text.";
+export const ADMIN_SERVICE_ROLE_HINT =
+  "Set SUPABASE_SERVICE_ROLE_KEY on the server to load live aggregates.";
+export const ADMIN_STATS_ERROR =
+  "Could not load dashboard data. Check the service role key and database migrations.";
+
 /** Feature suggestions (phase 7). */
 export const FEATURE_SUGGESTIONS_HEADING = "Shape the gathering";
 export const FEATURE_SUGGESTIONS_BODY =

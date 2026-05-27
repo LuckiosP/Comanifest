@@ -77,6 +77,7 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 | `/auth/callback` | **Client page** finishes PKCE in the **browser** (verifier cookie from “Send magic link” is visible): **`auth.initialize()`** (with default `detectSessionInUrl`) performs the code exchange once, then **`getSession()`** confirms and the app redirects to **`next`** |
 | `/guidelines` | Full **community guidelines** page |
 | `/about` | Minimal about stub (may be expanded later) |
+| `/admin` | **Operator dashboard** (phase 11): aggregated stats — not in public nav; allowlisted email + **`SUPABASE_SERVICE_ROLE_KEY`** |
 
 **Feed data:** If Supabase env vars are missing or the query errors, the app shows **sample/example cards** (`lib/manifestations/sample-data.ts`) and a yellow **hint** banner — never a blank broken page.
 
@@ -139,6 +140,7 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 - `app/components/SimilarManifestationsPanel.tsx` — debounced vibe match on create  
 - `app/components/ShareManifestationControl.tsx` — Facebook / Bluesky / native share / copy link  
 - `app/components/NotificationPreferencesForm.tsx` — hold email frequency on **`/account`**  
+- `app/admin/page.tsx` — operator dashboard (aggregates; **`lib/admin/*`**)  
 - `app/sign-in/page.tsx` — sign-in shell + query errors from callback  
 - `app/auth/callback/page.tsx` — magic-link landing shell  
 - `app/auth/callback/CallbackClient.tsx` — client PKCE via **`auth.initialize()`** + **`getSession()`** + redirect  
@@ -164,7 +166,8 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 - `lib/manifestations/similar.ts` — **`findSimilarManifestations`** (reuses search ranking)  
 - `lib/manifestations/share-client.ts` — share URL helpers (client)  
 - `lib/site-url.ts` — **`getPublicSiteUrl`**, **`manifestationPublicUrl`**  
-- `lib/notifications/` — Resend email, prefs, instant notify, digest sender  
+- `lib/notifications/` — Resend email, prefs, instant notify, digest sender (+ **`createServiceSupabaseClient`** for server-only jobs)  
+- `lib/admin/` — operator allowlist (**`ADMIN_OPERATOR_EMAILS`**), **`fetchAdminDashboardStats`**  
 - `docs/supabase/migrations/notifications.sql` — notification prefs + digest queue  
 - `vercel.json` — cron schedules for hold digests  
 - `lib/manifestations/queries.ts` — **`listManifestations`**, **`getManifestationById`**, **`probeManifestationsTable`** (live vs sample; hold flags for live)  
@@ -227,7 +230,7 @@ Roadmap detail and priority: **`docs/comanifest-brief.md` → §7 Status & roadm
 - **Phase 8 — Share:** ✅ Facebook, Bluesky, native share / copy link on detail + account (creator or holder); Open Graph on detail  
 - **Phase 9 — Creator email updates:** ✅ instant / daily / weekly / off on **`/account`** (email sign-in); Resend + Vercel cron for digests  
 - **Phase 10 — Manifestation moderation:** (a) **content filter** on create (educated guess vs guidelines) → (b) **`pending`** + creator-only visibility + email **`hello@manifest.org`** → (c) **email approve / decline** with optional feedback to manifestor  
-- **Phase 11 — Operator dashboard:** private admin analytics (users, manifests, holds, category, geography) — operator auth + privacy review  
+- **Phase 11 — Operator dashboard:** ✅ first slice — **`/admin`** (allowlisted **`ADMIN_OPERATOR_EMAILS`** or moderation inbox; email sign-in; **`notFound`** for others); overview + status/category/country breakdowns via service role  
 - **Phase 12 — Creator interim updates:** while **active**, optional creator notes on “how it’s going” for holders; does not close or archive  
 - **Security review / pentest** — before wider launch; **`docs/security-pentest.md`**  
 - **Custom domain** — **`docs/deploying.md` Step 3**  
@@ -254,4 +257,4 @@ That gives the assistant the same structural context chat history used to hold.
 
 ---
 
-*Last updated: 2026-05-25 — phase 12 (creator interim updates) added to roadmap; granular closure noted in untriaged backlog.*
+*Last updated: 2026-05-27 — phase 11 operator dashboard first slice (`/admin`).*
