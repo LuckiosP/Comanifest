@@ -67,7 +67,7 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 
 | Route | Purpose |
 |--------|--------|
-| `/` | Marketing-style **home**: hero, CTAs to feed + create, short “Ground rules” + link to full guidelines |
+| `/` | “Google-style” **manifest hub** home: central manifest-as-search, live similar suggestions, path to start a new manifestation if no close match |
 | `/manifestations` | **Feed** of manifestations; **sort** via `?sort=joined` or default newest; **search** via `?q=` (title, intention, category) |
 | `/manifestations/new` | **Start a manifestation** form (`MANIFEST_CTA`); server action **`createManifestation`** |
 | `/manifestations/[id]` | **Detail** for one manifestation: full intention, metadata, **hold** UI (`JoinManifestationControl`); **`getManifestationById`** returns sample rows, live UUID rows, and **`viewer_has_joined` / `viewer_is_creator`** for the current session |
@@ -88,6 +88,21 @@ These are **implementation-facing** preferences agreed in chat (the **brief** re
 **Hold (live Supabase only):** Feed and detail use **`JoinManifestationControl`** — anonymous session, **Hold with intention** expand on cards, **commitment note** (20–500 chars) + **required checkbox**, server action **`joinManifestation`**. Holders can **withdraw** via **`WithdrawHoldControl`** + **`withdrawHold`** (checkbox confirmation; decrements **`join_count`** via DB trigger). Copy: **Hold this manifestation**, badge **You're holding this manifestation**, **Withdraw hold**. **`manifestation_joins`** + RLS + triggers (see SQL docs). Sample/example cards do not enable hold.
 
 **Detail navigation:** Feed card **titles** link to **`/manifestations/[id]`**.
+
+---
+
+## Historical chat export (for reference)
+
+If prior Cursor chat history is lost, this repo includes a human-exported transcript:
+
+- `docs/cursor_general_development_roadmap.md`
+
+This is **not** the source of truth (code + these docs are), but it captures “why” context and decisions around:
+
+- Phase 10 moderation + security hardening
+- Email “Reply-To” vs send-only addresses
+- The design-preview workflow and early brand/logo iterations
+- The homepage shift toward a manifest-first “search hub”
 
 **Auth:** **`AuthNav`** in the header shows **My account** when you have a session (anonymous or email), **Guest** + **Sign in** + **Sign out** for anonymous-only guests, or truncated **email** + **Sign out** after magic link. **Sign in** preserves the current path via **`?next=`** (validated).
 
