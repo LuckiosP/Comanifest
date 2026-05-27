@@ -119,26 +119,6 @@ export default async function AdminDashboardPage() {
                 label="Closed with reflection"
                 value={statsResult.stats.overview.closedWithReflection}
               />
-              {statsResult.stats.traffic ? (
-                <>
-                  <AdminStatCard
-                    label="Traffic (pageviews, 7d)"
-                    value={statsResult.stats.traffic.pageviewsLast7Days}
-                    hint={
-                      statsResult.stats.traffic.missing
-                        ? "Traffic table not configured yet (optional drain)."
-                        : statsResult.stats.traffic.capped
-                          ? "Capped sample (high volume)"
-                          : "From Vercel Analytics Drains"
-                    }
-                  />
-                  <AdminStatCard
-                    label="Traffic (visitors, 7d)"
-                    value={statsResult.stats.traffic.visitorsLast7Days}
-                    hint="Approx unique sessions"
-                  />
-                </>
-              ) : null}
               <AdminStatCard
                 label="Distinct creators"
                 value={statsResult.stats.participants.distinctCreators}
@@ -194,14 +174,6 @@ export default async function AdminDashboardPage() {
                 emptyLabel="No country data yet."
               />
             </div>
-
-            {statsResult.stats.traffic && !statsResult.stats.traffic.missing ? (
-              <AdminBreakdownTable
-                title="Top pages (pageviews, 7d)"
-                rows={statsResult.stats.traffic.topPagesLast7Days}
-                emptyLabel="No traffic data yet."
-              />
-            ) : null}
 
             <p className="text-xs leading-relaxed text-stone-500 dark:text-stone-400">
               Country codes are coarse ISO regions from the hosting edge at create/hold

@@ -26,7 +26,6 @@ Run only what you have not applied yet, in order:
 | 8 | [`migrations/security-hardening.sql`](./migrations/security-hardening.sql) | RLS/trigger hardening + RPC lockdown |
 | 9 | [`migrations/security-hardening-join-count-hotfix.sql`](./migrations/security-hardening-join-count-hotfix.sql) | Only if hardening was run with `join_count = 0` |
 | 10 | [`migrations/geo-country.sql`](./migrations/geo-country.sql) | Coarse country on create/hold (aggregated analytics) |
-| 11 | [`migrations/vercel-analytics-drain.sql`](./migrations/vercel-analytics-drain.sql) | Optional: store Vercel Analytics Drains events (topline traffic on `/admin`) |
 
 Most migration files are **safe to re-run** (use `if not exists`, `drop policy if exists`, etc.).
 

@@ -16,17 +16,6 @@ export type AdminDashboardStats = {
     manifestationsLast7Days: number;
     holdsLast7Days: number;
   };
-  traffic: {
-    /** Number of pageview events captured via Vercel Analytics Drains. */
-    pageviewsLast7Days: number;
-    /** Approx unique visitors (distinct sessionId) over last 7 days. */
-    visitorsLast7Days: number;
-    topPagesLast7Days: AdminBreakdownRow[];
-    /** Whether traffic data is missing because drain isn’t configured yet. */
-    missing: boolean;
-    /** Whether the dataset was capped for performance. */
-    capped: boolean;
-  } | null;
   byStatus: AdminBreakdownRow[];
   byCategory: AdminBreakdownRow[];
   creatorCountries: AdminBreakdownRow[];
