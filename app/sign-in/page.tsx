@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 
 import { SessionStatusCallout } from "../components/SessionStatusCallout";
 import { SignInForm } from "../components/SignInForm";
@@ -12,6 +13,13 @@ import {
   createServerSupabaseClient,
   getServerAuthUser,
 } from "@/lib/supabase/server";
+
+export const metadata: Metadata = {
+  title: "Sign in — Comanifest",
+  description: "Sign in with email to access your account across devices.",
+  robots: { index: false, follow: false },
+  alternates: { canonical: "/sign-in" },
+};
 
 function decodeExchangeMessage(raw: string | undefined): string | null {
   if (raw == null || !String(raw).trim()) {

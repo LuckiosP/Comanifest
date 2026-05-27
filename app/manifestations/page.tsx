@@ -1,5 +1,5 @@
 import Link from "next/link";
-
+import type { Metadata } from "next";
 import { ManifestationFeedWithSearch } from "../components/ManifestationFeedWithSearch";
 import { SiteHeader } from "../components/SiteHeader";
 import { normalizeSearchQuery } from "@/lib/manifestations/search";
@@ -7,6 +7,15 @@ import {
   listManifestations,
   type ManifestationSort,
 } from "@/lib/manifestations/queries";
+
+export const metadata: Metadata = {
+  title: "Manifestations — Comanifest",
+  description:
+    "Browse active manifestations on Comanifest — name a hopeful outcome or hold one that already resonates.",
+  alternates: {
+    canonical: "/manifestations",
+  },
+};
 
 export default async function ManifestationsPage({
   searchParams,

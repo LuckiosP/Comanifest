@@ -31,6 +31,7 @@ import {
 export const metadata: Metadata = {
   title: "My account — Comanifest",
   description: "Manifestations you started and those you are holding.",
+  robots: { index: false, follow: false },
 };
 
 export default async function AccountPage() {

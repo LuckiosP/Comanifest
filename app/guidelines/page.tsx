@@ -1,8 +1,17 @@
 import Link from "next/link";
-
+import type { Metadata } from "next";
 import { SiteFooter } from "../components/SiteFooter";
 import { SiteHeader } from "../components/SiteHeader";
 import { MANIFEST_CTA } from "@/lib/manifestations/intention-copy";
+
+export const metadata: Metadata = {
+  title: "Community guidelines — Comanifest",
+  description:
+    "Principles that keep Comanifest safe, inclusive, and grounded in collective uplift.",
+  alternates: {
+    canonical: "/guidelines",
+  },
+};
 
 export default function GuidelinesPage() {
   return (

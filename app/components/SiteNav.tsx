@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { ManifestationHeaderSearch } from "@/app/components/ManifestationHeaderSearch";
 import { BROWSE_NAV, MANIFEST_NAV } from "@/lib/manifestations/intention-copy";
@@ -56,24 +57,91 @@ export function SiteManifestButton() {
 
 export function SiteNav({ searchQuery = "", hideSearch = false }: SiteNavProps) {
   const pathname = usePathname() ?? "";
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
 
   return (
-    <nav className="flex flex-wrap items-center justify-end gap-1 sm:gap-2">
+    <nav className="relative flex items-center gap-1 sm:gap-2">
       {!hideSearch ? (
         <div className="hidden min-w-0 md:flex">
           <ManifestationHeaderSearch defaultQuery={searchQuery} />
         </div>
       ) : null}
-      <Link href="/guidelines" className={navLinkClass(isGuidelinesActive(pathname))}>
-        Guidelines
-      </Link>
-      <Link
-        href="/manifestations"
-        className={navLinkClass(isManifestationsActive(pathname))}
-      >
-        {BROWSE_NAV}
-      </Link>
-      <AuthNav />
+
+      <div className="hidden items-center gap-1 sm:gap-2 md:flex">
+        <Link
+          href="/guidelines"
+          className={navLinkClass(isGuidelinesActive(pathname))}
+        >
+          Guidelines
+        </Link>
+        <Link
+          href="/manifestations"
+          className={navLinkClass(isManifestationsActive(pathname))}
+        >
+          {BROWSE_NAV}
+        </Link>
+        <AuthNav />
+      </div>
+
+      <div className="flex items-center md:hidden">
+        <button
+          type="button"
+          className="inline-flex items-center justify-center rounded-full border border-stone-300 bg-white p-2 text-stone-700 shadow-sm transition hover:border-violet-300 hover:text-violet-800 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200 dark:hover:border-violet-600 dark:hover:text-violet-100"
+          aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
+          aria-expanded={mobileOpen}
+          onClick={() => setMobileOpen((open) => !open)}
+        >
+          <span className="sr-only">
+            {mobileOpen ? "Close navigation menu" : "Open navigation menu"}
+          </span>
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            className="h-5 w-5"
+          >
+            {mobileOpen ? (
+              <path
+                d="M6 6l12 12M18 6L6 18"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
+            ) : (
+              <path
+                d="M4 7h16M4 12h16M4 17h16"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
+            )}
+          </svg>
+        </button>
+      </div>
+
+      {mobileOpen ? (
+        <div className="absolute right-0 top-full z-20 mt-2 w-52 rounded-2xl border border-stone-200 bg-white p-2 text-sm shadow-lg ring-1 ring-black/5 dark:border-stone-700 dark:bg-stone-900">
+          <Link
+            href="/guidelines"
+            className={`${navLinkBase} block w-full text-left`}
+          >
+            Guidelines
+          </Link>
+          <Link
+            href="/manifestations"
+            className={`${navLinkBase} block w-full text-left`}
+          >
+            {BROWSE_NAV}
+          </Link>
+          <div className="mt-1 border-t border-stone-200 pt-1 dark:border-stone-700">
+            <AuthNav />
+          </div>
+        </div>
+      ) : null}
     </nav>
   );
 }
+

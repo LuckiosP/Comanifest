@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { ComanifestLogoMark } from "@/app/components/ComanifestLogoMark";
 import { HomeManifestHub } from "@/app/components/HomeManifestHub";
 import { SiteHeader } from "@/app/components/SiteHeader";
@@ -9,7 +11,28 @@ import {
   HOME_FOOTER_PRIVACY,
 } from "@/lib/manifestations/intention-copy";
 import { listManifestations } from "@/lib/manifestations/queries";
+import { getPublicSiteUrl } from "@/lib/site-url";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Comanifest — collective intention",
+  description: HOME_DESCRIPTOR,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    siteName: "Comanifest",
+    title: "Comanifest — collective intention",
+    description: HOME_DESCRIPTOR,
+    url: "/",
+  },
+  twitter: {
+    card: "summary",
+    title: "Comanifest — collective intention",
+    description: HOME_DESCRIPTOR,
+  },
+};
 
 export default async function Home() {
   const { rows, source } = await listManifestations("newest");
@@ -35,6 +58,26 @@ export default async function Home() {
         <p className="mx-auto mt-10 max-w-md text-center text-sm leading-relaxed text-stone-500 dark:text-stone-400">
           {HOME_DESCRIPTOR}
         </p>
+
+        {/* Structured data for search / AI tools */}
+        <script
+          type="application/ld+json"
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "Comanifest",
+              url: getPublicSiteUrl(),
+              description: HOME_DESCRIPTOR,
+              potentialAction: {
+                "@type": "SearchAction",
+                target: `${getPublicSiteUrl()}/manifestations?q={search_term_string}`,
+                "query-input": "required name=search_term_string",
+              },
+            }),
+          }}
+        />
       </main>
 
       <footer className="px-4 pb-8 text-center">

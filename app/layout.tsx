@@ -9,6 +9,7 @@ import {
   getDesignTheme,
   isDesignPreviewEnabled,
 } from "@/lib/design-themes";
+import { getPublicSiteUrl } from "@/lib/site-url";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,9 +22,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Comanifest — collective intention",
+  metadataBase: new URL(getPublicSiteUrl()),
+  title: {
+    default: "Comanifest — collective intention",
+    template: "%s — Comanifest",
+  },
   description:
-    "Gather with others to hold intention and good energy toward hopeful outcomes — playful, inclusive, and built for uplift.",
+    "Comanifest is a communal space for manifesting hopeful outcomes together — playful, inclusive, and built for uplift, not petitions or promises.",
+  openGraph: {
+    type: "website",
+    siteName: "Comanifest",
+    title: "Comanifest — collective intention",
+    description:
+      "Name a hopeful outcome, find others already holding something similar, or start your own gathering.",
+    url: "/",
+  },
+  twitter: {
+    card: "summary",
+    title: "Comanifest — collective intention",
+    description:
+      "A lightly magical place to hold collective intention toward hopeful outcomes.",
+  },
 };
 
 export default async function RootLayout({
