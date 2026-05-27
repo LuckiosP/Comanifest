@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { cookies } from "next/headers";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { DesignPreviewBanner } from "./components/DesignPreviewBanner";
 import "./globals.css";
@@ -67,6 +68,7 @@ export default async function RootLayout({
         {activeTheme ? <DesignPreviewBanner theme={activeTheme} /> : null}
         {children}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
