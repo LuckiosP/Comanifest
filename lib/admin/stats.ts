@@ -11,6 +11,14 @@ import type { ManifestationCategory, ManifestationStatus } from "@/lib/types/man
 
 const AUTH_USER_PAGE_SIZE = 200;
 const AUTH_USER_MAX_PAGES = 50;
+const ANALYTICS_MAX_ROWS = 5000;
+
+type AnalyticsEventRow = {
+  event_type: "pageview" | "event" | string;
+  session_id: number | null;
+  path: string | null;
+  timestamp: string;
+};
 
 type ManifestationStatsRow = {
   status: ManifestationStatus;
@@ -103,13 +111,20 @@ async function fetchAuthUserCounts(
 export async function fetchAdminDashboardStats(
   supabase: SupabaseClient,
 ): Promise<AdminStatsFetchResult> {
-  const [manifestResult, joinsResult] = await Promise.all([
+  const cutoffIso = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+  const [manifestResult, joinsResult, trafficResult] = await Promise.all([
     supabase
       .from("manifestations")
       .select("status, category, creator_country, created_at, reflected_at, user_id"),
     supabase
       .from("manifestation_joins")
       .select("holder_country, created_at, user_id"),
+    supabase
+      .from("vercel_analytics_events")
+      .select("event_type, session_id, path, timestamp")
+      .gte("timestamp", cutoffIso)
+      .limit(ANALYTICS_MAX_ROWS),
   ]);
 
   if (manifestResult.error) {
@@ -123,6 +138,47 @@ export async function fetchAdminDashboardStats(
     user_id: string;
   })[];
   const joinRows = (joinsResult.data ?? []) as JoinStatsRow[];
+
+  const traffic = (() => {
+    if (trafficResult.error) {
+      // Table likely missing until the drain migration is run.
+      return {
+        pageviewsLast7Days: 0,
+        visitorsLast7Days: 0,
+        topPagesLast7Days: [],
+        missing: true,
+        capped: false,
+      } satisfies NonNullable<AdminDashboardStats["traffic"]>;
+    }
+
+    const rows = (trafficResult.data ?? []) as AnalyticsEventRow[];
+    const capped = rows.length >= ANALYTICS_MAX_ROWS;
+
+    const pageviews = rows.filter((r) => r.event_type === "pageview");
+    const visitorIds = new Set<number>();
+    const byPath = new Map<string, number>();
+
+    for (const row of pageviews) {
+      if (row.session_id != null) {
+        visitorIds.add(row.session_id);
+      }
+      const path = row.path?.trim() || "/";
+      byPath.set(path, (byPath.get(path) ?? 0) + 1);
+    }
+
+    const topPagesLast7Days = [...byPath.entries()]
+      .map(([key, count]) => ({ key, label: key, count }))
+      .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))
+      .slice(0, 8);
+
+    return {
+      pageviewsLast7Days: pageviews.length,
+      visitorsLast7Days: visitorIds.size,
+      topPagesLast7Days,
+      missing: false,
+      capped,
+    } satisfies NonNullable<AdminDashboardStats["traffic"]>;
+  })();
 
   const statusCounts = new Map<string, number>();
   const categoryCounts = new Map<string, number>();
@@ -160,6 +216,7 @@ export async function fetchAdminDashboardStats(
       ),
       holdsLast7Days: rowsInLastDays(joinRows.map((r) => r.created_at), 7),
     },
+    traffic,
     byStatus: orderedBreakdown(
       ADMIN_STATUS_ORDER,
       statusCounts,
