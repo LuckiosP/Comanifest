@@ -89,7 +89,7 @@ export async function createManifestation(
   redirect(
     status === "pending"
       ? `/manifestations/${inserted.id}`
-      : "/manifestations",
+      : `/manifestations/${inserted.id}?created=1`,
   );
 }
 

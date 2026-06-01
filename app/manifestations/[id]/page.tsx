@@ -14,8 +14,11 @@ import {
   MODERATION_PENDING_BANNER,
   MANIFEST_ARCHIVED_BANNER,
   MANIFEST_CLOSED_BANNER,
+  MANIFEST_CREATED_BODY,
+  MANIFEST_CREATED_HEADING,
   MANIFEST_ENDS_LABEL,
-  SHARE_LABEL,
+  SHARE_INVITE_BODY,
+  SHARE_INVITE_HEADING,
 } from "@/lib/manifestations/intention-copy";
 import { formatManifestationDate } from "@/lib/manifestations/dates";
 import { getManifestationById } from "@/lib/manifestations/queries";
@@ -30,6 +33,7 @@ import { MANIFESTATION_CATEGORY_LABELS } from "@/lib/types/manifestation";
 
 type Props = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ created?: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -67,14 +71,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function ManifestationDetailPage({ params }: Props) {
+export default async function ManifestationDetailPage({
+  params,
+  searchParams,
+}: Props) {
   const { id } = await params;
+  const { created } = await searchParams;
   const result = await getManifestationById(id);
   if (!result) {
     notFound();
   }
 
   const { row, hint, viewer_has_joined, viewer_is_creator, source } = result;
+  const justCreated =
+    created === "1" && viewer_is_creator && row.status === "active";
   const label =
     MANIFESTATION_CATEGORY_LABELS[row.category] ?? row.category;
   const canShare =
@@ -108,6 +118,17 @@ export default async function ManifestationDetailPage({ params }: Props) {
           <p className="rounded-xl border border-amber-200 bg-amber-50/90 px-3 py-2 text-sm text-amber-950 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-100">
             {MODERATION_PENDING_BANNER}
           </p>
+        ) : null}
+
+        {justCreated ? (
+          <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-amber-50/60 px-4 py-4 dark:border-violet-900/50 dark:from-violet-950/40 dark:to-stone-900/40">
+            <h2 className="text-base font-semibold text-violet-900 dark:text-violet-100">
+              {MANIFEST_CREATED_HEADING}
+            </h2>
+            <p className="mt-1 text-sm leading-relaxed text-violet-800/90 dark:text-violet-200/80">
+              {MANIFEST_CREATED_BODY}
+            </p>
+          </div>
         ) : null}
 
         {row.status === "archived" && viewer_is_creator && row.moderation_decline_feedback ? (
@@ -165,9 +186,14 @@ export default async function ManifestationDetailPage({ params }: Props) {
 
             {canShare ? (
               <div className="flex flex-col gap-3 border-t border-stone-100 pt-4 dark:border-stone-700/80">
-                <p className="text-xs font-medium uppercase tracking-wide text-stone-500 dark:text-stone-400">
-                  {SHARE_LABEL}
-                </p>
+                <div>
+                  <h2 className="text-sm font-semibold text-stone-900 dark:text-stone-50">
+                    {SHARE_INVITE_HEADING}
+                  </h2>
+                  <p className="mt-1 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+                    {SHARE_INVITE_BODY}
+                  </p>
+                </div>
                 <ShareManifestationControl
                   manifestationId={row.id}
                   title={row.title}

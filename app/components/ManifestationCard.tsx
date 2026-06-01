@@ -8,7 +8,8 @@ import { ShareManifestationControl } from "@/app/components/ShareManifestationCo
 import {
   holdingCountLabel,
   MANIFEST_ENDS_LABEL,
-  SHARE_LABEL,
+  SHARE_INVITE_COMPACT,
+  SHARE_INVITE_HEADING,
 } from "@/lib/manifestations/intention-copy";
 import { formatManifestationDate } from "@/lib/manifestations/dates";
 import { isManifestationClosable } from "@/lib/manifestations/lifecycle";
@@ -110,7 +111,15 @@ export function ManifestationCard({
       </CardSection>
 
       {showShareSection ? (
-        <CardSection label={SHARE_LABEL}>
+        <CardSection>
+          <div>
+            <p className="text-sm font-semibold text-stone-900 dark:text-stone-50">
+              {SHARE_INVITE_HEADING}
+            </p>
+            <p className="mt-0.5 text-xs leading-relaxed text-stone-500 dark:text-stone-400">
+              {SHARE_INVITE_COMPACT}
+            </p>
+          </div>
           <ShareManifestationControl
             manifestationId={manifestation.id}
             title={manifestation.title}

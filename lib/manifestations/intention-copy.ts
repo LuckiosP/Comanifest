@@ -50,6 +50,26 @@ export const HOME_START_OWN_HINT =
   "Nothing close enough? Name yours and invite others to hold it with you.";
 export const HOME_DESCRIPTOR =
   "Name a hopeful outcome, find others already holding something similar, or start your own gathering. Comanifest is playful, sincere, and built for uplift — not petitions, promises, or harm.";
+
+/** First-visit explainer — hero + "how it works" (above & around the manifest hub). */
+export const HOME_HERO_HEADING = "Turn a quiet hope into a gathering";
+export const HOME_HERO_SUBHEAD =
+  "Name an outcome you long to see — sunshine for a wedding, calm in a hard week, peace somewhere far away — and invite others to hold it with you. Not petitions or promises. Just shared focus, gently.";
+export const HOME_HOW_HEADING = "How a manifestation unfolds";
+export const HOME_HOW_STEPS = [
+  {
+    step: "Manifest",
+    body: "Name a hopeful outcome you'd love to see, and choose a date to hold it until.",
+  },
+  {
+    step: "Hold",
+    body: "Others find your manifestation and hold it with intention — a private note and a deliberate, good-faith yes.",
+  },
+  {
+    step: "Reflect",
+    body: "When the date arrives, you reflect on how it landed. No verdicts — just what you and the circle noticed.",
+  },
+] as const;
 export const HOME_FOOTER_PRIVACY = "Privacy";
 export const HOME_FOOTER_GUIDELINES = "Guidelines";
 export const HOME_FOOTER_FEEDBACK = "Feedback";
@@ -133,6 +153,18 @@ export const SHARE_LINK = "Link";
 export const SHARE_COPY_SUCCESS = "Link copied — paste it wherever you like.";
 export const SHARE_INSTAGRAM_COPY_SUCCESS =
   "Link copied — paste it in Instagram.";
+
+/** Encouragement to invite others to hold (shown around the share controls). */
+export const SHARE_INVITE_HEADING = "Widen the circle";
+export const SHARE_INVITE_BODY =
+  "Every person holding adds to the shared focus. Invite others to hold this with you — the more of us, the more momentum it gathers. No promises or guarantees, just collective intention behind a hopeful outcome.";
+export const SHARE_INVITE_COMPACT =
+  "More people holding, more momentum — invite others to hold this with you.";
+
+/** Celebratory prompt the creator sees the moment a manifestation goes live. */
+export const MANIFEST_CREATED_HEADING = "It's live — now gather your circle";
+export const MANIFEST_CREATED_BODY =
+  "Your manifestation is out in the world. Comanifest works through collective focus — the more people who hold the same hopeful outcome, the more momentum it gathers. Share it with anyone who'd love to hold this with you.";
 
 /** Creator hold email updates (phase 9). */
 export const NOTIFICATIONS_HEADING = "Hold updates by email";

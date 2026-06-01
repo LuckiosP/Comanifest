@@ -9,6 +9,10 @@ import {
   HOME_FOOTER_FEEDBACK,
   HOME_FOOTER_GUIDELINES,
   HOME_FOOTER_PRIVACY,
+  HOME_HERO_HEADING,
+  HOME_HERO_SUBHEAD,
+  HOME_HOW_HEADING,
+  HOME_HOW_STEPS,
 } from "@/lib/manifestations/intention-copy";
 import { listManifestations } from "@/lib/manifestations/queries";
 import { getPublicSiteUrl } from "@/lib/site-url";
@@ -45,19 +49,57 @@ export default async function Home() {
         <div className="flex flex-1 flex-col items-center justify-center">
           <Link
             href="/"
-            className="mb-10 flex flex-col items-center gap-3 text-center text-stone-900 dark:text-stone-50"
+            className="mb-6 flex flex-col items-center gap-3 text-center text-stone-900 dark:text-stone-50"
             aria-label="Comanifest home"
           >
             <ComanifestLogoMark size={48} className="size-12 shrink-0" priority />
             <span className="text-2xl font-semibold tracking-tight">Comanifest</span>
           </Link>
 
+          <div className="mb-10 max-w-xl text-center">
+            <h1 className="text-balance text-3xl font-semibold tracking-tight text-stone-900 sm:text-4xl dark:text-stone-50">
+              {HOME_HERO_HEADING}
+            </h1>
+            <p className="mt-4 text-pretty text-base leading-relaxed text-stone-600 dark:text-stone-300">
+              {HOME_HERO_SUBHEAD}
+            </p>
+          </div>
+
           <HomeManifestHub candidates={rows} similarSource={source} />
         </div>
 
-        <p className="mx-auto mt-10 max-w-md text-center text-sm leading-relaxed text-stone-500 dark:text-stone-400">
-          {HOME_DESCRIPTOR}
-        </p>
+        <section
+          aria-labelledby="how-it-works"
+          className="mx-auto mt-16 w-full max-w-2xl"
+        >
+          <h2
+            id="how-it-works"
+            className="text-center text-xs font-medium uppercase tracking-[0.18em] text-stone-500 dark:text-stone-400"
+          >
+            {HOME_HOW_HEADING}
+          </h2>
+          <ol className="mt-6 grid gap-4 sm:grid-cols-3">
+            {HOME_HOW_STEPS.map((item, index) => (
+              <li
+                key={item.step}
+                className="rounded-3xl border border-stone-200/80 bg-white/70 p-5 text-center shadow-sm dark:border-stone-700 dark:bg-stone-900/40"
+              >
+                <span className="mx-auto flex size-9 items-center justify-center rounded-full bg-violet-100 text-sm font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300">
+                  {index + 1}
+                </span>
+                <h3 className="mt-3 text-base font-semibold text-stone-900 dark:text-stone-50">
+                  {item.step}
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
+                  {item.body}
+                </p>
+              </li>
+            ))}
+          </ol>
+          <p className="mx-auto mt-8 max-w-md text-center text-sm leading-relaxed text-stone-500 dark:text-stone-400">
+            {HOME_DESCRIPTOR}
+          </p>
+        </section>
 
         {/* Structured data for search / AI tools */}
         <script
