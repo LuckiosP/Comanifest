@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { ManifestationCard, FeedSortLinks } from "@/app/components/ManifestationCard";
 import {
   MANIFEST_CTA,
+  searchManifestCtaLabel,
   SEARCH_CLEAR,
   SEARCH_HINT,
   SEARCH_NO_RESULTS,
@@ -180,16 +181,26 @@ export function ManifestationFeedWithSearch({
               : "No manifestations yet — yours can be the first."}
           </p>
           {isSearching ? (
-            <button
-              type="button"
-              onClick={() => {
-                setQuery("");
-                syncUrl("");
-              }}
-              className="mt-4 inline-flex text-sm font-medium text-violet-700 underline-offset-4 hover:underline dark:text-violet-300"
-            >
-              {SEARCH_CLEAR} →
-            </button>
+            <div className="mt-5 flex flex-col items-center gap-3">
+              <Link
+                href={`/manifestations/new?q=${encodeURIComponent(
+                  normalizeSearchQuery(query),
+                )}`}
+                className="inline-flex h-11 items-center justify-center rounded-full bg-violet-600 px-6 text-sm font-medium text-white shadow-sm transition hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-400"
+              >
+                {searchManifestCtaLabel(query)}
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setQuery("");
+                  syncUrl("");
+                }}
+                className="inline-flex text-sm font-medium text-stone-600 underline-offset-2 hover:underline dark:text-stone-400"
+              >
+                {SEARCH_CLEAR}
+              </button>
+            </div>
           ) : (
             <Link
               href="/manifestations/new"

@@ -77,7 +77,12 @@ export const SEARCH_HINT =
   "Results update as you type — we match the feeling and related words, not just exact phrases.";
 export const SEARCH_CLEAR = "Clear search";
 export const SEARCH_NO_RESULTS =
-  "Nothing quite matches that vibe yet — try a feeling or a few related words.";
+  "Nothing quite matches that vibe yet — try a feeling or a few related words, or start this one yourself.";
+
+/** CTA to start a new manifestation straight from the search query. */
+export function searchManifestCtaLabel(query: string): string {
+  return `Manifest “${query.trim()}”`;
+}
 
 /** Edit flow — creator updates an active manifestation. */
 export const MANIFEST_EDIT_CTA = "Edit manifestation";
