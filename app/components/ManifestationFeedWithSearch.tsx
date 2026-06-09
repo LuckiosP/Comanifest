@@ -145,7 +145,7 @@ export function ManifestationFeedWithSearch({
                 setQuery("");
                 syncUrl("");
               }}
-              className="w-fit text-sm font-medium text-stone-600 underline-offset-2 hover:underline dark:text-stone-400"
+              className="w-fit cursor-pointer text-sm font-medium text-stone-600 underline-offset-2 hover:underline dark:text-stone-400"
             >
               {SEARCH_CLEAR}
             </button>
@@ -196,7 +196,7 @@ export function ManifestationFeedWithSearch({
                   setQuery("");
                   syncUrl("");
                 }}
-                className="inline-flex text-sm font-medium text-stone-600 underline-offset-2 hover:underline dark:text-stone-400"
+                className="inline-flex cursor-pointer text-sm font-medium text-stone-600 underline-offset-2 hover:underline dark:text-stone-400"
               >
                 {SEARCH_CLEAR}
               </button>

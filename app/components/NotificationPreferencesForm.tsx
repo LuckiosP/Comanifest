@@ -72,7 +72,7 @@ export function NotificationPreferencesForm({
       <button
         type="submit"
         disabled={disabled || pending}
-        className="inline-flex h-10 w-fit items-center justify-center rounded-full bg-violet-600 px-5 text-sm font-medium text-white shadow-sm transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-violet-500 dark:hover:bg-violet-400"
+        className="inline-flex h-10 w-fit cursor-pointer items-center justify-center rounded-full bg-violet-600 px-5 text-sm font-medium text-white shadow-sm transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-violet-500 dark:hover:bg-violet-400"
       >
         {pending ? NOTIFICATIONS_SAVE_PENDING : NOTIFICATIONS_SAVE}
       </button>

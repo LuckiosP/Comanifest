@@ -120,7 +120,7 @@ export function EditManifestationForm({
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex h-12 items-center justify-center rounded-full bg-violet-600 px-8 text-base font-medium text-white shadow-md transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-violet-500 dark:hover:bg-violet-400"
+        className="inline-flex h-12 cursor-pointer items-center justify-center rounded-full bg-violet-600 px-8 text-base font-medium text-white shadow-md transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-violet-500 dark:hover:bg-violet-400"
       >
         {pending ? MANIFEST_EDIT_SUBMIT_PENDING : MANIFEST_EDIT_SUBMIT}
       </button>

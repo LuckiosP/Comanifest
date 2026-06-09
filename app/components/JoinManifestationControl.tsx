@@ -149,7 +149,7 @@ export function JoinManifestationControl({
           type="button"
           disabled
           title="Holding is available when the app is connected to your Supabase project"
-          className="inline-flex h-10 w-full items-center justify-center rounded-full border border-stone-200 px-4 text-sm font-medium text-stone-400 sm:w-auto sm:self-start dark:border-stone-600 dark:text-stone-500"
+          className="inline-flex h-10 w-full cursor-not-allowed items-center justify-center rounded-full border border-stone-200 px-4 text-sm font-medium text-stone-400 sm:w-auto sm:self-start dark:border-stone-600 dark:text-stone-500"
         >
           Hold
         </button>
@@ -198,7 +198,7 @@ export function JoinManifestationControl({
             <p>{authError}</p>
             <button
               type="button"
-              className="mt-2 font-medium text-violet-800 underline-offset-2 hover:underline dark:text-violet-300"
+              className="mt-2 cursor-pointer font-medium text-violet-800 underline-offset-2 hover:underline dark:text-violet-300"
               onClick={() => {
                 setAuthError(null);
                 setAuthReady(false);
@@ -214,7 +214,7 @@ export function JoinManifestationControl({
           type="button"
           disabled={Boolean(authError)}
           onClick={() => setExpanded(true)}
-          className="inline-flex h-10 w-full items-center justify-center rounded-full border border-violet-300 bg-violet-50 px-4 text-sm font-medium text-violet-900 shadow-sm transition hover:bg-violet-100 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:self-start dark:border-violet-700 dark:bg-violet-950/50 dark:text-violet-100 dark:hover:bg-violet-900/60"
+          className="inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-full border border-violet-300 bg-violet-50 px-4 text-sm font-medium text-violet-900 shadow-sm transition hover:bg-violet-100 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:self-start dark:border-violet-700 dark:bg-violet-950/50 dark:text-violet-100 dark:hover:bg-violet-900/60"
         >
           {HOLD_CTA_EXPAND}
         </button>
@@ -238,7 +238,7 @@ export function JoinManifestationControl({
             setExpanded(false);
             setCaptchaToken(null);
           }}
-          className="self-start text-xs font-medium text-stone-500 underline-offset-2 hover:underline dark:text-stone-400"
+          className="self-start cursor-pointer text-xs font-medium text-stone-500 underline-offset-2 hover:underline dark:text-stone-400"
         >
           Cancel
         </button>
@@ -258,7 +258,7 @@ export function JoinManifestationControl({
           <p>{authError}</p>
           <button
             type="button"
-            className="mt-2 font-medium text-violet-800 underline-offset-2 hover:underline dark:text-violet-300"
+            className="mt-2 cursor-pointer font-medium text-violet-800 underline-offset-2 hover:underline dark:text-violet-300"
             onClick={() => {
               setAuthError(null);
               setAuthReady(false);
@@ -320,7 +320,7 @@ export function JoinManifestationControl({
       <button
         type="submit"
         disabled={disabled}
-        className="inline-flex h-10 w-full items-center justify-center rounded-full bg-violet-600 px-5 text-sm font-medium text-white shadow-sm transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-violet-500 dark:hover:bg-violet-400"
+        className="inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-violet-600 px-5 text-sm font-medium text-white shadow-sm transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-violet-500 dark:hover:bg-violet-400"
       >
         {pending
           ? HOLD_SUBMIT_PENDING

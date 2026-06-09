@@ -159,14 +159,14 @@ export function CreatorManifestationActions({
                     type="button"
                     disabled={archivePending}
                     onClick={() => setShowArchive(false)}
-                    className="text-xs font-medium text-stone-500 underline-offset-2 hover:underline dark:text-stone-400"
+                    className="cursor-pointer text-xs font-medium text-stone-500 underline-offset-2 hover:underline dark:text-stone-400"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={archivePending}
-                    className="inline-flex h-9 items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-xs font-medium text-stone-700 shadow-sm transition hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-stone-600 dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-stone-800"
+                    className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-xs font-medium text-stone-700 shadow-sm transition hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-stone-600 dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-stone-800"
                   >
                     {archivePending ? MANIFEST_ARCHIVE_PENDING : MANIFEST_ARCHIVE_CTA}
                   </button>
@@ -176,7 +176,7 @@ export function CreatorManifestationActions({
               <button
                 type="button"
                 onClick={() => setShowArchive(true)}
-                className="w-fit text-sm font-medium text-stone-600 underline-offset-2 hover:text-stone-900 hover:underline dark:text-stone-400 dark:hover:text-stone-200"
+                className="w-fit cursor-pointer text-sm font-medium text-stone-600 underline-offset-2 hover:text-stone-900 hover:underline dark:text-stone-400 dark:hover:text-stone-200"
               >
                 {MANIFEST_ARCHIVE_CTA}
               </button>
@@ -203,14 +203,14 @@ export function CreatorManifestationActions({
                     type="button"
                     disabled={deletePending}
                     onClick={() => setShowDelete(false)}
-                    className="text-xs font-medium text-stone-500 underline-offset-2 hover:underline dark:text-stone-400"
+                    className="cursor-pointer text-xs font-medium text-stone-500 underline-offset-2 hover:underline dark:text-stone-400"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={deletePending}
-                    className="inline-flex h-9 items-center justify-center rounded-full border border-red-200 bg-red-50 px-4 text-xs font-medium text-red-900 shadow-sm transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-100 dark:hover:bg-red-950/60"
+                    className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full border border-red-200 bg-red-50 px-4 text-xs font-medium text-red-900 shadow-sm transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-100 dark:hover:bg-red-950/60"
                   >
                     {deletePending ? MANIFEST_DELETE_PENDING : MANIFEST_DELETE_CTA}
                   </button>
@@ -220,7 +220,7 @@ export function CreatorManifestationActions({
               <button
                 type="button"
                 onClick={() => setShowDelete(true)}
-                className="w-fit text-sm font-medium text-red-800 underline-offset-2 hover:underline dark:text-red-300"
+                className="w-fit cursor-pointer text-sm font-medium text-red-800 underline-offset-2 hover:underline dark:text-red-300"
               >
                 {MANIFEST_DELETE_CTA}
               </button>

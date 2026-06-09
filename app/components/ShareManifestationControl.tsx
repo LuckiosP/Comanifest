@@ -45,8 +45,8 @@ export function ShareManifestationControl({
   }, [manifestationId, showMessage, title]);
 
   const buttonClass = compact
-    ? "inline-flex items-center justify-center rounded-full border border-stone-200 bg-white p-1.5 text-stone-700 transition hover:border-violet-300 hover:text-violet-800 dark:border-stone-600 dark:bg-stone-900 dark:text-stone-200 dark:hover:border-violet-700 dark:hover:text-violet-200"
-    : "inline-flex items-center justify-center rounded-full border border-stone-200 bg-white p-2 text-stone-700 transition hover:border-violet-300 hover:text-violet-800 dark:border-stone-600 dark:bg-stone-900 dark:text-stone-200 dark:hover:border-violet-700 dark:hover:text-violet-200";
+    ? "inline-flex cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white p-1.5 text-stone-700 transition hover:border-violet-300 hover:text-violet-800 dark:border-stone-600 dark:bg-stone-900 dark:text-stone-200 dark:hover:border-violet-700 dark:hover:text-violet-200"
+    : "inline-flex cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white p-2 text-stone-700 transition hover:border-violet-300 hover:text-violet-800 dark:border-stone-600 dark:bg-stone-900 dark:text-stone-200 dark:hover:border-violet-700 dark:hover:text-violet-200";
   const iconClass = compact ? "size-4 shrink-0" : "size-5 shrink-0";
 
   return (

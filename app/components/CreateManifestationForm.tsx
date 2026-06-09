@@ -159,7 +159,7 @@ export function CreateManifestationForm({
           <p>{authError}</p>
           <button
             type="button"
-            className="mt-2 text-sm font-medium text-violet-800 underline-offset-2 hover:underline dark:text-violet-300"
+            className="mt-2 cursor-pointer text-sm font-medium text-violet-800 underline-offset-2 hover:underline dark:text-violet-300"
             onClick={() => {
               setAuthError(null);
               setAuthReady(false);
@@ -247,7 +247,7 @@ export function CreateManifestationForm({
       <button
         type="submit"
         disabled={!configured || disabled}
-        className="inline-flex h-12 items-center justify-center rounded-full bg-violet-600 px-8 text-base font-medium text-white shadow-md transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-violet-500 dark:hover:bg-violet-400"
+        className="inline-flex h-12 cursor-pointer items-center justify-center rounded-full bg-violet-600 px-8 text-base font-medium text-white shadow-md transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-violet-500 dark:hover:bg-violet-400"
       >
         {pending
           ? MANIFEST_SUBMIT_PENDING

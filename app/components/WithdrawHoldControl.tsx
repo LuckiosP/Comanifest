@@ -46,7 +46,7 @@ export function WithdrawHoldControl({
       <button
         type="button"
         onClick={() => setExpanded(true)}
-        className="w-fit text-sm font-medium text-stone-600 underline-offset-2 hover:text-stone-900 hover:underline dark:text-stone-400 dark:hover:text-stone-200"
+        className="w-fit cursor-pointer text-sm font-medium text-stone-600 underline-offset-2 hover:text-stone-900 hover:underline dark:text-stone-400 dark:hover:text-stone-200"
       >
         {HOLD_WITHDRAW_CTA}
       </button>
@@ -93,7 +93,7 @@ export function WithdrawHoldControl({
                 type="button"
                 disabled={pending}
                 onClick={() => setExpanded(false)}
-                className="text-xs font-medium text-stone-500 underline-offset-2 hover:underline dark:text-stone-400"
+                className="cursor-pointer text-xs font-medium text-stone-500 underline-offset-2 hover:underline dark:text-stone-400"
               >
                 Cancel
               </button>
@@ -101,7 +101,7 @@ export function WithdrawHoldControl({
             <button
               type="submit"
               disabled={pending}
-              className="inline-flex h-9 items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-xs font-medium text-stone-700 shadow-sm transition hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-stone-600 dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-stone-800"
+              className="inline-flex h-9 cursor-pointer items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-xs font-medium text-stone-700 shadow-sm transition hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-stone-600 dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-stone-800"
             >
               {pending ? HOLD_WITHDRAW_PENDING : HOLD_WITHDRAW_CTA}
             </button>

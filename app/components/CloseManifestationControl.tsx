@@ -158,7 +158,7 @@ export function CloseManifestationControl({
                 type="button"
                 disabled={pending}
                 onClick={() => setExpanded(false)}
-                className="text-sm font-medium text-stone-500 underline-offset-2 hover:underline dark:text-stone-400"
+                className="cursor-pointer text-sm font-medium text-stone-500 underline-offset-2 hover:underline dark:text-stone-400"
               >
                 Cancel
               </button>
@@ -166,7 +166,7 @@ export function CloseManifestationControl({
             <button
               type="submit"
               disabled={pending}
-              className="inline-flex h-10 items-center justify-center rounded-full bg-violet-600 px-5 text-sm font-medium text-white shadow-sm transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-violet-500 dark:hover:bg-violet-400"
+              className="inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-violet-600 px-5 text-sm font-medium text-white shadow-sm transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-violet-500 dark:hover:bg-violet-400"
             >
               {pending ? MANIFEST_CLOSE_PENDING : ctaLabel}
             </button>
@@ -176,7 +176,7 @@ export function CloseManifestationControl({
         <button
           type="button"
           onClick={() => setExpanded(true)}
-          className="inline-flex h-10 w-full items-center justify-center rounded-full border border-violet-300 bg-white px-5 text-sm font-medium text-violet-900 shadow-sm transition hover:bg-violet-50 sm:w-auto sm:self-start dark:border-violet-700 dark:bg-stone-900 dark:text-violet-100 dark:hover:bg-violet-950/40"
+          className="inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-full border border-violet-300 bg-white px-5 text-sm font-medium text-violet-900 shadow-sm transition hover:bg-violet-50 sm:w-auto sm:self-start dark:border-violet-700 dark:bg-stone-900 dark:text-violet-100 dark:hover:bg-violet-950/40"
         >
           {ctaLabel}
         </button>

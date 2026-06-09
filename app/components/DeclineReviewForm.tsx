@@ -60,7 +60,7 @@ export function DeclineReviewForm({ token }: DeclineReviewFormProps) {
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex h-10 w-fit items-center justify-center rounded-full bg-stone-800 px-5 text-sm font-medium text-white shadow-sm transition hover:bg-stone-900 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-stone-200 dark:text-stone-900 dark:hover:bg-white"
+        className="inline-flex h-10 w-fit cursor-pointer items-center justify-center rounded-full bg-stone-800 px-5 text-sm font-medium text-white shadow-sm transition hover:bg-stone-900 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-stone-200 dark:text-stone-900 dark:hover:bg-white"
       >
         {pending ? MODERATION_DECLINE_SUBMIT_PENDING : MODERATION_DECLINE_SUBMIT}
       </button>

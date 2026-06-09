@@ -44,7 +44,7 @@ export function ApproveReviewForm({ token }: ApproveReviewFormProps) {
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex h-10 w-fit items-center justify-center rounded-full bg-violet-700 px-5 text-sm font-medium text-white shadow-sm transition hover:bg-violet-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-violet-600 dark:hover:bg-violet-500"
+        className="inline-flex h-10 w-fit cursor-pointer items-center justify-center rounded-full bg-violet-700 px-5 text-sm font-medium text-white shadow-sm transition hover:bg-violet-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-violet-600 dark:hover:bg-violet-500"
       >
         {pending ? MODERATION_APPROVE_SUBMIT_PENDING : MODERATION_APPROVE_SUBMIT}
       </button>
