@@ -72,7 +72,7 @@ export function HomeManifestHub({
         />
         <button
           type="submit"
-          className="inline-flex h-11 items-center justify-center rounded-full bg-violet-600 px-8 text-sm font-medium text-white shadow-sm transition hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-400"
+          className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full bg-violet-600 px-8 text-sm font-medium text-white shadow-sm transition hover:bg-violet-700 hover:shadow-md dark:bg-violet-500 dark:hover:bg-violet-400"
         >
           {HOME_MANIFEST_SUBMIT}
         </button>
