@@ -53,9 +53,7 @@ export function HomeManifestHub({
         className="flex w-full flex-col items-center gap-4"
         onSubmit={(event) => {
           event.preventDefault();
-          if (matches.length === 0) {
-            router.push(createHref);
-          }
+          router.push(createHref);
         }}
       >
         <label className="sr-only" htmlFor="home-manifest-query">
