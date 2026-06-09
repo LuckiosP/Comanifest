@@ -1,0 +1,19 @@
+# Normalize all text files to LF in the repository.
+# Git auto-detects text vs binary; checked-out files use LF on every OS.
+* text=auto eol=lf
+
+# Explicitly treat common binary assets as binary (never touch their bytes).
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.svg text eol=lf
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.pdf binary
+*.mp4 binary
+*.webm binary
