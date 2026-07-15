@@ -31,19 +31,27 @@ export async function upsertHoldUpdatesFrequency(
   supabase: SupabaseClient,
   userId: string,
   frequency: HoldUpdatesFrequency,
-): Promise<{ ok: boolean; error?: string }> {
-  const { error } = await supabase.from("notification_preferences").upsert(
-    {
-      user_id: userId,
-      hold_updates_frequency: frequency,
-      updated_at: new Date().toISOString(),
-    },
-    { onConflict: "user_id" },
-  );
+): Promise<{ ok: boolean; frequency?: HoldUpdatesFrequency; error?: string }> {
+  const { data, error } = await supabase
+    .from("notification_preferences")
+    .upsert(
+      {
+        user_id: userId,
+        hold_updates_frequency: frequency,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "user_id" },
+    )
+    .select("hold_updates_frequency")
+    .single();
 
   if (error) {
     return { ok: false, error: error.message };
   }
 
-  return { ok: true };
+  const saved = data.hold_updates_frequency as HoldUpdatesFrequency;
+  return {
+    ok: true,
+    frequency: HOLD_UPDATES_FREQUENCIES.includes(saved) ? saved : frequency,
+  };
 }

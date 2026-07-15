@@ -140,9 +140,7 @@ export default async function AccountPage() {
                   {NOTIFICATIONS_NOT_CONFIGURED}
                 </p>
               ) : null}
-              <NotificationPreferencesForm
-                initialFrequency={preferenceState.frequency}
-              />
+              <NotificationPreferencesForm />
             </>
           )}
         </section>

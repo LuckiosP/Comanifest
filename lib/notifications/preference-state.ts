@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { unstable_noStore as noStore } from "next/cache";
 
 import type { HoldUpdatesFrequency } from "./preferences";
 
@@ -11,6 +12,8 @@ export async function getHoldUpdatesPreferenceState(
   supabase: SupabaseClient,
   userId: string,
 ): Promise<HoldUpdatesPreferenceResult> {
+  noStore();
+
   const { data, error } = await supabase
     .from("notification_preferences")
     .select("hold_updates_frequency")
