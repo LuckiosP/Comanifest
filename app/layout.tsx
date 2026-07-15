@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     url: "/",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Comanifest — collective intention",
     description:
       "A lightly magical place to hold collective intention toward hopeful outcomes.",
